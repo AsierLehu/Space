@@ -23,3 +23,30 @@ hs_err_pid*
 replay_pid*
 
 .metadata/
+.project
+.bin/
+
+# Carpetas de compilación / binarios
+bin/
+build/
+out/
+target/
+dist/
+
+# Archivos y carpetas de IDEs
+.classpath
+.settings/
+.idea/
+*.iml
+.vscode/
+
+# Ficheros temporales / backups
+*.tmp
+*.swp
+*.bak
+
+# Salida de herramientas
+reports/
+test-output/
+coverage/
+.coverage/
