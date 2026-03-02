@@ -4,6 +4,6 @@
 /**
  * 
  */
-module SpaceInvaders {
+module SPACEFINAL {
 	requires java.desktop;
 }

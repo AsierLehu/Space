@@ -20,7 +20,7 @@ public class Disparo {
 		return y;
 	}
 	
-	public boolean isActivo) {
+	public boolean isActivo() {
 		return activo;
 	}
 	
