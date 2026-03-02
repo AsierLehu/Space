@@ -28,7 +28,7 @@ public class Disparo {
 		this.activo = b;
 	}
 	
-	// El disparo sube 1 píxel cada lamada
+	// El disparo sube 1 pÃ­xel cada lamada
 	public void subir() {
 		if (activo) {
 			y--;
