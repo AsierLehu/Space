@@ -211,4 +211,4 @@ public class MainFrame extends JFrame implements Observador {
 		
 	}
 
-}
+

@@ -1,5 +1,6 @@
 package sp;
 
+
 public abstract class Naves {
 	
 	protected int x;

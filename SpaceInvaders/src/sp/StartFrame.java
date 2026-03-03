@@ -1,7 +1,8 @@
 package sp;
 
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,21 +47,21 @@ public class StartFrame extends JFrame {
         gbc.gridx = 0;
         gbc.insets = new Insets(10, 0, 10, 0);
 
-        // Título
+        // T�tulo
         JLabel titulo = new JLabel("SPACE INVADERS");
         titulo.setForeground(Color.GREEN);
         titulo.setFont(new Font("Monospaced", Font.BOLD, 28));
         gbc.gridy = 0;
         panel.add(titulo, gbc);
 
-        // Subtítulo
+        // Subt�tulo
         JLabel subtitulo = new JLabel("Sprint 1");
         subtitulo.setForeground(Color.GRAY);
         subtitulo.setFont(new Font("Monospaced", Font.PLAIN, 14));
         gbc.gridy = 1;
         panel.add(subtitulo, gbc);
 
-        // Instrucción para iniciar
+        // Instrucci�n para iniciar
         JLabel pressSpace = new JLabel("Pulsa SPACE para jugar");
         pressSpace.setForeground(Color.GREEN);
         pressSpace.setFont(new Font("Monospaced", Font.BOLD, 14));
@@ -100,5 +101,4 @@ public class StartFrame extends JFrame {
         dispose();
         new MainFrame();
     }
-
 }

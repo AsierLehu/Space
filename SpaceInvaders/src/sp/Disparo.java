@@ -9,7 +9,7 @@ public class Disparo {
 	public Disparo(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.vivo = false;
+		this.activo = false;
 	}
 	
 	public int getX() {

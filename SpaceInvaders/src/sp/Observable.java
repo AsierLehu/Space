@@ -1,9 +1,10 @@
 package sp;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Observable {
-	private ArrayList<Observador> observadores = new ArrayList<>();
+	private List<Observador> observadores = new ArrayList<>();
 
     public void addObserver(Observador o) {
         observadores.add(o);
