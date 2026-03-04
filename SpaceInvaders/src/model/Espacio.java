@@ -58,7 +58,7 @@ public class Espacio extends Observable {
         Jugador j = getJugador();
         if (j != null && j.isVivo()) {
             j.mover(dx, dy);
-            //notificarVista();
+            notificarVista();
         }
     }
 
@@ -66,7 +66,7 @@ public class Espacio extends Observable {
         Jugador j = getJugador();
         if (j != null && j.isVivo()) {
             j.disparar();
-            //notificarVista();
+            notificarVista();
         }
     }
 
@@ -79,7 +79,7 @@ public class Espacio extends Observable {
         if (d.isActivo()) {
             d.subir();
             comprobarColisiones(d);
-            //notificarVista();
+            notificarVista();
         }
     }
 
@@ -90,7 +90,7 @@ public class Espacio extends Observable {
                 e.mover();
             }
         }
-        //notificarVista();
+        notificarVista();
     }
 
     private void comprobarColisiones(Disparo d) {
@@ -127,4 +127,8 @@ public class Espacio extends Observable {
     public int getAnchura() { return anchura; }
     public int getAltura()  { return altura;  }
 
+    private void notificarVista() {
+        setChanged();
+        notifyObservers();
+    }
 }
