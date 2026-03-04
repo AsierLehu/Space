@@ -151,19 +151,7 @@ public class MainFrame extends JFrame implements Observador {
     private void dibujarNave(Graphics g, int x, int y) {
         g.setColor(Color.MAGENTA);
         
-        // Forma de nave espacial tipo T invertida (como en la imagen)
-        // Parte superior (punta)
-        g.fillRect((x-1) * CELL_SIZE, (y-1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        g.fillRect((x+1) * CELL_SIZE, (y-1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-
-        // Parte media (alas - 3 píxeles horizontales)
-        g.fillRect((x-1) * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
         g.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        g.fillRect((x+1) * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        
-        g.fillRect((x-1) * CELL_SIZE, (y+1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        g.fillRect(x * CELL_SIZE, (y+1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        g.fillRect((x+1) * CELL_SIZE, (y+1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
 
     }
 
