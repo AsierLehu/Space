@@ -97,15 +97,10 @@ public class MainFrame extends JFrame implements Observador {
             }
         }
 
-        // Dibujar jugador (píxel verde)
+        // Dibujar jugador (nave con forma)
         Jugador jugador = espacio.getJugador();
         if (jugador != null && jugador.isVivo()) {
-            g.setColor(Color.GREEN);
-            g.fillRect(
-                jugador.getX() * CELL_SIZE,
-                jugador.getY() * CELL_SIZE,
-                CELL_SIZE, CELL_SIZE
-            );
+            dibujarNave(g, jugador.getX(), jugador.getY());
         }
 
         // Dibujar enemigos (píxel rojo)
@@ -151,6 +146,25 @@ public class MainFrame extends JFrame implements Observador {
         int tx = (espacio.getAnchura() * CELL_SIZE - fm.stringWidth(mensaje)) / 2;
         int ty = espacio.getAltura() * CELL_SIZE / 2 + fm.getAscent() / 2;
         g.drawString(mensaje, tx, ty);
+    }
+
+    private void dibujarNave(Graphics g, int x, int y) {
+        g.setColor(Color.MAGENTA);
+        
+        // Forma de nave espacial tipo T invertida (como en la imagen)
+        // Parte superior (punta)
+        g.fillRect((x-1) * CELL_SIZE, (y-1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        g.fillRect((x+1) * CELL_SIZE, (y-1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+        // Parte media (alas - 3 píxeles horizontales)
+        g.fillRect((x-1) * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        g.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        g.fillRect((x+1) * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        
+        g.fillRect((x-1) * CELL_SIZE, (y+1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        g.fillRect(x * CELL_SIZE, (y+1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        g.fillRect((x+1) * CELL_SIZE, (y+1) * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
     }
 
 

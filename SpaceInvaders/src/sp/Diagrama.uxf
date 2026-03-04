@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>5</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>65</x>
+      <y>185</y>
+      <w>205</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>sp::MainFrame
+--
+-CELL_SIZE = 10: int
+-gamePanel: JPanel
+-gameTimer: Timer
+-frameCount: int
+-espacio: Espacio
+--
++MainFrame(): ctor
++main(String[] args): void
+-initPanel(): void
+-dibujar(Graphics g): void
+-dibujarMensaje(Graphics g, String mensaje, Color color): void
+-startTimer(): void
++update(Observable o, Object arg): void
++actualizar(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
