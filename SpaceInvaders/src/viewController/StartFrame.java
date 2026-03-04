@@ -1,34 +1,23 @@
-package sp;
+package viewController;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Observable;
+import java.util.Observer;
 
-public class StartFrame extends JFrame {
+import model.Espacio;
+
+public class StartFrame extends JFrame implements Observer {
 
 	private JPanel contentPane;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					StartFrame frame = new StartFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -95,10 +84,25 @@ public class StartFrame extends JFrame {
             @Override public void keyReleased(KeyEvent e) {}
             @Override public void keyTyped(KeyEvent e) {}
         });
+        
+        Espacio.getEspacio().addObserver(this);
     }
 
     private void iniciarJuego() {
-        dispose();
-        new MainFrame();
+        Espacio.getEspacio().cambiarAMain();
+
+        
     }
-}
+
+	@Override
+	public void update(Observable o, Object arg) {
+	    // Cuando Espacio notifica cambios (ej: cambiarAMain()),
+	    // esta ventana de inicio debe cerrarse y abrir la ventana del juego
+	    if (o instanceof Espacio) {
+	        // Cerrar esta ventana de inicio
+	        this.setVisible(false);
+	        
+	        // Abrir la ventana principal del juego
+	        new MainFrame();
+	    }
+	}}

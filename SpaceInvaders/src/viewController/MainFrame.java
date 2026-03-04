@@ -1,9 +1,4 @@
-package sp;
-
-import sp.Disparo;
-import sp.Enemigo;
-import sp.Espacio;
-import sp.Jugador;
+package viewController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +11,12 @@ import java.util.Observer;
 
 import javax.swing.border.EmptyBorder;
 
-public class MainFrame extends JFrame implements Observador {
+import model.Disparo;
+import model.Enemigo;
+import model.Espacio;
+import model.Jugador;
+
+public class MainFrame extends JFrame implements Observer {
 
 	// Tamaño de cada celda en píxeles de pantalla
     private static final int CELL_SIZE = 10;
@@ -48,8 +48,8 @@ public class MainFrame extends JFrame implements Observador {
 	 * Create the frame.
 	 */
 	public MainFrame() {
-		espacio = new Espacio(100, 60);
-        espacio.addObserver(this);
+		espacio = Espacio.getEspacio();
+		espacio.addObserver(this);
 
         setTitle("Space Invaders — Juego");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

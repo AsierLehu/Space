@@ -1,4 +1,4 @@
-package sp;
+package model;
 
 public class Enemigo extends Naves {
 	

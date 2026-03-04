@@ -1,21 +1,29 @@
-package sp;
+package model;
 
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
-public class Espacio extends sp.Observable {
-	private int anchura;
-	private int altura;
+public class Espacio extends Observable {
+    private static Espacio miEspacio;
 	private ArrayList<Naves> naves;
+	private static int anchura = 100;
+	private static int altura = 60;
 	
-    public Espacio(int anchura, int altura) {
-        this.anchura = anchura;
-        this.altura  = altura;
+    private Espacio() {
         this.naves   = new ArrayList<>();
-        inicializar();
     }
-
+    public static Espacio getEspacio() {
+        if (miEspacio == null) {
+            miEspacio = new Espacio();
+        }
+        return miEspacio;
+    }
+    public void cambiarAMain() {
+    	inicializar();
+    	setChanged();       
+    	notifyObservers();   
+    }
     private void inicializar() {
         // Crear jugador en posición inicial (50, 55)
         naves.add(new Jugador());
@@ -50,7 +58,7 @@ public class Espacio extends sp.Observable {
         Jugador j = getJugador();
         if (j != null && j.isVivo()) {
             j.mover(dx, dy);
-            notificarVista();
+            //notificarVista();
         }
     }
 
@@ -58,7 +66,7 @@ public class Espacio extends sp.Observable {
         Jugador j = getJugador();
         if (j != null && j.isVivo()) {
             j.disparar();
-            notificarVista();
+            //notificarVista();
         }
     }
 
@@ -71,7 +79,7 @@ public class Espacio extends sp.Observable {
         if (d.isActivo()) {
             d.subir();
             comprobarColisiones(d);
-            notificarVista();
+            //notificarVista();
         }
     }
 
@@ -82,7 +90,7 @@ public class Espacio extends sp.Observable {
                 e.mover();
             }
         }
-        notificarVista();
+        //notificarVista();
     }
 
     private void comprobarColisiones(Disparo d) {
@@ -115,9 +123,6 @@ public class Espacio extends sp.Observable {
         return true;
     }
 
-    private void notificarVista() {
-        notificarObservadores();
-    }
 
     public int getAnchura() { return anchura; }
     public int getAltura()  { return altura;  }

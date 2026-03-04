@@ -1,6 +1,6 @@
-package sp;
+package spmain;
 
-import sp.StartFrame;
+import viewController.StartFrame;
 
 import javax.swing.SwingUtilities;
 
