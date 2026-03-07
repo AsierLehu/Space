@@ -81,20 +81,23 @@ public class Espacio extends Observable {
 
     // Llamado cada 200ms: baja los enemigos 1 píxel
     public void actualizarEnemigos() {
-        for (Enemigo e : getEnemigos()) {
+        Disparo d = jugador.getDisparo();
+        for (Enemigo e : enemigos) {
             if (e.isVivo()) {
                 e.mover(0, 1);
+                if (d != null && d.isActivo()) comprobarColisiones(d);
             }
         }
         notificarVista();
     }
 
     private void comprobarColisiones(Disparo d) {
-        for (Enemigo e : getEnemigos()) {
-            if (e.isVivo() && d.getX() == e.getX() && d.getY() == e.getY()) {
+        for (Enemigo e : enemigos) {
+            if (e.isVivo() && d.getX() == e.getX()
+                    && d.getY() <= e.getY() && d.getY() >= e.getY() - 1) { // si es menor, debe cumplir que sea 1 pixel por debajo del enemigo. si es el mismo, cumple.
                 e.setVivo(false);
                 d.setActivo(false);
-                notificarVista(); // Notificar inmediatamente la colisión
+                notificarVista();
             }
         }
     }

@@ -1,1 +1,0 @@
--velocidad no está implementado en enemigo
