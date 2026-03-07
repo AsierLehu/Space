@@ -11,8 +11,6 @@ public class Jugador extends Naves {
 	}
 	
 	@Override
-	public void mover() {}
-	
 	public void mover(int dx, int dy) {
 		x += dx * velocidad;
 		y += dy * velocidad;

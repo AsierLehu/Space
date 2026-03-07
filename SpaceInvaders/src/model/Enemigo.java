@@ -8,9 +8,9 @@ public class Enemigo extends Naves {
 	}
 	
 	@Override
-	public void mover() {
-		//El enemigo baja 1 pixel cada 200ms seg�n requisitos
-		y++;
+	public void mover(int dx, int dy) {
+		x += dx;
+		y += dy;
 	}
 
 }

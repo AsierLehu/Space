@@ -39,5 +39,5 @@ public abstract class Naves {
 		this.vivo = b;
 	}
 	
-	public abstract void mover();
+	public abstract void mover(int dx, int dy);
 }

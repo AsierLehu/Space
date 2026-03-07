@@ -11,8 +11,8 @@ import javax.swing.Timer;
 public class Espacio extends Observable {
     private static Espacio miEspacio;
 	private ArrayList<Naves> naves;
-	private static int anchura = 100;
-	private static int altura = 60;
+	private int anchura = 100;
+	private int altura = 60;
 	
 	// Timer del juego - Lógica de negocio del modelo
 	private Timer gameTimer;
@@ -96,7 +96,7 @@ public class Espacio extends Observable {
     public void actualizarEnemigos() {
         for (Enemigo e : getEnemigos()) {
             if (e.isVivo()) {
-                e.mover();
+                e.mover(0, 1);
             }
         }
         notificarVista();
