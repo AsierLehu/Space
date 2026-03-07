@@ -1,14 +1,22 @@
 package model;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
+import javax.swing.Timer;
 
+@SuppressWarnings("deprecation")
 public class Espacio extends Observable {
     private static Espacio miEspacio;
 	private ArrayList<Naves> naves;
 	private static int anchura = 100;
 	private static int altura = 60;
+	
+	// Timer del juego - Lógica de negocio del modelo
+	private Timer gameTimer;
+	private int frameCount;
 	
     private Espacio() {
         this.naves   = new ArrayList<>();
@@ -21,6 +29,7 @@ public class Espacio extends Observable {
     }
     public void cambiarAMain() {
     	inicializar();
+    	iniciarJuegoLoop(); // Iniciar el timer del juego
     	setChanged();       
     	notifyObservers();   
     }
@@ -98,6 +107,7 @@ public class Espacio extends Observable {
             if (e.isVivo() && d.getX() == e.getX() && d.getY() == e.getY()) {
                 e.setVivo(false);
                 d.setActivo(false);
+                notificarVista(); // Notificar inmediatamente la colisión
             }
         }
     }
@@ -126,6 +136,39 @@ public class Espacio extends Observable {
 
     public int getAnchura() { return anchura; }
     public int getAltura()  { return altura;  }
+
+    /**
+     * Inicia el bucle principal del juego (game loop) - Lógica de negocio
+     * Tick cada 50ms para disparos, cada 200ms para enemigos
+     */
+    public void iniciarJuegoLoop() {
+        frameCount = 0;
+        // Tick cada 50ms (20 FPS)
+        gameTimer = new Timer(50, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isGameOver() && !isGameWon()) {
+                    actualizarDisparo();
+                    frameCount++;
+                    // Cada 4 ticks = 200ms: bajar enemigos
+                    if (frameCount % 4 == 0) {
+                        actualizarEnemigos();
+                    }
+                }
+            }
+        });
+        gameTimer.start();
+    }
+
+    /**
+     * Detiene el bucle principal del juego
+     */
+    public void detenerJuegoLoop() {
+        if (gameTimer != null) {
+            gameTimer.stop();
+            gameTimer = null;
+        }
+    }
 
     private void notificarVista() {
         setChanged();

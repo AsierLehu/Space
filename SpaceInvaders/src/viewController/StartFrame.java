@@ -11,6 +11,7 @@ import java.util.Observer;
 
 import model.Espacio;
 
+@SuppressWarnings("deprecation")
 public class StartFrame extends JFrame implements Observer {
 
 	private JPanel contentPane;
@@ -73,17 +74,9 @@ public class StartFrame extends JFrame implements Observer {
         setFocusable(true);
         requestFocusInWindow();
 
-        // Solo SPACE inicia el juego
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    iniciarJuego();
-                }
-            }
-            @Override public void keyReleased(KeyEvent e) {}
-            @Override public void keyTyped(KeyEvent e) {}
-        });
+        // Añadir el Controller (clase privada interna)
+        Controller controller = new Controller();
+        addKeyListener(controller);
         
         Espacio.getEspacio().addObserver(this);
     }
@@ -108,4 +101,30 @@ public class StartFrame extends JFrame implements Observer {
 	        // Abrir la ventana principal del juego
 	        new MainFrame();
 	    }
-	}}
+	}
+
+    /**
+     * Controlador para gestionar la interacción del usuario con la pantalla de inicio
+     * Clase privada interna según patrón MVC
+     */
+    private class Controller implements KeyListener {
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            // Solo SPACE inicia el juego
+            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                iniciarJuego();
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // No se necesita acción al soltar la tecla
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            // No se necesita acción
+        }
+    }
+}

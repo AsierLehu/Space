@@ -2,8 +2,6 @@ package viewController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Observable;
@@ -16,14 +14,13 @@ import model.Enemigo;
 import model.Espacio;
 import model.Jugador;
 
+@SuppressWarnings("deprecation")
 public class MainFrame extends JFrame implements Observer {
 
 	// Tamaño de cada celda en píxeles de pantalla
     private static final int CELL_SIZE = 10;
 
     private JPanel gamePanel;
-    private Timer  gameTimer;
-    private int    frameCount;
 
     // Referencia al modelo
     private Espacio espacio;
@@ -56,7 +53,6 @@ public class MainFrame extends JFrame implements Observer {
         setResizable(false);
 
         initPanel();
-        startTimer();
 
         pack();
         setLocationRelativeTo(null);
@@ -155,32 +151,8 @@ public class MainFrame extends JFrame implements Observer {
 
     }
 
-
-    private void startTimer() {
-        frameCount = 0;
-        // Tick cada 50ms
-        gameTimer = new Timer(50, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!espacio.isGameOver() && !espacio.isGameWon()) {
-                    espacio.actualizarDisparo();
-                    frameCount++;
-                    // Cada 4 ticks = 200ms: bajar enemigos
-                    if (frameCount % 4 == 0) {
-                        espacio.actualizarEnemigos();
-                    }
-                }
-            }
-        });
-        gameTimer.start();
-    }
-
-
+    @Override
     public void update(Observable o, Object arg) {
-        gamePanel.repaint();
-    }
-    
-    public void actualizar() {
         gamePanel.repaint();
     }
 
