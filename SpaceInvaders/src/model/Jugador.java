@@ -21,7 +21,7 @@ public class Jugador extends Naves {
 		if (x < 0) {x = 0;}
 		if (x > 99) {x = 99;}
 		if (y < 0) {y = 0;}
-		if (y > 99) {y = 99;}
+		if (y > 59) {y = 59;}
 }
 	
 	public void disparar() {
