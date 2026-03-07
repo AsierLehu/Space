@@ -10,16 +10,17 @@ import javax.swing.Timer;
 @SuppressWarnings("deprecation")
 public class Espacio extends Observable {
     private static Espacio miEspacio;
-	private ArrayList<Naves> naves;
-	private static int anchura = 100;
-	private static int altura = 60;
+	private ArrayList<Enemigo> enemigos;
+	private Jugador jugador;
+	private int anchura = 100;
+	private int altura = 60;
 	
 	// Timer del juego - Lógica de negocio del modelo
 	private Timer gameTimer;
 	private int frameCount;
 	
     private Espacio() {
-        this.naves   = new ArrayList<>();
+        this.enemigos = new ArrayList<>();
     }
     public static Espacio getEspacio() {
         if (miEspacio == null) {
@@ -34,57 +35,43 @@ public class Espacio extends Observable {
     	notifyObservers();   
     }
     private void inicializar() {
-        // Crear jugador en posición inicial (50, 55)
-        naves.add(new Jugador());
+        jugador = new Jugador();
 
-        // Crear 1 enemigo aleatorio en Sprint 1 (HU4: single-pixel enemy)
         Random rand = new Random();
-        int ex = rand.nextInt(anchura);   // x aleatoria entre 0 y 99
-        int ey = rand.nextInt(5);          // y en la parte superior (0-4)
-        naves.add(new Enemigo(ex, ey));
+        int ex = rand.nextInt(anchura);
+        int ey = rand.nextInt(5);
+        enemigos.add(new Enemigo(ex, ey));
     }
 
     public Jugador getJugador() {
-        for (Naves n : naves) {
-            if (n instanceof Jugador) return (Jugador) n;
-        }
-        return null;
+        return jugador;
     }
 
     public ArrayList<Enemigo> getEnemigos() {
-    	ArrayList<Enemigo> enemigos = new ArrayList<>();
-        for (Naves n : naves) {
-            if (n instanceof Enemigo) enemigos.add((Enemigo) n);
-        }
         return enemigos;
     }
 
-    public ArrayList<Naves> getNaves() {
-        return naves;
-    }
+
 
     public void moverJugador(int dx, int dy) {
-        Jugador j = getJugador();
-        if (j != null && j.isVivo()) {
-            j.mover(dx, dy);
+        if (jugador != null && jugador.isVivo()) {
+            jugador.mover(dx, dy);
             notificarVista();
         }
     }
 
     public void disparar() {
-        Jugador j = getJugador();
-        if (j != null && j.isVivo()) {
-            j.disparar();
+        if (jugador != null && jugador.isVivo()) {
+            jugador.disparar();
             notificarVista();
         }
     }
 
     // Llamado cada 50ms: mueve el disparo 1 píxel hacia arriba
     public void actualizarDisparo() {
-        Jugador j = getJugador();
-        if (j == null) return;
+        if (jugador == null) return;
 
-        Disparo d = j.getDisparo();
+        Disparo d = jugador.getDisparo();
         if (d.isActivo()) {
             d.subir();
             comprobarColisiones(d);
@@ -94,38 +81,39 @@ public class Espacio extends Observable {
 
     // Llamado cada 200ms: baja los enemigos 1 píxel
     public void actualizarEnemigos() {
-        for (Enemigo e : getEnemigos()) {
+        Disparo d = jugador.getDisparo();
+        for (Enemigo e : enemigos) {
             if (e.isVivo()) {
-                e.mover();
+                e.mover(0, 1);
+                if (d != null && d.isActivo()) comprobarColisiones(d);
             }
         }
         notificarVista();
     }
 
     private void comprobarColisiones(Disparo d) {
-        for (Enemigo e : getEnemigos()) {
-            if (e.isVivo() && d.getX() == e.getX() && d.getY() == e.getY()) {
+        for (Enemigo e : enemigos) {
+            if (e.isVivo() && d.getX() == e.getX()
+                    && d.getY() <= e.getY() && d.getY() >= e.getY() - 1) { // si es menor, debe cumplir que sea 1 pixel por debajo del enemigo. si es el mismo, cumple.
                 e.setVivo(false);
                 d.setActivo(false);
-                notificarVista(); // Notificar inmediatamente la colisión
+                notificarVista();
             }
         }
     }
 
     // Derrota: un enemigo llega a la fila del jugador o más abajo
     public boolean isGameOver() {
-        Jugador j = getJugador();
-        if (j == null || !j.isVivo()) return true;
+        if (jugador == null || !jugador.isVivo()) return true;
 
-        for (Enemigo e : getEnemigos()) {
-            if (e.isVivo() && e.getY() >= j.getY()) return true;
+        for (Enemigo e : enemigos) {
+            if (e.isVivo() && e.getY() >= jugador.getY()) return true;
         }
         return false;
     }
 
     // Victoria: hay al menos un enemigo Y todos están eliminados
     public boolean isGameWon() {
-    	ArrayList<Enemigo> enemigos = getEnemigos();
         if (enemigos.isEmpty()) return false;
         for (Enemigo e : enemigos) {
             if (e.isVivo()) return false;

@@ -7,7 +7,15 @@ public abstract class Naves {
 	protected int y;
 	protected int velocidad;
 	protected boolean vivo;
-	
+
+	private static final int VELOCIDAD_DEFAULT = 1;
+
+	// Constructor con velocidad por defecto - no está implementado que influya en el movimiento del enemigo
+	public Naves(int x, int y) {
+		this(x, y, VELOCIDAD_DEFAULT);
+	}
+
+	// Constructor con velocidad personalizada
 	public Naves(int x, int y, int velocidad) {
 		this.x = x;
 		this.y = y;
@@ -31,5 +39,5 @@ public abstract class Naves {
 		this.vivo = b;
 	}
 	
-	public abstract void mover();
+	public abstract void mover(int dx, int dy);
 }
