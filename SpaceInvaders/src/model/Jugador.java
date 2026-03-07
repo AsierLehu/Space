@@ -6,7 +6,7 @@ public class Jugador extends Naves {
 	
 	// Posici�n inicial: (50, 55) seg�n requisitos
 	public Jugador() {
-		super(50, 55, 1);
+		super(50, 55);
 		this.disparo = new Disparo(x, y);
 	}
 	

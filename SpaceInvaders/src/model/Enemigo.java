@@ -4,7 +4,7 @@ public class Enemigo extends Naves {
 	
 	//Posici�n aleatoria en la parte superior
 	public Enemigo(int x, int y) {
-		super(x, y, 1);
+		super(x, y);
 	}
 	
 	@Override
