@@ -7,10 +7,7 @@ import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
-import model.Disparo;
-import model.Enemigo;
 import model.Espacio;
-import model.Jugador;
 
 @SuppressWarnings("deprecation")
 public class MainFrame extends JFrame implements Observer {
@@ -20,14 +17,20 @@ public class MainFrame extends JFrame implements Observer {
     private static final Color COLOR_ENEMIGO = Color.RED;
     private static final Color COLOR_DISPARO = Color.YELLOW;
 
-    private JButton[][] celdas;
+    private JLabel[][] celdas;
     private Espacio espacio;
+    
+    private int jugadorX;
+    private int jugadorY;
+    private int disparoX;
+    private int disparoY;
+    private boolean disparoPintado;
 
     public MainFrame() {
         espacio = Espacio.getEspacio();
         espacio.addObserver(this);
 
-        setTitle("Space Invaders â€” Juego");
+        setTitle("Space Invaders - Juego");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -43,72 +46,98 @@ public class MainFrame extends JFrame implements Observer {
         int cols = espacio.getAnchura();
         int rows = espacio.getAltura();
 
-        celdas = new JButton[cols][rows];
+        celdas = new JLabel[cols][rows];
 
         JPanel gamePanel = new JPanel(new GridLayout(rows, cols, 0, 0));
         gamePanel.setBackground(COLOR_FONDO);
 
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
-                JButton btn = new JButton();
-                btn.setPreferredSize(new Dimension(10, 10));
-                btn.setBackground(COLOR_FONDO);
-                btn.setBorder(BorderFactory.createLineBorder(new Color(35, 35, 35), 1));
-                btn.setFocusable(false);
-                celdas[x][y] = btn;
-                gamePanel.add(btn);
+                JLabel lbl = new JLabel();
+                lbl.setPreferredSize(new Dimension(10,10));
+                lbl.setOpaque(true);
+                lbl.setBackground(COLOR_FONDO);
+                celdas[x][y] = lbl;
+                gamePanel.add(lbl);
             }
         }
-
+        
+        //Inicializamos variables y pintamos al jugador
+        jugadorX = 50;
+        jugadorY = 55;
+        disparoX = 0;
+        disparoY = 0;
+        disparoPintado = false;
+        celdas[jugadorX][jugadorY].setBackground(COLOR_JUGADOR);
+        
         addKeyListener(new Controller());
         add(gamePanel);
     }
 
-    private void actualizarVista() {
-        int cols = espacio.getAnchura();
-        int rows = espacio.getAltura();
-
-        // Resetear todas las celdas al color de fondo
-        for (int x = 0; x < cols; x++) {
-            for (int y = 0; y < rows; y++) {
-                celdas[x][y].setBackground(COLOR_FONDO);
-            }
-        }
-
-        // Pintar jugador
-        Jugador jugador = espacio.getJugador();
-        if (jugador != null && jugador.isVivo()) {
-            celdas[jugador.getX()][jugador.getY()].setBackground(COLOR_JUGADOR);
-        }
-
-        // Pintar enemigos
-        for (Enemigo e : espacio.getEnemigos()) {
-            if (e.isVivo()) {
-                celdas[e.getX()][e.getY()].setBackground(COLOR_ENEMIGO);
-            }
-        }
-
-        // Pintar disparo
-        if (jugador != null) {
-            Disparo d = jugador.getDisparo();
-            if (d.isActivo()) {
-                celdas[d.getX()][d.getY()].setBackground(COLOR_DISPARO);
-            }
-        }
-
-        // Mensaje de fin de partida
-        if (espacio.isGameWon()) {
-            JOptionPane.showMessageDialog(this, "Â¡HAS GANADO!", "Fin", JOptionPane.INFORMATION_MESSAGE);
-        } else if (espacio.isGameOver()) {
-            JOptionPane.showMessageDialog(this, "GAME OVER", "Fin", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     @Override
     public void update(Observable o, Object arg) {
-        SwingUtilities.invokeLater(this::actualizarVista);
+    	if (o instanceof Espacio) {
+    		int[] datos = (int[]) arg;
+    		SwingUtilities.invokeLater(new Runnable() {
+    			public void run() {
+    				procesarNotificacion(datos);
+    			}
+    		});
+    	}
     }
 
+    private void procesarNotificacion(int[] datos) {
+    	int tipo = datos[0];
+    	
+    	switch (tipo) {
+    		case 0: // jugador se movió
+    			celdas[jugadorX][jugadorY].setBackground(COLOR_FONDO);
+    			jugadorX = datos[1];
+    			jugadorY = datos[2];
+    			celdas[jugadorX][jugadorY].setBackground(COLOR_JUGADOR);
+    			break;
+        
+    		case 1: //dispro se movió
+    			if (disparoPintado) {
+    				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
+    			}
+    			disparoX = datos[1];
+    			disparoY = datos[2];
+    			celdas[disparoX][disparoY].setBackground(COLOR_DISPARO);
+    			disparoPintado = true;
+    			break;
+    			
+    		case 2: // disparo salió del tablero
+    			if (disparoPintado ) {
+    				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
+    			}
+    			disparoPintado = false;
+    			break;
+    		
+    		case 3: // enemigo bajó
+    			celdas[datos[2]][datos[3]-1].setBackground(COLOR_FONDO);
+    			celdas[datos[2]][datos[3]].setBackground(COLOR_ENEMIGO);
+    			break;
+    		
+    		case 4: // colisión
+    			if (disparoPintado) {
+    				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
+    			}
+    			disparoPintado = false;
+    			break;
+    			
+    		case 6: // game over
+    			JOptionPane.showMessageDialog(MainFrame.this,
+                        "GAME OVER", "Fin", JOptionPane.ERROR_MESSAGE);
+                    break;
+                    
+    		case 7: // game won
+    			JOptionPane.showMessageDialog(MainFrame.this,
+                        "HAS GANADO!", "Fin", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+    	}
+    }
+    
     private class Controller implements KeyListener {
 
         @Override

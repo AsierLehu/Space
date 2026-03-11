@@ -12,13 +12,13 @@ public class Espacio extends Observable {
     private static Espacio miEspacio;
 	private ArrayList<Enemigo> enemigos;
 	private Jugador jugador;
-	private int anchura = 100;
-	private int altura = 60;
+	private static int anchura = 100;
+	private static int altura = 60;
 	
-	// Timer del juego - L√≥gica de negocio del modelo
+	// Timer del juego
 	private Timer gameTimer;
 	private int frameCount;
-	
+
     private Espacio() {
         this.enemigos = new ArrayList<>();
     }
@@ -32,8 +32,9 @@ public class Espacio extends Observable {
     	inicializar();
     	iniciarJuegoLoop(); // Iniciar el timer del juego
     	setChanged();       
-    	notifyObservers();   
+    	notifyObservers(new int[] {5});   
     }
+    
     private void inicializar() {
         jugador = new Jugador();
 
@@ -51,58 +52,88 @@ public class Espacio extends Observable {
         return enemigos;
     }
 
-
-
     public void moverJugador(int dx, int dy) {
         if (jugador != null && jugador.isVivo()) {
             jugador.mover(dx, dy);
-            notificarVista();
+            
+            setChanged();
+            notifyObservers(new int[] {0, jugador.getX(), jugador.getY()});
         }
     }
 
     public void disparar() {
         if (jugador != null && jugador.isVivo()) {
             jugador.disparar();
-            notificarVista();
+            Disparo d = jugador.getDisparo();
+            setChanged();
+            notifyObservers(new int[] {1, d.getX(), d.getY()});
         }
     }
 
-    // Llamado cada 50ms: mueve el disparo 1 p√≠xel hacia arriba
+    // Llamado cada 50ms: mueve el disparo 1 pÌxel hacia arriba
     public void actualizarDisparo() {
         if (jugador == null) return;
 
         Disparo d = jugador.getDisparo();
         if (d.isActivo()) {
             d.subir();
-            comprobarColisiones(d);
-            notificarVista();
+            if (!d.isActivo()) {
+            	// El disparo saliÛ del tablero
+            	setChanged();
+            	notifyObservers(new int[] {2});
+            }
+            else {
+            	boolean colision = comprobarColisiones(d);
+            	if (colision) {}
+            	else {
+            		setChanged();
+            		notifyObservers(new int[] {1, d.getX(), d.getY()});
+            	}
+            }
         }
     }
 
     // Llamado cada 200ms: baja los enemigos 1 p√≠xel
     public void actualizarEnemigos() {
         Disparo d = jugador.getDisparo();
-        for (Enemigo e : enemigos) {
+        for (int i = 0; i < enemigos.size(); i++) {
+        	Enemigo e = enemigos.get(i);
             if (e.isVivo()) {
                 e.mover(0, 1);
-                if (d != null && d.isActivo()) comprobarColisiones(d);
+                if (d != null && d.isActivo()) {
+                	comprobarColisiones(d);
+                }
+                //Manda la nueva posiciÛn de cda enemgio en su Ìndice (ahora solo hay 1)
+                setChanged();
+                notifyObservers(new int[] {3, i, e.getX(), e.getY()});
             }
         }
-        notificarVista();
+        if (isGameOver()) {
+        	setChanged();
+        	notifyObservers(new int[] {6});
+        }
     }
 
-    private void comprobarColisiones(Disparo d) {
-        for (Enemigo e : enemigos) {
+    private boolean comprobarColisiones(Disparo d) {
+        for (int i = 0; i < enemigos.size(); i++) {
+        	Enemigo e = enemigos.get(i);
             if (e.isVivo() && d.getX() == e.getX()
                     && d.getY() <= e.getY() && d.getY() >= e.getY() - 1) { // si es menor, debe cumplir que sea 1 pixel por debajo del enemigo. si es el mismo, cumple.
                 e.setVivo(false);
                 d.setActivo(false);
-                notificarVista();
+                setChanged();
+                notifyObservers(new int[] {4, i});
+                if (isGameWon()) {
+                	setChanged();
+                	notifyObservers(new int[] {7});
+                }
+                return true;
             }
         }
+        return false;
     }
 
-    // Derrota: un enemigo llega a la fila del jugador o m√°s abajo
+    // Derrota: un enemigo llega a la fila del jugador o m·s abajo
     public boolean isGameOver() {
         if (jugador == null || !jugador.isVivo()) return true;
 
@@ -112,7 +143,7 @@ public class Espacio extends Observable {
         return false;
     }
 
-    // Victoria: hay al menos un enemigo Y todos est√°n eliminados
+    // VictorÌa: hay al menos un enemigo Y todos est·n eliminados
     public boolean isGameWon() {
         if (enemigos.isEmpty()) return false;
         for (Enemigo e : enemigos) {
@@ -126,7 +157,7 @@ public class Espacio extends Observable {
     public int getAltura()  { return altura;  }
 
     /**
-     * Inicia el bucle principal del juego (game loop) - L√≥gica de negocio
+     * Inicia el bucle principal del juego (game loop)
      * Tick cada 50ms para disparos, cada 200ms para enemigos
      */
     public void iniciarJuegoLoop() {
@@ -156,10 +187,5 @@ public class Espacio extends Observable {
             gameTimer.stop();
             gameTimer = null;
         }
-    }
-
-    private void notificarVista() {
-        setChanged();
-        notifyObservers();
     }
 }
