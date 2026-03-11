@@ -36,7 +36,7 @@ public class Espacio extends Observable {
     }
     
     private void inicializar() {
-        jugador = new Jugador();
+        jugador = new Jugador(50, 55);
 
         Random rand = new Random();
         int ex = rand.nextInt(anchura);
@@ -70,7 +70,7 @@ public class Espacio extends Observable {
         }
     }
 
-    // Llamado cada 50ms: mueve el disparo 1 píxel hacia arriba
+    // Llamado cada 50ms: mueve el disparo 1 pï¿½xel hacia arriba
     public void actualizarDisparo() {
         if (jugador == null) return;
 
@@ -78,14 +78,13 @@ public class Espacio extends Observable {
         if (d.isActivo()) {
             d.subir();
             if (!d.isActivo()) {
-            	// El disparo salió del tablero
+            	// El disparo saliï¿½ del tablero
             	setChanged();
             	notifyObservers(new int[] {2});
             }
             else {
             	boolean colision = comprobarColisiones(d);
-            	if (colision) {}
-            	else {
+            	if (!colision){
             		setChanged();
             		notifyObservers(new int[] {1, d.getX(), d.getY()});
             	}
@@ -103,7 +102,7 @@ public class Espacio extends Observable {
                 if (d != null && d.isActivo()) {
                 	comprobarColisiones(d);
                 }
-                //Manda la nueva posición de cda enemgio en su índice (ahora solo hay 1)
+                // Notifica la nueva posiciÃ³n del enemigo junto a su Ã­ndice en el array
                 setChanged();
                 notifyObservers(new int[] {3, i, e.getX(), e.getY()});
             }
@@ -118,11 +117,11 @@ public class Espacio extends Observable {
         for (int i = 0; i < enemigos.size(); i++) {
         	Enemigo e = enemigos.get(i);
             if (e.isVivo() && d.getX() == e.getX()
-                    && d.getY() <= e.getY() && d.getY() >= e.getY() - 1) { // si es menor, debe cumplir que sea 1 pixel por debajo del enemigo. si es el mismo, cumple.
+                    && d.getY() <= e.getY() && d.getY() >= e.getY() - 1) { // ventana de 2 pÃ­xeles: evitamos el error de que no "choquen" 
                 e.setVivo(false);
                 d.setActivo(false);
                 setChanged();
-                notifyObservers(new int[] {4, i});
+                notifyObservers(new int[] {4, e.getX(), e.getY()});
                 if (isGameWon()) {
                 	setChanged();
                 	notifyObservers(new int[] {7});
@@ -133,7 +132,7 @@ public class Espacio extends Observable {
         return false;
     }
 
-    // Derrota: un enemigo llega a la fila del jugador o más abajo
+    // Derrota: un enemigo llega a la fila del jugador o mï¿½s abajo
     public boolean isGameOver() {
         if (jugador == null || !jugador.isVivo()) return true;
 
@@ -143,7 +142,7 @@ public class Espacio extends Observable {
         return false;
     }
 
-    // Victoría: hay al menos un enemigo Y todos están eliminados
+    // Victorï¿½a: hay al menos un enemigo Y todos estï¿½n eliminados
     public boolean isGameWon() {
         if (enemigos.isEmpty()) return false;
         for (Enemigo e : enemigos) {
@@ -179,13 +178,4 @@ public class Espacio extends Observable {
         gameTimer.start();
     }
 
-    /**
-     * Detiene el bucle principal del juego
-     */
-    public void detenerJuegoLoop() {
-        if (gameTimer != null) {
-            gameTimer.stop();
-            gameTimer = null;
-        }
-    }
 }

@@ -78,11 +78,14 @@ public class MainFrame extends JFrame implements Observer {
     public void update(Observable o, Object arg) {
     	if (o instanceof Espacio) {
     		int[] datos = (int[]) arg;
-    		SwingUtilities.invokeLater(new Runnable() {
+            /// investigar esto de invokeLater
+    		/*SwingUtilities.invokeLater(new Runnable() {
     			public void run() {
     				procesarNotificacion(datos);
     			}
     		});
+    		*/
+    		procesarNotificacion(datos);
     	}
     }
 
@@ -90,14 +93,14 @@ public class MainFrame extends JFrame implements Observer {
     	int tipo = datos[0];
     	
     	switch (tipo) {
-    		case 0: // jugador se movió
+    		case 0: // jugador se mueve
     			celdas[jugadorX][jugadorY].setBackground(COLOR_FONDO);
     			jugadorX = datos[1];
     			jugadorY = datos[2];
     			celdas[jugadorX][jugadorY].setBackground(COLOR_JUGADOR);
     			break;
         
-    		case 1: //dispro se movió
+    		case 1: // disparo se mueve
     			if (disparoPintado) {
     				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
     			}
@@ -107,23 +110,24 @@ public class MainFrame extends JFrame implements Observer {
     			disparoPintado = true;
     			break;
     			
-    		case 2: // disparo salió del tablero
+    		case 2: // disparo salio del tablero
     			if (disparoPintado ) {
     				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
     			}
     			disparoPintado = false;
     			break;
     		
-    		case 3: // enemigo bajó
+    		case 3: // enemigo baja
     			celdas[datos[2]][datos[3]-1].setBackground(COLOR_FONDO);
     			celdas[datos[2]][datos[3]].setBackground(COLOR_ENEMIGO);
     			break;
     		
-    		case 4: // colisión
+    		case 4: // colision: borra disparo y enemigo
     			if (disparoPintado) {
     				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
     			}
     			disparoPintado = false;
+    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
     			break;
     			
     		case 6: // game over

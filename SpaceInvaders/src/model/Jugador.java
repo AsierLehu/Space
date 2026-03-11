@@ -5,8 +5,8 @@ public class Jugador extends Naves {
 	private Disparo disparo;
 	
 	// Posici�n inicial: (50, 55) seg�n requisitos
-	public Jugador() {
-		super(50, 55);
+	public Jugador(int x, int y) {
+		super(x, y);
 		this.disparo = new Disparo(x, y);
 	}
 	

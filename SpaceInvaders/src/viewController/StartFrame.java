@@ -14,12 +14,6 @@ import model.Espacio;
 @SuppressWarnings("deprecation")
 public class StartFrame extends JFrame implements Observer {
 
-	private JPanel contentPane;
-
-	/**
-	 * Launch the application.
-	 */
-
 	/**
 	 * Create the frame.
 	 */
