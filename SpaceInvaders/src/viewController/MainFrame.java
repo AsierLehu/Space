@@ -18,6 +18,7 @@ public class MainFrame extends JFrame implements Observer {
     private static final Color COLOR_DISPARO = Color.YELLOW;
 
     private JLabel[][] celdas;
+    private JLabel mensajeFin;
     private Espacio espacio;
     
     private int jugadorX;
@@ -72,6 +73,18 @@ public class MainFrame extends JFrame implements Observer {
         
         addKeyListener(new Controller());
         add(gamePanel);
+    }
+
+    private void mostrarMensajeFin(String texto, Color color) {
+        mensajeFin = new JLabel(texto, SwingConstants.CENTER);
+        mensajeFin.setFont(new Font("Monospaced", Font.BOLD, 28));
+        mensajeFin.setOpaque(true);
+        mensajeFin.setBackground(Color.BLACK);
+        mensajeFin.setForeground(color);
+        mensajeFin.setPreferredSize(new Dimension(espacio.getAnchura() * 10, 40));
+        add(mensajeFin, BorderLayout.SOUTH);
+        revalidate();
+        pack();
     }
 
     @Override
@@ -130,15 +143,8 @@ public class MainFrame extends JFrame implements Observer {
     			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
     			break;
     			
-    		case 6: // game over
-    			JOptionPane.showMessageDialog(MainFrame.this,
-                        "GAME OVER", "Fin", JOptionPane.ERROR_MESSAGE);
-                    break;
-                    
-    		case 7: // game won
-    			JOptionPane.showMessageDialog(MainFrame.this,
-                        "HAS GANADO!", "Fin", JOptionPane.INFORMATION_MESSAGE);
-                    break;
+    		case 6: mostrarMensajeFin("GAME OVER",   Color.RED);   break;
+    		case 7: mostrarMensajeFin("HAS GANADO!", Color.GREEN); break;
     	}
     }
     
