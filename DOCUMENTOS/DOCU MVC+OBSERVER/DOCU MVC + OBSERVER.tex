@@ -81,9 +81,43 @@ Para que la vista se mantenga actualizada cuando cambian los datos del modelo, n
 
 La combinación de MVC y Observer permite desarrollar aplicaciones más modulares, donde la lógica del programa, la presentación de los datos y la interacción con el usuario están claramente separadas. Esto facilita la reutilización del código, la ampliación del sistema y el mantenimiento a largo plazo de la aplicación.
 
-\begin{pendiente}
-\textbf{Pendiente:} añadir la explicación del patrón MVC+Observer aplicada concretamente al proyecto Space Invaders (qué clase es el modelo, cuáles son las vistas y cómo está conectado todo).
-\end{pendiente}
+% --------------------------------------------------
+\subsection{Aplicación al proyecto Space Invaders}
+
+En el proyecto Space Invaders, las tres capas del patrón MVC se distribuyen de la siguiente manera:
+
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Modelo}]
+        La clase central del modelo es \texttt{Espacio}, que actúa como Singleton (se obtiene siempre con \lstinline|Espacio.getEspacio()|) y extiende \texttt{Observable}. Contiene todo el estado del juego: la instancia del \texttt{Jugador}, la lista de \texttt{Enemigo}s y el objeto \texttt{Disparo} asociado al jugador. Además, \texttt{Espacio} alberga toda la lógica de negocio: el bucle principal del juego (\textit{game loop} con un \texttt{Timer} de 50 ms), la detección de colisiones entre el disparo y los enemigos, y las condiciones de fin de partida (\textit{game over} y victoria).
+
+        Las clases auxiliares del modelo son:
+        \begin{itemize}[leftmargin=2em]
+            \item \texttt{Naves} — clase abstracta con los atributos comunes (\texttt{x}, \texttt{y}, \texttt{velocidad}, \texttt{vivo}) y el método abstracto \texttt{mover}.
+            \item \texttt{Jugador} — extiende \texttt{Naves}; gestiona el movimiento dentro de los límites del tablero y posee un objeto \texttt{Disparo}.
+            \item \texttt{Enemigo} — extiende \texttt{Naves}; se crea en una posición aleatoria en la parte superior y desciende píxel a píxel.
+            \item \texttt{Disparo} — almacena la posición del proyectil y si está activo; sube un píxel por tick y se desactiva al salir del tablero.
+        \end{itemize}
+
+        Ninguna de estas clases conoce la interfaz gráfica ni sabe cómo se dibuja el juego; solo gestionan datos y reglas.
+
+    \item[\textbf{Vista}]
+        Las vistas son \texttt{StartFrame} y \texttt{MainFrame}, ambas subclases de \texttt{JFrame} e implementan la interfaz \texttt{Observer}:
+        \begin{itemize}[leftmargin=2em]
+            \item \texttt{StartFrame} muestra la pantalla de inicio con el título, las instrucciones de control y el mensaje «Pulsa SPACE para jugar». No dibuja ningún elemento del juego.
+            \item \texttt{MainFrame} pinta el estado del juego en cada actualización: el tablero (cuadrícula negra de $100 \times 60$ celdas de 10 px), el jugador en magenta, los enemigos en rojo y el disparo en amarillo. También muestra el mensaje de victoria o derrota cuando la partida termina.
+        \end{itemize}
+
+        Ambas vistas se registran como observadoras de \texttt{Espacio} al construirse, con la llamada \lstinline|Espacio.getEspacio().addObserver(this)|.
+
+    \item[\textbf{Controlador}]
+        Los controladores son clases internas privadas llamadas \texttt{Controller} definidas dentro de \texttt{StartFrame} y \texttt{MainFrame}. Ambas implementan \texttt{KeyListener}, de modo que reciben los eventos de teclado del usuario y los traducen en llamadas al modelo:
+        \begin{itemize}[leftmargin=2em]
+            \item El \texttt{Controller} de \texttt{StartFrame} solo atiende la pulsación de \texttt{SPACE} para llamar a \lstinline|Espacio.getEspacio().cambiarAMain()|.
+            \item El \texttt{Controller} de \texttt{MainFrame} atiende las cuatro flechas direccionales (llamando a \lstinline|espacio.moverJugador(dx, dy)|) y la barra espaciadora (llamando a \lstinline|espacio.disparar()|), ignorando cualquier entrada si la partida ya ha terminado.
+        \end{itemize}
+\end{description}
+
+La relación entre las tres capas queda así: el usuario interactúa con la \textbf{Vista} (ventana con foco de teclado), el \textbf{Controlador} captura esa interacción y llama al \textbf{Modelo}, y el Modelo notifica a la Vista para que se repinte. En ningún momento la vista accede directamente a la lógica del juego, ni el modelo sabe cómo se representa gráficamente.
 
 % ==================================================
 \section{Diagramas MVC + Observer}
@@ -218,8 +252,69 @@ El funcionamiento coordinado de estos dos métodos permite mantener sincronizado
 
 Gracias a este mecanismo, los cambios en el sistema se propagan automáticamente a los objetos que dependen de ellos, sin necesidad de que exista una dependencia directa entre todas las clases.
 
-\begin{pendiente}
-\textbf{Pendiente:} añadir la explicación de \texttt{notify} y \texttt{update} aplicada concretamente al juego (qué clase llama a \texttt{notify}, en qué momentos, y cómo responden \texttt{MainFrame} y \texttt{StartFrame} en sus respectivos \texttt{update}).
-\end{pendiente}
+% --------------------------------------------------
+\subsection{Aplicación al proyecto Space Invaders}
+
+\subsubsection*{Quién notifica y cuándo}
+
+En el proyecto, el observable es \texttt{Espacio}. Toda notificación a los observadores pasa por el método privado \texttt{notificarVista()}, que ejecuta siempre la misma secuencia:
+
+\begin{lstlisting}
+private void notificarVista() {
+    setChanged();
+    notifyObservers();
+}
+\end{lstlisting}
+
+La llamada a \lstinline|setChanged()| es obligatoria antes de \lstinline|notifyObservers()|: sin ella, la clase \texttt{Observable} no propagaría nada. \texttt{notifyObservers()} recorre internamente la lista de observers registrados y llama al \texttt{update} de cada uno.
+
+\texttt{notificarVista()} se invoca desde varios puntos del modelo, cada vez que el estado del juego cambia y la pantalla debe reflejarlo:
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Al mover al jugador} — dentro de \texttt{moverJugador()}, tras actualizar la posición.
+    \item \textbf{Al disparar} — dentro de \texttt{disparar()}, tras crear el nuevo \texttt{Disparo}.
+    \item \textbf{Al actualizar el disparo} — dentro de \texttt{actualizarDisparo()}, en cada tick del \textit{game loop} (cada 50 ms) mientras el proyectil está activo.
+    \item \textbf{Al detectar una colisión} — dentro de \texttt{comprobarColisiones()}, cuando el disparo alcanza a un enemigo (el enemigo pasa a \texttt{vivo = false} y el disparo se desactiva).
+    \item \textbf{Al bajar los enemigos} — dentro de \texttt{actualizarEnemigos()}, cada 200 ms, tras desplazar todos los enemigos vivos.
+\end{itemize}
+
+Adicionalmente, \texttt{cambiarAMain()} llama directamente a \lstinline|setChanged()| y \lstinline|notifyObservers()| (sin pasar por \texttt{notificarVista()}) para señalar que el juego ha cambiado al estado principal y que \texttt{StartFrame} debe reaccionar.
+
+\subsubsection*{Cómo responde \texttt{MainFrame} en su \texttt{update}}
+
+\texttt{MainFrame} implementa \texttt{Observer} y se registra en \texttt{Espacio} al construirse. Su método \texttt{update} es muy directo:
+
+\begin{lstlisting}
+@Override
+public void update(Observable o, Object arg) {
+    gamePanel.repaint();
+}
+\end{lstlisting}
+
+Cada vez que \texttt{Espacio} notifica un cambio, \texttt{MainFrame} simplemente repinta el panel de juego. Esto provoca una llamada a \texttt{paintComponent}, que a su vez ejecuta \texttt{dibujar(g)}: se redibuja el tablero, el jugador, los enemigos vivos, el disparo (si está activo) y, si procede, el mensaje de victoria o derrota. \texttt{MainFrame} no necesita saber \textit{qué} cambió exactamente; se limita a leer el estado actual del modelo y volcar lo que encuentra.
+
+\subsubsection*{Cómo responde \texttt{StartFrame} en su \texttt{update}}
+
+\texttt{StartFrame} también implementa \texttt{Observer} y se registra en \texttt{Espacio} al construirse. Su método \texttt{update} tiene un comportamiento distinto: no dibuja nada, sino que gestiona la transición entre pantallas:
+
+\begin{lstlisting}
+@Override
+public void update(Observable o, Object arg) {
+    if (o instanceof Espacio) {
+        Espacio.getEspacio().deleteObserver(this);
+        this.setVisible(false);
+        new MainFrame();
+    }
+}
+\end{lstlisting}
+
+Cuando \texttt{Espacio} notifica (lo que ocurre al llamar a \texttt{cambiarAMain()} desde el controlador de \texttt{StartFrame}), este \texttt{update}:
+\begin{enumerate}[leftmargin=2em]
+    \item Se desregistra como observer con \lstinline|deleteObserver(this)|, para no recibir más notificaciones futuras del juego.
+    \item Oculta la ventana de inicio con \lstinline|setVisible(false)|.
+    \item Crea un \texttt{MainFrame}, que al construirse se registra automáticamente como el nuevo observer y abre la pantalla de juego.
+\end{enumerate}
+
+Así, un único evento de notificación actúa como señal de arranque: hace desaparecer la pantalla de inicio y aparece la pantalla de juego, sin que ninguna de las dos clases necesite conocerse directamente entre sí.
 
 \end{document}
