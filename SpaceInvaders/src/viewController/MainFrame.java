@@ -7,8 +7,6 @@ import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.border.EmptyBorder;
-
 import model.Disparo;
 import model.Enemigo;
 import model.Espacio;
@@ -17,36 +15,17 @@ import model.Jugador;
 @SuppressWarnings("deprecation")
 public class MainFrame extends JFrame implements Observer {
 
-	// Tamaño de cada celda en píxeles de pantalla
-    private static final int CELL_SIZE = 10;
+    private static final Color COLOR_FONDO   = new Color(20, 20, 20);
+    private static final Color COLOR_JUGADOR = Color.MAGENTA;
+    private static final Color COLOR_ENEMIGO = Color.RED;
+    private static final Color COLOR_DISPARO = Color.YELLOW;
 
-    private JPanel gamePanel;
-
-    // Referencia al modelo
+    private JButton[][] celdas;
     private Espacio espacio;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public MainFrame() {
-		espacio = Espacio.getEspacio();
-		espacio.addObserver(this);
+    public MainFrame() {
+        espacio = Espacio.getEspacio();
+        espacio.addObserver(this);
 
         setTitle("Space Invaders — Juego");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,103 +36,77 @@ public class MainFrame extends JFrame implements Observer {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
-
-        // El foco debe estar en el frame para capturar teclado
         requestFocusInWindow();
-	}
-	
+    }
+
     private void initPanel() {
-        gamePanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                dibujar(g);
+        int cols = espacio.getAnchura();
+        int rows = espacio.getAltura();
+
+        celdas = new JButton[cols][rows];
+
+        JPanel gamePanel = new JPanel(new GridLayout(rows, cols, 0, 0));
+        gamePanel.setBackground(COLOR_FONDO);
+
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                JButton btn = new JButton();
+                btn.setPreferredSize(new Dimension(10, 10));
+                btn.setBackground(COLOR_FONDO);
+                btn.setBorder(BorderFactory.createLineBorder(new Color(35, 35, 35), 1));
+                btn.setFocusable(false);
+                celdas[x][y] = btn;
+                gamePanel.add(btn);
             }
-        };
-        gamePanel.setBackground(Color.BLACK);
-        gamePanel.setPreferredSize(new Dimension(
-                espacio.getAnchura() * CELL_SIZE,
-                espacio.getAltura()  * CELL_SIZE
-        ));
+        }
 
-        // Añadir el Controller (clase privada interna)
-        Controller controller = new Controller();
-        addKeyListener(controller);
-
+        addKeyListener(new Controller());
         add(gamePanel);
     }
 
-    private void dibujar(Graphics g) {
+    private void actualizarVista() {
+        int cols = espacio.getAnchura();
+        int rows = espacio.getAltura();
 
-        // Fondo cuadrícula (opcional, ayuda a ver el tablero)
-        g.setColor(new Color(20, 20, 20));
-        for (int x = 0; x < espacio.getAnchura(); x++) {
-            for (int y = 0; y < espacio.getAltura(); y++) {
-                g.drawRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+        // Resetear todas las celdas al color de fondo
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                celdas[x][y].setBackground(COLOR_FONDO);
             }
         }
 
-        // Dibujar jugador (nave con forma)
+        // Pintar jugador
         Jugador jugador = espacio.getJugador();
         if (jugador != null && jugador.isVivo()) {
-            dibujarNave(g, jugador.getX(), jugador.getY());
+            celdas[jugador.getX()][jugador.getY()].setBackground(COLOR_JUGADOR);
         }
 
-        // Dibujar enemigos (píxel rojo)
+        // Pintar enemigos
         for (Enemigo e : espacio.getEnemigos()) {
             if (e.isVivo()) {
-                g.setColor(Color.RED);
-                g.fillRect(
-                    e.getX() * CELL_SIZE,
-                    e.getY() * CELL_SIZE,
-                    CELL_SIZE, CELL_SIZE
-                );
+                celdas[e.getX()][e.getY()].setBackground(COLOR_ENEMIGO);
             }
         }
 
-        // Dibujar disparo (píxel amarillo)
+        // Pintar disparo
         if (jugador != null) {
             Disparo d = jugador.getDisparo();
             if (d.isActivo()) {
-                g.setColor(Color.YELLOW);
-                g.fillRect(
-                    d.getX() * CELL_SIZE,
-                    d.getY() * CELL_SIZE,
-                    CELL_SIZE, CELL_SIZE
-                );
+                celdas[d.getX()][d.getY()].setBackground(COLOR_DISPARO);
             }
         }
 
-        // Mensajes de fin de partida
+        // Mensaje de fin de partida
         if (espacio.isGameWon()) {
-            dibujarMensaje(g, "¡HAS GANADO!", Color.GREEN);
+            JOptionPane.showMessageDialog(this, "¡HAS GANADO!", "Fin", JOptionPane.INFORMATION_MESSAGE);
         } else if (espacio.isGameOver()) {
-            dibujarMensaje(g, "GAME OVER", Color.RED);
+            JOptionPane.showMessageDialog(this, "GAME OVER", "Fin", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private void dibujarMensaje(Graphics g, String mensaje, Color color) {
-        g.setColor(new Color(0, 0, 0, 180));
-        g.fillRect(0, espacio.getAltura() * CELL_SIZE / 2 - 30,
-                   espacio.getAnchura() * CELL_SIZE, 60);
-        g.setColor(color);
-        g.setFont(new Font("Monospaced", Font.BOLD, 32));
-        FontMetrics fm = g.getFontMetrics();
-        int tx = (espacio.getAnchura() * CELL_SIZE - fm.stringWidth(mensaje)) / 2;
-        int ty = espacio.getAltura() * CELL_SIZE / 2 + fm.getAscent() / 2;
-        g.drawString(mensaje, tx, ty);
-    }
-
-    private void dibujarNave(Graphics g, int x, int y) {
-        g.setColor(Color.MAGENTA);
-        
-        g.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        gamePanel.repaint();
+        SwingUtilities.invokeLater(this::actualizarVista);
     }
 
     private class Controller implements KeyListener {
@@ -171,18 +124,7 @@ public class MainFrame extends JFrame implements Observer {
             }
         }
 
-        @Override
-        public void keyReleased(KeyEvent e) {
-            // No se necesita acción al soltar la tecla
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-            // No se necesita acción
-        }
+        @Override public void keyReleased(KeyEvent e) {}
+        @Override public void keyTyped(KeyEvent e) {}
     }
-
-		
-	}
-
-
+}
