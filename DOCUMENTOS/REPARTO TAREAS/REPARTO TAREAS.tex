@@ -1,0 +1,149 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\geometry{margin=2.5cm}
+
+% Colores
+\definecolor{cabecera}{RGB}{30, 90, 160}
+\definecolor{filasombreada}{RGB}{220, 232, 250}
+
+% Estilo de sección
+\titleformat{\section}{\large\bfseries\color{cabecera}}{}{0em}{}[\titlerule]
+
+% --------------------------------------------------
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{Reparto de Tareas}}\\[0.4em]
+    {\large \textit{Space Invaders — Proyecto de Programación}}\\[0.3em]
+    {\small Fecha: \today}
+\end{center}
+
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Miembros del equipo}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Miembro 1:} Nombre Apellido
+    \item \textbf{Miembro 2:} Nombre Apellido
+    \item \textbf{Miembro 3:} Nombre Apellido
+    % Añadir o eliminar miembros según corresponda
+\end{itemize}
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Tabla de reparto de tareas}
+
+\begin{longtable}{>{\bfseries}p{0.04\textwidth} p{0.28\textwidth} p{0.40\textwidth} p{0.16\textwidth}}
+    \rowcolor{cabecera}
+    \textcolor{white}{\#} &
+    \textcolor{white}{Tarea} &
+    \textcolor{white}{Descripción} &
+    \textcolor{white}{Responsable(s)} \\
+    \midrule
+    \endfirsthead
+
+    \rowcolor{cabecera}
+    \textcolor{white}{\#} &
+    \textcolor{white}{Tarea} &
+    \textcolor{white}{Descripción} &
+    \textcolor{white}{Responsable(s)} \\
+    \midrule
+    \endhead
+
+    % ---- Fila de ejemplo (duplicar para añadir más tareas) ----
+    \rowcolor{filasombreada}
+    1 & Diseño del modelo (MVC) &
+    Definición de las clases del modelo: \texttt{Espacio}, \texttt{Jugador}, \texttt{Enemigo}, \texttt{Naves}, \texttt{Disparo}. Implementación de la lógica del juego. &
+    Miembro 1 \\
+    \midrule
+
+    2 & Patrón Observer &
+    Implementación de las interfaces \texttt{Observable} y \texttt{Observador}. Conexión entre modelo y vista. &
+    Miembro 2 \\
+    \midrule
+
+    \rowcolor{filasombreada}
+    3 & Vista y controlador &
+    Desarrollo de \texttt{MainFrame} y \texttt{StartFrame}. Pintado del tablero, captura de eventos de teclado y actualización de la interfaz. &
+    Miembro 3 \\
+    \midrule
+
+    4 & Lógica de disparo y colisiones &
+    Detección de colisiones entre disparos y naves enemigas/jugador. Control del ciclo de vida de los disparos. &
+    Miembro 1, Miembro 2 \\
+    \midrule
+
+    \rowcolor{filasombreada}
+    5 & Movimiento de enemigos &
+    Algoritmo de movimiento grupal de los enemigos, cambio de dirección al llegar a los bordes y descenso de filas. &
+    Miembro 2 \\
+    \midrule
+
+    6 & Gestión del juego (Main / bucle) &
+    Configuración del \texttt{Main}, hilo del juego, control de estados (inicio, partida, fin) y reinicio. &
+    Miembro 3 \\
+    \midrule
+
+    \rowcolor{filasombreada}
+    7 & Documentación &
+    Redacción de la memoria, diagramas UML, justificación del patrón MVC+Observer y este documento de reparto. &
+    Todos \\
+    \midrule
+
+    % ---- Añadir nuevas tareas aquí ----
+    8 & & & \\
+
+    \bottomrule
+\end{longtable}
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Detalle individual de contribuciones}
+
+% ---- Repetir este bloque para cada miembro ----
+\subsection*{Miembro 1 — Nombre Apellido}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Tarea 1 — Diseño del modelo:} descripción breve de lo que hizo concretamente (clases creadas, métodos implementados, decisiones de diseño tomadas\ldots).
+    \item \textbf{Tarea 4 — Lógica de disparo y colisiones:} descripción breve.
+\end{itemize}
+
+\subsection*{Miembro 2 — Nombre Apellido}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Tarea 2 — Patrón Observer:} descripción breve.
+    \item \textbf{Tarea 4 — Lógica de disparo y colisiones:} descripción breve.
+    \item \textbf{Tarea 5 — Movimiento de enemigos:} descripción breve.
+\end{itemize}
+
+\subsection*{Miembro 3 — Nombre Apellido}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Tarea 3 — Vista y controlador:} descripción breve.
+    \item \textbf{Tarea 6 — Gestión del juego:} descripción breve.
+\end{itemize}
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Observaciones generales}
+
+\begin{itemize}[leftmargin=2em]
+    \item Escribir aquí cualquier nota sobre la coordinación del equipo, herramientas usadas (Git, etc.) o dificultades encontradas.
+\end{itemize}
+
+\end{document}

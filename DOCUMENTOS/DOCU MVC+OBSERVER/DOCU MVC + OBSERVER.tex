@@ -1,0 +1,225 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{mdframed}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+\geometry{margin=2.5cm}
+
+% Colores
+\definecolor{azulprincipal}{RGB}{30, 90, 160}
+\definecolor{amarillopendiente}{RGB}{255, 200, 0}
+\definecolor{grisclaro}{RGB}{245, 245, 245}
+\definecolor{codigofondo}{RGB}{240, 244, 250}
+\definecolor{codigoborde}{RGB}{30, 90, 160}
+
+% Estilo de secciones
+\titleformat{\section}{\large\bfseries\color{azulprincipal}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{azulprincipal}}{}{0em}{}
+
+% Estilo de código inline
+\lstset{
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{codigofondo},
+    frame=single,
+    rulecolor=\color{codigoborde},
+    breaklines=true,
+    language=Java,
+    keywordstyle=\color{azulprincipal}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{teal},
+}
+
+% Caja de "pendiente"
+\newmdenv[
+    backgroundcolor=amarillopendiente!25,
+    linecolor=amarillopendiente!80!black,
+    leftmargin=0, rightmargin=0,
+    innerleftmargin=8pt, innerrightmargin=8pt,
+    innertopmargin=6pt, innerbottommargin=6pt,
+    roundcorner=4pt
+]{pendiente}
+
+% --------------------------------------------------
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{Documentación: Patrón MVC + Observer}}\\[0.4em]
+    {\large \textit{Space Invaders — Proyecto de Programación}}\\[0.3em]
+    {\small Fecha: \today}
+\end{center}
+
+\vspace{0.5em}
+\hrule
+\vspace{1.5em}
+
+% ==================================================
+\section{Descripción general}
+
+El patrón \textbf{Modelo-Vista-Controlador (MVC)} es una arquitectura de diseño utilizada en programación orientada a objetos que permite organizar una aplicación separando sus componentes en tres partes principales: \textit{Modelo}, \textit{Vista} y \textit{Controlador}. Esta separación facilita el mantenimiento del código, mejora su organización y permite que cada componente tenga una responsabilidad clara dentro del sistema.
+
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Modelo}]
+        Se encarga de gestionar los datos y la lógica del programa. Contiene la información del sistema y las operaciones necesarias para modificarla o consultarla. El modelo no depende de la interfaz gráfica ni de cómo se muestran los datos al usuario.
+
+    \item[\textbf{Vista}]
+        Es la parte encargada de presentar la información al usuario. Su función principal es mostrar los datos que proporciona el modelo y actualizarse cuando estos cambian. La vista no contiene la lógica principal del programa, sino únicamente la representación visual de la información.
+
+    \item[\textbf{Controlador}]
+        Actúa como intermediario entre el usuario y el sistema. Recibe las acciones del usuario (por ejemplo, clics, entradas de teclado, etc.), interpreta estas acciones y solicita al modelo que realice las operaciones correspondientes. Después, puede indicar a la vista que actualice la información mostrada.
+\end{description}
+
+Para que la vista se mantenga actualizada cuando cambian los datos del modelo, normalmente se utiliza el \textbf{patrón Observer (Observador)}. Este patrón establece una relación entre un objeto denominado \textit{observable} (el modelo) y uno o varios \textit{observadores} (las vistas). Cuando el estado del observable cambia, todos los observadores registrados son notificados automáticamente y pueden actualizar su información.
+
+La combinación de MVC y Observer permite desarrollar aplicaciones más modulares, donde la lógica del programa, la presentación de los datos y la interacción con el usuario están claramente separadas. Esto facilita la reutilización del código, la ampliación del sistema y el mantenimiento a largo plazo de la aplicación.
+
+\begin{pendiente}
+\textbf{Pendiente:} añadir la explicación del patrón MVC+Observer aplicada concretamente al proyecto Space Invaders (qué clase es el modelo, cuáles son las vistas y cómo está conectado todo).
+\end{pendiente}
+
+% ==================================================
+\section{Diagramas MVC + Observer}
+
+\begin{pendiente}
+\textbf{Pendiente:} insertar los diagramas UML que ilustren la arquitectura MVC y la relación Observer entre las clases del proyecto.
+\end{pendiente}
+
+% ==================================================
+\section{Controlador (Controller)}
+
+El controlador es el componente encargado de gestionar la interacción entre el usuario, el modelo y la vista dentro del patrón MVC. Su función principal es recibir las acciones del usuario, interpretarlas y coordinar la respuesta del sistema.
+
+Cuando el usuario realiza una acción en la interfaz (por ejemplo, pulsar un botón, seleccionar una opción o introducir datos), esta acción es capturada por el controlador. El controlador analiza la acción y decide qué operación debe realizarse en el modelo, que es el componente que contiene la lógica del programa y los datos.
+
+Una vez que el controlador solicita al modelo que realice una operación (por ejemplo, modificar un dato o ejecutar una acción), el modelo actualiza su estado interno. En muchos sistemas que utilizan el patrón Observer, cuando el modelo cambia su estado notifica automáticamente a las vistas para que actualicen la información que muestran al usuario.
+
+Por tanto, el controlador no contiene los datos del sistema ni se encarga de mostrarlos, sino que actúa como un intermediario que conecta las acciones del usuario con las operaciones del modelo.
+
+En aplicaciones más complejas puede haber varios controladores, cada uno responsable de gestionar diferentes partes de la aplicación o diferentes tipos de interacción. Esto permite dividir la lógica de control y mantener el sistema mejor organizado y más fácil de mantener.
+
+En resumen, el controlador se encarga de:
+
+\begin{itemize}[leftmargin=2em]
+    \item Recibir las acciones del usuario.
+    \item Interpretar esas acciones.
+    \item Solicitar al modelo que realice las operaciones necesarias.
+    \item Coordinar la actualización de la vista cuando es necesario.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Explicación aplicada al juego}
+
+\subsubsection*{Clase \texttt{MainFrame}}
+
+El \texttt{Controller} de esta clase es la parte que traduce las teclas del usuario en acciones del juego. Está definido como una clase interna en \texttt{MainFrame} e implementa \texttt{KeyListener}, por lo que escucha eventos del teclado.
+
+Su flujo es el siguiente:
+
+\begin{enumerate}[leftmargin=2em]
+    \item Se crea en \texttt{MainFrame} con \lstinline|Controller controller = new Controller()|.
+    \item Se registra en la ventana con \lstinline|addKeyListener(...)| en \texttt{MainFrame}.
+    \item Para que realmente reciba teclas, el frame solicita el foco en \texttt{MainFrame}.
+\end{enumerate}
+
+Lo importante ocurre en \texttt{keyPressed} en \texttt{MainFrame}:
+
+\begin{itemize}[leftmargin=2em]
+    \item Primero comprueba si la partida ya terminó: si el juego está en \textit{game over} o \textit{ganado}, no hace nada.
+    \item Luego mira qué tecla se pulsó con \lstinline|e.getKeyCode()|.
+    \item Según la tecla, llama al modelo \texttt{Espacio}:
+    \begin{itemize}[leftmargin=2em]
+        \item \textbf{Flecha izquierda:} mueve al jugador a la izquierda.
+        \item \textbf{Flecha derecha:} mueve al jugador a la derecha.
+        \item \textbf{Flecha arriba:} mueve al jugador hacia arriba.
+        \item \textbf{Flecha abajo:} mueve al jugador hacia abajo.
+        \item \textbf{Espacio:} dispara.
+    \end{itemize}
+\end{itemize}
+
+En otras palabras: el \texttt{Controller} no dibuja nada ni calcula reglas visuales; solo captura la entrada del teclado y le dice al modelo qué hacer. Después, cuando el modelo cambia y notifica a la vista, el método \texttt{update} repinta el panel en \texttt{MainFrame}.
+
+\subsubsection*{Clase \texttt{StartFrame}}
+
+En esta clase, el \texttt{Controller} sirve para controlar la pantalla de inicio usando el teclado. Está definido al final de \texttt{StartFrame} como una clase interna que implementa \texttt{KeyListener}.
+
+Su función es muy simple: escuchar si el usuario pulsa la barra espaciadora.
+
+El flujo es el siguiente:
+
+\begin{enumerate}[leftmargin=2em]
+    \item En el constructor de \texttt{StartFrame} se crea el controller y se registra con \lstinline|addKeyListener(controller)|.
+    \item Como la ventana pide el foco con \texttt{StartFrame}, puede recibir eventos del teclado.
+    \item Cuando el usuario pulsa una tecla, se ejecuta \texttt{keyPressed} en \texttt{StartFrame}.
+\end{enumerate}
+
+Dentro de \texttt{keyPressed}, el controller hace una sola comprobación:
+
+\begin{itemize}[leftmargin=2em]
+    \item Si la tecla pulsada es \texttt{SPACE}, llama a \lstinline|iniciarJuego()|.
+\end{itemize}
+
+Ese método está en \texttt{StartFrame} y lo que hace es pedir al modelo \texttt{Espacio} que cambie al estado principal del juego con \lstinline|cambiarAMain()|. Después, como la clase también observa al modelo, el método \texttt{update} en \texttt{StartFrame} responde a ese cambio:
+
+\begin{itemize}[leftmargin=2em]
+    \item Elimina este frame como observer.
+    \item Oculta la ventana de inicio.
+    \item Abre un nuevo \texttt{MainFrame}.
+\end{itemize}
+
+En resumen: el \texttt{Controller} aquí no mueve naves ni dispara. Solo detecta que el usuario pulsa \texttt{SPACE} en la pantalla inicial y lanza el arranque del juego.
+
+% ==================================================
+\section{Métodos \texttt{notify} y \texttt{update}}
+
+Dentro del patrón Observer, los métodos \texttt{notify} y \texttt{update} permiten que los objetos que observan a otro objeto puedan mantenerse informados cuando su estado cambia.
+
+% --------------------------------------------------
+\subsection{Método \texttt{notify}}
+
+El método \texttt{notify} pertenece al objeto \textbf{observable}, que es el objeto que contiene los datos o el estado que puede cambiar. En muchas aplicaciones que siguen la arquitectura MVC, el observable suele ser el modelo, ya que es el componente que gestiona la información y la lógica del sistema.
+
+La función del método \texttt{notify} es avisar a todos los observadores registrados de que el estado del observable ha cambiado. Para ello, el observable mantiene normalmente una lista o colección de observadores que se han registrado previamente para recibir notificaciones.
+
+Cuando ocurre un cambio relevante en el estado del observable (por ejemplo, una modificación de datos), el método \texttt{notify} recorre esta lista de observadores y llama al método \texttt{update} de cada uno de ellos. De esta manera, todos los observadores reciben la notificación del cambio y pueden reaccionar en consecuencia.
+
+Una característica importante del método \texttt{notify} es que el observable \textbf{no necesita conocer los detalles internos de los observadores}. Simplemente se encarga de avisarlos de que ha ocurrido un cambio. Esto permite mantener un bajo acoplamiento entre las clases, lo que facilita la reutilización del código y el mantenimiento del sistema.
+
+% --------------------------------------------------
+\subsection{Método \texttt{update}}
+
+El método \texttt{update} pertenece a los \textbf{observadores}. Cada observador debe implementar este método para definir cómo reaccionará cuando el observable le notifique un cambio.
+
+Cuando el observable ejecuta el método \texttt{notify}, este llama al método \texttt{update} de cada observador registrado. En ese momento, el observador recibe la notificación y puede realizar las acciones necesarias para actualizar su estado.
+
+En muchos casos, el método \texttt{update} se utiliza para que el observador consulte el nuevo estado del observable y adapte su comportamiento o su representación visual. Por ejemplo, si el observable es el modelo de una aplicación y el observador es una vista, el método \texttt{update} se encargará de actualizar la información que se muestra al usuario para reflejar los cambios recientes.
+
+Cada observador puede implementar su propio comportamiento en el método \texttt{update}, lo que permite que diferentes componentes reaccionen de distintas formas ante el mismo cambio en el observable.
+
+% --------------------------------------------------
+\subsection{Funcionamiento conjunto de \texttt{notify} y \texttt{update}}
+
+El funcionamiento coordinado de estos dos métodos permite mantener sincronizados los distintos componentes de un sistema que utiliza el patrón Observer. El proceso general es el siguiente:
+
+\begin{enumerate}[leftmargin=2em]
+    \item Se produce un cambio en el estado del objeto observable.
+    \item El observable detecta ese cambio y ejecuta el método \texttt{notify}.
+    \item El método \texttt{notify} recorre la lista de observadores registrados.
+    \item Para cada observador, se llama a su método \texttt{update}.
+    \item Cada observador recibe la notificación y actualiza su estado o su información según corresponda.
+\end{enumerate}
+
+Gracias a este mecanismo, los cambios en el sistema se propagan automáticamente a los objetos que dependen de ellos, sin necesidad de que exista una dependencia directa entre todas las clases.
+
+\begin{pendiente}
+\textbf{Pendiente:} añadir la explicación de \texttt{notify} y \texttt{update} aplicada concretamente al juego (qué clase llama a \texttt{notify}, en qué momentos, y cómo responden \texttt{MainFrame} y \texttt{StartFrame} en sus respectivos \texttt{update}).
+\end{pendiente}
+
+\end{document}
