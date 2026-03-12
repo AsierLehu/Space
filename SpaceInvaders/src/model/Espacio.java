@@ -31,6 +31,8 @@ public class Espacio extends Observable {
     public void cambiarAMain() {
     	inicializar();
     	iniciarJuegoLoop(); // Iniciar el timer del juego
+    	setChanged();
+    	notifyObservers(new int[] {6, jugador.getX(), jugador.getY(), enemigos.get(0).getX(), enemigos.get(0).getY()});
     }
     
     private void inicializar() {
@@ -52,10 +54,12 @@ public class Espacio extends Observable {
 
     public void moverJugador(int dx, int dy) {
         if (jugador != null && jugador.isVivo()) {
+            int oldX = jugador.getX();
+            int oldY = jugador.getY();
             jugador.mover(dx, dy);
             
             setChanged();
-            notifyObservers(new int[] {0, jugador.getX(), jugador.getY()});
+            notifyObservers(new int[] {0, oldX, oldY, jugador.getX(), jugador.getY()});
         }
     }
 
@@ -74,17 +78,19 @@ public class Espacio extends Observable {
 
         Disparo d = jugador.getDisparo();
         if (d.isActivo()) {
+            int oldX = d.getX();
+            int oldY = d.getY();
             d.subir();
             if (!d.isActivo()) {
             	// El disparo sali� del tablero
             	setChanged();
-            	notifyObservers(new int[] {2});
+            	notifyObservers(new int[] {3, oldX, oldY});
             }
             else {
             	boolean colision = comprobarColisiones(d);
             	if (!colision){
             		setChanged();
-            		notifyObservers(new int[] {1, d.getX(), d.getY()});
+            		notifyObservers(new int[] {2, oldX, oldY, d.getX(), d.getY()});
             	}
             }
         }
@@ -96,18 +102,19 @@ public class Espacio extends Observable {
         for (int i = 0; i < enemigos.size(); i++) {
         	Enemigo e = enemigos.get(i);
             if (e.isVivo()) {
+                int oldX = e.getX();
+                int oldY = e.getY();
                 e.mover(0, 1);
                 if (d != null && d.isActivo()) {
                 	comprobarColisiones(d);
                 }
-                // Notifica la nueva posición del enemigo junto a su índice en el array
                 setChanged();
-                notifyObservers(new int[] {3, i, e.getX(), e.getY()});
+                notifyObservers(new int[] {4, oldX, oldY, e.getX(), e.getY()});
             }
         }
         if (isGameOver()) {
         	setChanged();
-        	notifyObservers(new int[] {6});
+        	notifyObservers(new int[] {7});
         }
     }
 
@@ -119,10 +126,10 @@ public class Espacio extends Observable {
                 e.setVivo(false);
                 d.setActivo(false);
                 setChanged();
-                notifyObservers(new int[] {4, e.getX(), e.getY()});
+                notifyObservers(new int[] {5, d.getX(), d.getY(), e.getX(), e.getY()});
                 if (isGameWon()) {
                 	setChanged();
-                	notifyObservers(new int[] {7});
+                	notifyObservers(new int[] {8});
                 }
                 return true;
             }

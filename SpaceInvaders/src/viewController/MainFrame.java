@@ -20,12 +20,6 @@ public class MainFrame extends JFrame implements Observer {
     private JLabel[][] celdas;
     private JLabel mensajeFin;
     private Espacio espacio;
-    
-    private int jugadorX;
-    private int jugadorY;
-    private int disparoX;
-    private int disparoY;
-    private boolean disparoPintado;
 
     public MainFrame() {
         espacio = Espacio.getEspacio();
@@ -63,14 +57,6 @@ public class MainFrame extends JFrame implements Observer {
             }
         }
         
-        //Inicializamos variables y pintamos al jugador
-        jugadorX = 50;
-        jugadorY = 55;
-        disparoX = 0;
-        disparoY = 0;
-        disparoPintado = false;
-        celdas[jugadorX][jugadorY].setBackground(COLOR_JUGADOR);
-        
         addKeyListener(new Controller());
         add(gamePanel);
     }
@@ -106,45 +92,41 @@ public class MainFrame extends JFrame implements Observer {
     	int tipo = datos[0];
     	
     	switch (tipo) {
-    		case 0: // jugador se mueve
-    			celdas[jugadorX][jugadorY].setBackground(COLOR_FONDO);
-    			jugadorX = datos[1];
-    			jugadorY = datos[2];
-    			celdas[jugadorX][jugadorY].setBackground(COLOR_JUGADOR);
+    		case 0: // jugador se mueve - [tipo, oldX, oldY, newX, newY]
+    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar posición anterior
+    			celdas[datos[3]][datos[4]].setBackground(COLOR_JUGADOR); // pintar nueva posición
     			break;
         
-    		case 1: // disparo se mueve
-    			if (disparoPintado) {
-    				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
-    			}
-    			disparoX = datos[1];
-    			disparoY = datos[2];
-    			celdas[disparoX][disparoY].setBackground(COLOR_DISPARO);
-    			disparoPintado = true;
+    		case 1: // disparo nuevo - [tipo, newX, newY]
+    			celdas[datos[1]][datos[2]].setBackground(COLOR_DISPARO);
     			break;
     			
-    		case 2: // disparo salio del tablero
-    			if (disparoPintado ) {
-    				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
-    			}
-    			disparoPintado = false;
-    			break;
-    		
-    		case 3: // enemigo baja
-    			celdas[datos[2]][datos[3]-1].setBackground(COLOR_FONDO);
-    			celdas[datos[2]][datos[3]].setBackground(COLOR_ENEMIGO);
-    			break;
-    		
-    		case 4: // colision: borra disparo y enemigo
-    			if (disparoPintado) {
-    				celdas[disparoX][disparoY].setBackground(COLOR_FONDO);
-    			}
-    			disparoPintado = false;
-    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    		case 2: // disparo se mueve - [tipo, oldX, oldY, newX, newY]
+    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar posición anterior
+    			celdas[datos[3]][datos[4]].setBackground(COLOR_DISPARO); // pintar nueva posición
     			break;
     			
-    		case 6: mostrarMensajeFin("GAME OVER",   Color.RED);   break;
-    		case 7: mostrarMensajeFin("HAS GANADO!", Color.GREEN); break;
+    		case 3: // disparo salio del tablero - [tipo, oldX, oldY]
+    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar disparo
+    			break;
+    		
+    		case 4: // enemigo baja - [tipo, oldX, oldY, newX, newY]
+    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar posición anterior
+    			celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO); // pintar nueva posición
+    			break;
+    		
+    		case 5: // colision - [tipo, disparoX, disparoY, enemigoX, enemigoY]
+    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar disparo
+    			celdas[datos[3]][datos[4]].setBackground(COLOR_FONDO); // borrar enemigo
+    			break;
+    			
+    		case 6: // inicialización del juego - [tipo, jugadorX, jugadorY, enemigoX, enemigoY]
+    			celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR); // pintar jugador
+    			celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO); // pintar enemigo
+    			break;
+    			
+    		case 7: mostrarMensajeFin("GAME OVER",   Color.RED);   break;
+    		case 8: mostrarMensajeFin("HAS GANADO!", Color.GREEN); break;
     	}
     }
     
@@ -152,7 +134,6 @@ public class MainFrame extends JFrame implements Observer {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (espacio.isGameOver() || espacio.isGameWon()) return;
 
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:  espacio.moverJugador(-1,  0); break;
