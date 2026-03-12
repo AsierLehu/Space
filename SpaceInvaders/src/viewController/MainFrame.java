@@ -91,7 +91,7 @@ public class MainFrame extends JFrame implements Observer {
     public void update(Observable o, Object arg) {
     	if (o instanceof Espacio) {
     		int[] datos = (int[]) arg;
-            /// investigar esto de invokeLater
+            /// de momento sin esto no da error
     		/*SwingUtilities.invokeLater(new Runnable() {
     			public void run() {
     				procesarNotificacion(datos);

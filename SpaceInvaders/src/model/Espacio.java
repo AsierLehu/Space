@@ -31,8 +31,6 @@ public class Espacio extends Observable {
     public void cambiarAMain() {
     	inicializar();
     	iniciarJuegoLoop(); // Iniciar el timer del juego
-    	setChanged();       
-    	notifyObservers(new int[] {5});   
     }
     
     private void inicializar() {
