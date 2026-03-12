@@ -35,6 +35,9 @@ public class MainFrame extends JFrame implements Observer {
         setLocationRelativeTo(null);
         setVisible(true);
         requestFocusInWindow();
+        
+        // Ahora que MainFrame está completamente inicializado, solicitar la notificación inicial
+        espacio.notificarInicializacion();
     }
 
     private void initPanel() {

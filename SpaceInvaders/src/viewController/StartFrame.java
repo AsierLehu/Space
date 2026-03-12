@@ -83,19 +83,16 @@ public class StartFrame extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-	    // Cuando Espacio notifica cambios (ej: cambiarAMain()),
-	    // esta ventana de inicio debe cerrarse y abrir la ventana del juego
+		int[] datos = (int[]) arg;
+        int tipo = datos[0];
 	    if (o instanceof Espacio) {
-
-            Espacio.getEspacio().deleteObserver(this);
-
-	        // Cerrar esta ventana de inicio
-	        this.setVisible(false);
-	        
-	        // Abrir la ventana principal del juego
-	        new MainFrame();
-	    }
-	}
+	        if (tipo == 9) { // Notificación para cambiar de pantalla
+	            Espacio.getEspacio().deleteObserver(this);
+                this.setVisible(false);
+                new MainFrame();
+            }
+        }
+    }
 
     /**
      * Controlador para gestionar la interacción del usuario con la pantalla de inicio
