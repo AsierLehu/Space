@@ -58,7 +58,7 @@ public class Espacio extends Observable {
     }
 
     public void moverJugador(int dx, int dy) {
-        if (jugador != null && jugador.isVivo()) {
+        if (jugador != null && jugador.isVivo() && !isGameOver() && !isGameWon()) {
             int oldX = jugador.getX();
             int oldY = jugador.getY();
             jugador.mover(dx, dy);
@@ -69,7 +69,7 @@ public class Espacio extends Observable {
     }
 
     public void disparar() {
-        if (jugador != null && jugador.isVivo()) {
+        if (jugador != null && jugador.isVivo() && !isGameOver() && !isGameWon()) {
             jugador.disparar();
             Disparo d = jugador.getDisparo();
             setChanged();

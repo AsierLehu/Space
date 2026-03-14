@@ -24,7 +24,7 @@ replay_pid*
 .metadata/
 .project
 .bin/
-
+*.synctex.gz
 # Carpetas de compilación / binarios
 bin/
 build/

@@ -62,35 +62,43 @@
 \vspace{1.5em}
 
 % ==================================================
-\section{Descripción general}
+\tableofcontents
+\newpage
+
+% ==================================================
+\section{Introducción al Patrón MVC + Observer}
 
 El patrón \textbf{Modelo-Vista-Controlador (MVC)} es una arquitectura de diseño utilizada en programación orientada a objetos que permite organizar una aplicación separando sus componentes en tres partes principales: \textit{Modelo}, \textit{Vista} y \textit{Controlador}. Esta separación facilita el mantenimiento del código, mejora su organización y permite que cada componente tenga una responsabilidad clara dentro del sistema.
 
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Modelo}]
-        Se encarga de gestionar los datos y la lógica del programa. Contiene la información del sistema y las operaciones necesarias para modificarla o consultarla. El modelo no depende de la interfaz gráfica ni de cómo se muestran los datos al usuario.
+        Se encarga de gestionar los datos y la lógica del programa. Contiene toda la lógica de negocio, del juego en este caso, y las operaciones necesarias para modificarla o consultarla. El modelo no depende de la interfaz gráfica ni de cómo se muestran los datos al usuario.
 
     \item[\textbf{Vista}]
         Es la parte encargada de presentar la información al usuario. Su función principal es mostrar los datos que proporciona el modelo y actualizarse cuando estos cambian. La vista no contiene la lógica principal del programa, sino únicamente la representación visual de la información.
 
     \item[\textbf{Controlador}]
-        Actúa como intermediario entre el usuario y el sistema. Recibe las acciones del usuario (por ejemplo, clics, entradas de teclado, etc.), interpreta estas acciones y solicita al modelo que realice las operaciones correspondientes. Después, puede indicar a la vista que actualice la información mostrada.
+        Actúa como intermediario entre el usuario y el sistema. Recibe las acciones del usuario (por ejemplo, clics, entradas de teclado, etc.), interpreta estas acciones y solicita al modelo que realice las operaciones correspondientes.
 \end{description}
 
-Para que la vista se mantenga actualizada cuando cambian los datos del modelo, normalmente se utiliza el \textbf{patrón Observer (Observador)}. Este patrón establece una relación entre un objeto denominado \textit{observable} (el modelo) y uno o varios \textit{observadores} (las vistas). Cuando el estado del observable cambia, todos los observadores registrados son notificados automáticamente y pueden actualizar su información.
+A este modelo de arquitectura se le añade el patrón \textbf{Observer (Observador)} para que la vista se mantenga actualizada cuando cambian los datos del modelo. Este \textbf{patrón de diseño} establece una relación entre un objeto denominado \textit{observable} (el modelo) y uno o varios \textit{observadores} (las vistas). Cuando el estado del observable cambia, todos los observadores registrados son notificados automáticamente y pueden actualizar su información.
+
 
 La combinación de MVC y Observer permite desarrollar aplicaciones más modulares, donde la lógica del programa, la presentación de los datos y la interacción con el usuario están claramente separadas. Esto facilita la reutilización del código, la ampliación del sistema y el mantenimiento a largo plazo de la aplicación.
 
+% ==================================================
+\section{Implementación en Space Invaders}
+
 % --------------------------------------------------
-\subsection{Aplicación al proyecto Space Invaders}
+\subsection{Arquitectura MVC del proyecto}
 
 En el proyecto Space Invaders, las tres capas del patrón MVC se distribuyen de la siguiente manera:
 
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Modelo}]
-        La clase central del modelo es \texttt{Espacio}, que actúa como Singleton (se obtiene siempre con \lstinline|Espacio.getEspacio()|) y extiende \texttt{Observable}. Contiene todo el estado del juego: la instancia del \texttt{Jugador}, la lista de \texttt{Enemigo}s y el objeto \texttt{Disparo} asociado al jugador. Además, \texttt{Espacio} alberga toda la lógica de negocio: el bucle principal del juego (\textit{game loop} con un \texttt{Timer} de 50 ms), la detección de colisiones entre el disparo y los enemigos, y las condiciones de fin de partida (\textit{game over} y victoria).
+        La clase central del modelo es \texttt{Espacio}, que está implementado como \textbf{Singleton} y extiende de la clase \texttt{Observable}. Contiene toda la lógica del juego: la instancia del \texttt{Jugador}, la lista de \texttt{Enemigo}s y el objeto \texttt{Disparo} asociado al jugador. Además, \texttt{Espacio} alberga el bucle principal del juego (\textit{game loop} con un \texttt{Timer} de 50 ms), la detección de colisiones entre el disparo y los enemigos, y las condiciones de fin de partida (\textit{game over} y victoria).
 
-        Las clases auxiliares del modelo son:
+        Las clases auxiliares del modelo son ---- AQUI CREO QUE HAY QUE DAR MÁS DETALLES ----:
         \begin{itemize}[leftmargin=2em]
             \item \texttt{Naves} — clase abstracta con los atributos comunes (\texttt{x}, \texttt{y}, \texttt{velocidad}, \texttt{vivo}) y el método abstracto \texttt{mover}.
             \item \texttt{Jugador} — extiende \texttt{Naves}; gestiona el movimiento dentro de los límites del tablero y posee un objeto \texttt{Disparo}.
@@ -98,10 +106,11 @@ En el proyecto Space Invaders, las tres capas del patrón MVC se distribuyen de 
             \item \texttt{Disparo} — almacena la posición del proyectil y si está activo; sube un píxel por tick y se desactiva al salir del tablero.
         \end{itemize}
 
-        Ninguna de estas clases conoce la interfaz gráfica ni sabe cómo se dibuja el juego; solo gestionan datos y reglas.
+        Ninguna de estas clases conoce la interfaz gráfica ni sabe cómo se dibuja el juego; solo gestionan datos y reglas de juego.
 
     \item[\textbf{Vista}]
         Las vistas son \texttt{StartFrame} y \texttt{MainFrame}, ambas subclases de \texttt{JFrame} e implementan la interfaz \texttt{Observer}:
+        ---- AQUI CREO QUE HAY QUE DAR MÁS DETALLES ----:
         \begin{itemize}[leftmargin=2em]
             \item \texttt{StartFrame} muestra la pantalla de inicio con el título, las instrucciones de control y el mensaje «Pulsa SPACE para jugar». No dibuja ningún elemento del juego.
             \item \texttt{MainFrame} pinta el estado del juego en cada actualización: el tablero (cuadrícula negra de $100 \times 60$ celdas de 10 px), el jugador en magenta, los enemigos en rojo y el disparo en amarillo. También muestra el mensaje de victoria o derrota cuando la partida termina.
@@ -110,6 +119,7 @@ En el proyecto Space Invaders, las tres capas del patrón MVC se distribuyen de 
         Ambas vistas se registran como observadoras de \texttt{Espacio} al construirse, con la llamada \lstinline|Espacio.getEspacio().addObserver(this)|.
 
     \item[\textbf{Controlador}]
+    ---- AQUI CREO QUE HAY QUE DAR MÁS DETALLES, POR EJEMPLO LO QUE SE OBTIENE SOBREESCIBIENDO SOLO LAS FUNCIONES QUE NOS INTERESAN----:
         Los controladores son clases internas privadas llamadas \texttt{Controller} definidas dentro de \texttt{StartFrame} y \texttt{MainFrame}. Ambas implementan \texttt{KeyListener}, de modo que reciben los eventos de teclado del usuario y los traducen en llamadas al modelo:
         \begin{itemize}[leftmargin=2em]
             \item El \texttt{Controller} de \texttt{StartFrame} solo atiende la pulsación de \texttt{SPACE} para llamar a \lstinline|Espacio.getEspacio().cambiarAMain()|.
@@ -117,25 +127,28 @@ En el proyecto Space Invaders, las tres capas del patrón MVC se distribuyen de 
         \end{itemize}
 \end{description}
 
-La relación entre las tres capas queda así: el usuario interactúa con la \textbf{Vista} (ventana con foco de teclado), el \textbf{Controlador} captura esa interacción y llama al \textbf{Modelo}, y el Modelo notifica a la Vista para que se repinte. En ningún momento la vista accede directamente a la lógica del juego, ni el modelo sabe cómo se representa gráficamente.
+La relación entre las tres capas queda así: el usuario interactúa con la \textbf{Vista} (ventana con foco de teclado), el \textbf{Controlador} captura esa interacción y llama al \textbf{Modelo}, y el Modelo notifica a la Vista para que se hagan los cambios necesarios. En ningún momento la vista accede directamente a la lógica del juego, ni el modelo sabe cómo se representa gráficamente.
 
-% ==================================================
-\section{Diagramas MVC + Observer}
+Más adelante se verá como se implementa esta relación entre las tres capas en el proyecto Space Invaders.
+
+% --------------------------------------------------
+\subsection{Diagramas UML}
 
 \begin{pendiente}
 \textbf{Pendiente:} insertar los diagramas UML que ilustren la arquitectura MVC y la relación Observer entre las clases del proyecto.
 \end{pendiente}
 
 % ==================================================
-\section{Controlador (Controller)}
+\section{El Controlador en Detalle}
 
+ESTOS PARRAFOS SON INFUMABLES, SE PUEDEN RESUMIR EN 3 FRASES
 El controlador es el componente encargado de gestionar la interacción entre el usuario, el modelo y la vista dentro del patrón MVC. Su función principal es recibir las acciones del usuario, interpretarlas y coordinar la respuesta del sistema.
 
 Cuando el usuario realiza una acción en la interfaz (por ejemplo, pulsar un botón, seleccionar una opción o introducir datos), esta acción es capturada por el controlador. El controlador analiza la acción y decide qué operación debe realizarse en el modelo, que es el componente que contiene la lógica del programa y los datos.
 
-Una vez que el controlador solicita al modelo que realice una operación (por ejemplo, modificar un dato o ejecutar una acción), el modelo actualiza su estado interno. En muchos sistemas que utilizan el patrón Observer, cuando el modelo cambia su estado notifica automáticamente a las vistas para que actualicen la información que muestran al usuario.
+Una vez que el controlador solicita al modelo que realice una operación (por ejemplo, modificar un dato o ejecutar una acción), el modelo actualiza su estado interno. 
 
-Por tanto, el controlador no contiene los datos del sistema ni se encarga de mostrarlos, sino que actúa como un intermediario que conecta las acciones del usuario con las operaciones del modelo.
+El controlador no contiene los datos del sistema ni se encarga de mostrarlos, sino que actúa como un intermediario que conecta las acciones del usuario con las operaciones del modelo.
 
 En aplicaciones más complejas puede haber varios controladores, cada uno responsable de gestionar diferentes partes de la aplicación o diferentes tipos de interacción. Esto permite dividir la lógica de control y mantener el sistema mejor organizado y más fácil de mantener.
 
@@ -149,7 +162,7 @@ En resumen, el controlador se encarga de:
 \end{itemize}
 
 % --------------------------------------------------
-\subsection{Explicación aplicada al juego}
+\subsection{Implementación del Controlador en Space Invaders}
 
 \subsubsection*{Clase \texttt{MainFrame}}
 
@@ -211,7 +224,7 @@ Ese método está en \texttt{StartFrame} y lo que hace es pedir al modelo \textt
 En resumen: el \texttt{Controller} aquí no mueve naves ni dispara. Solo detecta que el usuario pulsa \texttt{SPACE} en la pantalla inicial y lanza el arranque del juego.
 
 % ==================================================
-\section{Métodos \texttt{notify} y \texttt{update}}
+\section{Patrón Observer: Notificación y Actualización}
 
 Dentro del patrón Observer, los métodos \texttt{notify} y \texttt{update} permiten que los objetos que observan a otro objeto puedan mantenerse informados cuando su estado cambia.
 
@@ -255,20 +268,18 @@ Gracias a este mecanismo, los cambios en el sistema se propagan automáticamente
 % --------------------------------------------------
 \subsection{Aplicación al proyecto Space Invaders}
 
-\subsubsection*{Quién notifica y cuándo}
+\subsubsection{Quién notifica y cuándo}
 
-En el proyecto, el observable es \texttt{Espacio}. Toda notificación a los observadores pasa por el método privado \texttt{notificarVista()}, que ejecuta siempre la misma secuencia:
+En el proyecto, el observable es \texttt{Espacio}. Las notificaciones a los observadores se realizan directamente con la secuencia:
 
 \begin{lstlisting}
-private void notificarVista() {
-    setChanged();
-    notifyObservers();
-}
+setChanged();
+notifyObservers(new int[] {caso, datos...});
 \end{lstlisting}
 
-La llamada a \lstinline|setChanged()| es obligatoria antes de \lstinline|notifyObservers()|: sin ella, la clase \texttt{Observable} no propagaría nada. \texttt{notifyObservers()} recorre internamente la lista de observers registrados y llama al \texttt{update} de cada uno.
+La llamada a \lstinline|setChanged()| es obligatoria antes de \lstinline|notifyObservers()|: sin ella, la clase \texttt{Observable} no propagaría nada. \texttt{notifyObservers()} recorre internamente la lista de observers registrados y llama al \texttt{update} de cada uno, pasando un array de enteros con información específica sobre el cambio.
 
-\texttt{notificarVista()} se invoca desde varios puntos del modelo, cada vez que el estado del juego cambia y la pantalla debe reflejarlo:
+Las notificaciones se invocan desde varios puntos del modelo, cada vez que el estado del juego cambia y la pantalla debe reflejarlo:
 
 \begin{itemize}[leftmargin=2em]
     \item \textbf{Al mover al jugador} — dentro de \texttt{moverJugador()}, tras actualizar la posición.
@@ -278,22 +289,25 @@ La llamada a \lstinline|setChanged()| es obligatoria antes de \lstinline|notifyO
     \item \textbf{Al bajar los enemigos} — dentro de \texttt{actualizarEnemigos()}, cada 200 ms, tras desplazar todos los enemigos vivos.
 \end{itemize}
 
-Adicionalmente, \texttt{cambiarAMain()} llama directamente a \lstinline|setChanged()| y \lstinline|notifyObservers()| (sin pasar por \texttt{notificarVista()}) para señalar que el juego ha cambiado al estado principal y que \texttt{StartFrame} debe reaccionar.
+Adicionalmente, \texttt{cambiarAMain()} llama directamente a \lstinline|setChanged()| y \lstinline|notifyObservers(new int[] {9})| para señalar que el juego ha cambiado al estado principal y que \texttt{StartFrame} debe reaccionar.
 
-\subsubsection*{Cómo responde \texttt{MainFrame} en su \texttt{update}}
+\subsubsection{Cómo responde \texttt{MainFrame} en su \texttt{update}}
 
-\texttt{MainFrame} implementa \texttt{Observer} y se registra en \texttt{Espacio} al construirse. Su método \texttt{update} es muy directo:
+\texttt{MainFrame} implementa \texttt{Observer} y se registra en \texttt{Espacio} al construirse. Su método \texttt{update} procesa las notificaciones específicas:
 
 \begin{lstlisting}
 @Override
 public void update(Observable o, Object arg) {
-    gamePanel.repaint();
+    if (o instanceof Espacio) {
+        int[] datos = (int[]) arg;
+        procesarNotificacion(datos);
+    }
 }
 \end{lstlisting}
 
-Cada vez que \texttt{Espacio} notifica un cambio, \texttt{MainFrame} simplemente repinta el panel de juego. Esto provoca una llamada a \texttt{paintComponent}, que a su vez ejecuta \texttt{dibujar(g)}: se redibuja el tablero, el jugador, los enemigos vivos, el disparo (si está activo) y, si procede, el mensaje de victoria o derrota. \texttt{MainFrame} no necesita saber \textit{qué} cambió exactamente; se limita a leer el estado actual del modelo y volcar lo que encuentra.
+El método \texttt{procesarNotificacion} analiza el primer elemento del array (el tipo de evento) y actualiza selectivamente las celdas del tablero según el caso: movimiento del jugador, disparo, enemigos, colisiones, etc. Esto es más eficiente que repintar todo el tablero en cada cambio y permite actualizaciones visuales más precisas.
 
-\subsubsection*{Cómo responde \texttt{StartFrame} en su \texttt{update}}
+\subsubsection{Cómo responde \texttt{StartFrame} en su \texttt{update}}
 
 \texttt{StartFrame} también implementa \texttt{Observer} y se registra en \texttt{Espacio} al construirse. Su método \texttt{update} tiene un comportamiento distinto: no dibuja nada, sino que gestiona la transición entre pantallas:
 
@@ -316,5 +330,24 @@ Cuando \texttt{Espacio} notifica (lo que ocurre al llamar a \texttt{cambiarAMain
 \end{enumerate}
 
 Así, un único evento de notificación actúa como señal de arranque: hace desaparecer la pantalla de inicio y aparece la pantalla de juego, sin que ninguna de las dos clases necesite conocerse directamente entre sí.
+
+% ==================================================
+\section{Conclusiones}
+
+La implementación del patrón MVC junto con Observer en el proyecto Space Invaders demuestra las ventajas de una arquitectura bien estructurada:
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Separación clara de responsabilidades}: El modelo (\texttt{Espacio}) gestiona exclusivamente la lógica del juego, las vistas (\texttt{StartFrame}, \texttt{MainFrame}) se encargan únicamente de la presentación, y los controladores traducen la interacción del usuario en acciones del modelo.
+    
+    \item \textbf{Bajo acoplamiento}: Las clases no dependen directamente unas de otras. El modelo no conoce las vistas, y las vistas no contienen lógica de negocio.
+    
+    \item \textbf{Sincronización automática}: El patrón Observer garantiza que cualquier cambio en el modelo se refleje inmediatamente en todas las vistas registradas, sin necesidad de llamadas explícitas.
+    
+    \item \textbf{Facilidad de mantenimiento}: Los cambios en la lógica del juego solo afectan al modelo, los cambios en la interfaz solo afectan a las vistas, y las modificaciones en los controles solo afectan a los controladores.
+    
+    \item \textbf{Extensibilidad}: Es fácil añadir nuevas vistas (por ejemplo, una pantalla de puntuaciones) o nuevos tipos de interacción sin modificar el código existente.
+\end{itemize}
+
+Esta arquitectura proporciona una base sólida para el desarrollo de aplicaciones interactivas, facilitando tanto el desarrollo inicial como el mantenimiento y la evolución futura del software.
 
 \end{document}
