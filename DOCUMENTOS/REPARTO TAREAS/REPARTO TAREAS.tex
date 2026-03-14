@@ -3,22 +3,15 @@
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{geometry}
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{xcolor}
-\usepackage{colortbl}
 \usepackage{titlesec}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{xcolor}
 
 \geometry{margin=2.5cm}
 
-% Colores
 \definecolor{cabecera}{RGB}{30, 90, 160}
-\definecolor{filasombreada}{RGB}{220, 232, 250}
 
-% Estilo de sección
 \titleformat{\section}{\large\bfseries\color{cabecera}}{}{0em}{}[\titlerule]
 
 % --------------------------------------------------
@@ -35,115 +28,246 @@
 \vspace{1.5em}
 
 % --------------------------------------------------
-\section{Miembros del equipo}
+\section{Miembros del equipo Cachopín}
 
 \begin{itemize}[leftmargin=2em]
-    \item \textbf{Miembro 1:} Nombre Apellido
-    \item \textbf{Miembro 2:} Nombre Apellido
-    \item \textbf{Miembro 3:} Nombre Apellido
-    % Añadir o eliminar miembros según corresponda
+    \item \textbf{Miembro 1:} Unai Urrutia
+    \item \textbf{Miembro 2:} Ekain Ortega
+    \item \textbf{Miembro 3:} Eder Lorenzo
+    \item \textbf{Miembro 4:} Asier López
 \end{itemize}
 
 \vspace{1.5em}
 
 % --------------------------------------------------
-\section{Tabla de reparto de tareas}
+\section{Planificación inicial}
 
-\begin{longtable}{>{\bfseries}p{0.04\textwidth} p{0.28\textwidth} p{0.40\textwidth} p{0.16\textwidth}}
-    \rowcolor{cabecera}
-    \textcolor{white}{\#} &
-    \textcolor{white}{Tarea} &
-    \textcolor{white}{Descripción} &
-    \textcolor{white}{Responsable(s)} \\
-    \midrule
-    \endfirsthead
+Tareas previstas antes de comenzar el desarrollo y su tiempo estimado:
 
-    \rowcolor{cabecera}
-    \textcolor{white}{\#} &
-    \textcolor{white}{Tarea} &
-    \textcolor{white}{Descripción} &
-    \textcolor{white}{Responsable(s)} \\
-    \midrule
-    \endhead
+\begin{enumerate}[leftmargin=2em]
+    \item Diseño del modelo (MVC) — X horas
+    \item Patrón Observer — X horas
+    \item Vista y controlador — X horas
+    \item Lógica de disparo y colisiones — X horas
+    \item Movimiento de enemigos — X horas
+    \item Gestión del juego (Main / bucle) — X horas
+    \item Documentación — X horas
+\end{enumerate}
 
-    % ---- Fila de ejemplo (duplicar para añadir más tareas) ----
-    \rowcolor{filasombreada}
-    1 & Diseño del modelo (MVC) &
-    Definición de las clases del modelo: \texttt{Espacio}, \texttt{Jugador}, \texttt{Enemigo}, \texttt{Naves}, \texttt{Disparo}. Implementación de la lógica del juego. &
-    Miembro 1 \\
-    \midrule
-
-    2 & Patrón Observer &
-    Implementación de las interfaces \texttt{Observable} y \texttt{Observador}. Conexión entre modelo y vista. &
-    Miembro 2 \\
-    \midrule
-
-    \rowcolor{filasombreada}
-    3 & Vista y controlador &
-    Desarrollo de \texttt{MainFrame} y \texttt{StartFrame}. Pintado del tablero, captura de eventos de teclado y actualización de la interfaz. &
-    Miembro 3 \\
-    \midrule
-
-    4 & Lógica de disparo y colisiones &
-    Detección de colisiones entre disparos y naves enemigas/jugador. Control del ciclo de vida de los disparos. &
-    Miembro 1, Miembro 2 \\
-    \midrule
-
-    \rowcolor{filasombreada}
-    5 & Movimiento de enemigos &
-    Algoritmo de movimiento grupal de los enemigos, cambio de dirección al llegar a los bordes y descenso de filas. &
-    Miembro 2 \\
-    \midrule
-
-    6 & Gestión del juego (Main / bucle) &
-    Configuración del \texttt{Main}, hilo del juego, control de estados (inicio, partida, fin) y reinicio. &
-    Miembro 3 \\
-    \midrule
-
-    \rowcolor{filasombreada}
-    7 & Documentación &
-    Redacción de la memoria, diagramas UML, justificación del patrón MVC+Observer y este documento de reparto. &
-    Todos \\
-    \midrule
-
-    % ---- Añadir nuevas tareas aquí ----
-    8 & & & \\
-
-    \bottomrule
-\end{longtable}
+\textbf{Tiempo total estimado:} X horas.
 
 \vspace{1.5em}
 
 % --------------------------------------------------
-\section{Detalle individual de contribuciones}
+\section{Resumen de tareas realizadas}
 
-% ---- Repetir este bloque para cada miembro ----
-\subsection*{Miembro 1 — Nombre Apellido}
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Tarea 1 — Diseño del modelo:} descripción breve de lo que hizo concretamente (clases creadas, métodos implementados, decisiones de diseño tomadas\ldots).
-    \item \textbf{Tarea 4 — Lógica de disparo y colisiones:} descripción breve.
-\end{itemize}
+Tareas efectivamente completadas y su tiempo real:
 
-\subsection*{Miembro 2 — Nombre Apellido}
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Tarea 2 — Patrón Observer:} descripción breve.
-    \item \textbf{Tarea 4 — Lógica de disparo y colisiones:} descripción breve.
-    \item \textbf{Tarea 5 — Movimiento de enemigos:} descripción breve.
-\end{itemize}
+\begin{enumerate}[leftmargin=2em]
+    \item Entendimiento del patrón MVC e ideamiento de las clases principales del juego — 3 horas
+    \item Creación del repositorio y cambios para evitar problemas con archivos de configuración — 1 hora
+    \item Desarrollo de las clases principales del modelo — 1.5 horas
+    \item Desarrollo de la lógica de juego, disparo y colisiones — 1.5 horas
+    \item Desarrollo de la vista, el controlador y los métodos update — 3 horas
+    \item Solución de los métodos notify y update para inicializar MainFrame correctamente — 0.5 horas
+    \item Solución de errores: colisiones, límites, movimiento — X horas
+    \item Refinamiento del modelo — 1 hora
+    \item Solución de estructura de MainFrame para implementarla con labels (Main / bucle) — 2 horas
+    \item Reestructuración del update y notify para MainFrame, evitando que MainFrame tenga lógica de negocio — 2 horas
+    \item Revisión y cambios para implementar correctamente el patrón MVC+Observer — 2 horas
 
-\subsection*{Miembro 3 — Nombre Apellido}
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Tarea 3 — Vista y controlador:} descripción breve.
-    \item \textbf{Tarea 6 — Gestión del juego:} descripción breve.
-\end{itemize}
+    \item Documentación — 3 horas
+    \item Diagramas UML y del patrón MVC+Observer — 2 horas
+\end{enumerate}
+
+\textbf{Tiempo total real:} X horas.
 
 \vspace{1.5em}
 
 % --------------------------------------------------
-\section{Observaciones generales}
+\section{Detalle de tareas}
 
-\begin{itemize}[leftmargin=2em]
-    \item Escribir aquí cualquier nota sobre la coordinación del equipo, herramientas usadas (Git, etc.) o dificultades encontradas.
-\end{itemize}
+% ---- Tarea 1 ----
+\subsection*{Tarea 1 — Entendimiento del patrón MVC e ideamiento de las clases principales del juego}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Estudio del patrón MVC y Observer, diseño conceptual de las clases necesarias para el juego: \texttt{Espacio}, \texttt{Jugador}, \texttt{Enemigo}, \texttt{Naves}, \texttt{Disparo}, y planificación de la arquitectura general. Ademñas, pensamos y miramos en otras prácticas cómo se implementó el patrón MVC+Observer.
+    
+    \item[\textbf{Tiempo:}] 3 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 2 ----
+\subsection*{Tarea 2 — Creación del repositorio y configuración inicial}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Creación del repositorio Git, configuración del \texttt{.gitignore} y ajustes para evitar problemas con archivos de configuración del IDE.
+    \item[\textbf{Tiempo:}] 1 hora.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 3 ----
+\subsection*{Tarea 3 — Desarrollo de las clases principales del modelo}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Implementación de las clases \texttt{Naves}, \texttt{Jugador}, \texttt{Enemigo}, \texttt{Disparo} y \texttt{Espacio}. Definición de atributos, constructores y métodos básicos. Se dejaron bastantes métodos de Espacio sin implementar.
+    \item[\textbf{Tiempo:}] 1.5 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 4 ----
+\subsection*{Tarea 4 — Desarrollo de la lógica de juego, disparo y colisiones}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Implementación de la lógica de disparo, detección de colisiones entre disparos y enemigos, condiciones de victoria y derrota. Todo ello en la clase Espacio.
+    \item[\textbf{Tiempo:}] 1.5 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 5 ----
+\subsection*{Tarea 5 — Desarrollo de la vista, el controlador y los métodos update}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Desarrollo de \texttt{StartFrame} y \texttt{MainFrame}. Implementación de los controladores de teclado (\texttt{KeyListener}), registro como observadores y métodos \texttt{update} para reaccionar a los cambios del modelo.
+    \item[\textbf{Tiempo:}] 3 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 6 ----
+\subsection*{Tarea 6 — Solución de los métodos notify y update para inicializar MainFrame}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Corrección de un problema que detectamos junto al profesor. Startframe no notificaba a Espacio la inicialización del juego, por lo que no se respetaba el patrón MVC+Observer.
+    \item[\textbf{Tiempo:}] 0.5 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 7 ----
+\subsection*{Tarea 7 — Solución de errores: colisiones, límites, movimiento}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Tras poder empezar a probar el juego,  se detectaron errores relacionados con la detección de colisiones, los límites del tablero y el movimiento del jugador y enemigos. Se solucionaron todos estos errores.
+    \item[\textbf{Tiempo:}] X horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 8 ----
+\subsection*{Tarea 8 — Refinamiento del modelo}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Mejoras en la estructura del modelo: limpieza de código, ajuste de responsabilidades entre clases y optimización de métodos.
+    \item[\textbf{Tiempo:}] 1 hora.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 9 ----
+\subsection*{Tarea 9 — Solución de estructura de MainFrame para implementarla con labels}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Tras el feedback del profesor vimos que MainFrame, y por lo tanto, la parte más importante del juego, no estaba implementada correctamente. Tuvimos que reestructurarlo y borrar mucho código. \texttt{MainFrame} pasó a ser una cuadrícula de \texttt{JLabel}. Además tuvimos que hacer cambios en update y notify, como se detalla en la siguiente tarea.
+    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 10 ----
+\subsection*{Tarea 10 — Reestructuración del update y notify para MainFrame}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Mainframe pasó de recibir un update vacío, a recibir un array diciendo qué arrays pintar y de qué color, y cuales pintar del color del fondo. También se eliminarion variables de estado en \texttt{MainFrame} (posiciones del jugador, disparo, etc.). Toda la información necesaria para pintar y borrar se pasa a través de las notificaciones del modelo, evitando que la vista contenga lógica de negocio.
+    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 11 ----
+\subsection*{Tarea 11 — Revisión y cambios para implementar correctamente el patrón MVC+Observer}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Revisión general del código para asegurar que se respeta el patrón MVC: la lógica de fin de partida se controla desde el modelo, el controlador no contiene lógica de negocio, y la vista solo reacciona a notificaciones. En concreto, se implementaron de forma diferente ciertas llamadas directas de MainFrame a Espacio, que detectaban si el juego había terminado.
+    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 12 ----
+\subsection*{Tarea 12 — Documentación}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Redacción de la memoria del proyecto, justificación del patrón MVC+Observer, y elaboración de este documento de reparto de tareas.
+    \item[\textbf{Tiempo:}] 3 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+            \item Miembro 2 — X horas
+            \item Miembro 3 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 13 ----
+\subsection*{Tarea 13 — Diagramas UML y del patrón MVC+Observer}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Elaboración de los diagramas UML de clases y de la arquitectura MVC+Observer del proyecto.
+    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Miembro 1 — X horas
+        \end{itemize}
+    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
+\end{description}
 
 \end{document}
