@@ -98,32 +98,30 @@ En el proyecto Space Invaders, las tres capas del patrón MVC se distribuyen de 
     \item[\textbf{Modelo}]
         La clase central del modelo es \texttt{Espacio}, que está implementado como \textbf{Singleton} y extiende de la clase \texttt{Observable}. Contiene toda la lógica del juego: la instancia del \texttt{Jugador}, la lista de \texttt{Enemigo}s y el objeto \texttt{Disparo} asociado al jugador. Además, \texttt{Espacio} alberga el bucle principal del juego (\textit{game loop} con un \texttt{Timer} de 50 ms), la detección de colisiones entre el disparo y los enemigos, y las condiciones de fin de partida (\textit{game over} y victoria).
 
-        Las clases auxiliares del modelo son ---- AQUI CREO QUE HAY QUE DAR MÁS DETALLES ----:
+        Las clases auxiliares del modelo definen la estructura de las naves y los disparos del juego:
         \begin{itemize}[leftmargin=2em]
-            \item \texttt{Naves} — clase abstracta con los atributos comunes (\texttt{x}, \texttt{y}, \texttt{velocidad}, \texttt{vivo}) y el método abstracto \texttt{mover}.
-            \item \texttt{Jugador} — extiende \texttt{Naves}; gestiona el movimiento dentro de los límites del tablero y posee un objeto \texttt{Disparo}.
-            \item \texttt{Enemigo} — extiende \texttt{Naves}; se crea en una posición aleatoria en la parte superior y desciende píxel a píxel.
-            \item \texttt{Disparo} — almacena la posición del proyectil y si está activo; sube un píxel por tick y se desactiva al salir del tablero.
+            \item \texttt{Naves} — clase abstracta que encapsula el comportamiento común de todas las naves. Define atributos: \texttt{x} (posición horizontal), \texttt{y} (posición vertical), \texttt{velocidad} (píxeles por actualización) y \texttt{vivo} (estado actual). Incluye el método abstracto \texttt{mover()}, que cada subclase implementa según su lógica de movimiento.
+            \item \texttt{Jugador} — extiende \texttt{Naves} y representa la nave controlable. Implementa \texttt{mover()} para desplazarse únicamente dentro de los límites del tablero visible. Posee un objeto \texttt{Disparo} que se dispara cuando el usuario presiona espacio. Solo hay una instancia del jugador simultáneamente.
+            \item \texttt{Enemigo} — extiende \texttt{Naves} y representa los enemigos del juego. Se crean constantemente en posiciones aleatorias en la fila superior y descienden verticalmente píxel a píxel. Se eliminan al salir del tablero o ser impactados por un disparo.
+            \item \texttt{Disparo} — representa el proyectil disparado por el jugador. Almacena su posición actual, un booleano para saber si está en vuelo, y la posición del jugador al momento del disparo. Asciende un píxel por tick. Se desactiva automáticamente al salir del tablero.
         \end{itemize}
 
         Ninguna de estas clases conoce la interfaz gráfica ni sabe cómo se dibuja el juego; solo gestionan datos y reglas de juego.
 
     \item[\textbf{Vista}]
-        Las vistas son \texttt{StartFrame} y \texttt{MainFrame}, ambas subclases de \texttt{JFrame} e implementan la interfaz \texttt{Observer}:
-        ---- AQUI CREO QUE HAY QUE DAR MÁS DETALLES ----:
+        Las vistas son \texttt{StartFrame} y \texttt{MainFrame}, ambas subclases de \texttt{JFrame} e implementan la interfaz \texttt{Observer}. Su función es capturar el estado del modelo y representarlo visualmente sin contener lógica de negocio:
         \begin{itemize}[leftmargin=2em]
-            \item \texttt{StartFrame} muestra la pantalla de inicio con el título, las instrucciones de control y el mensaje «Pulsa SPACE para jugar». No dibuja ningún elemento del juego.
-            \item \texttt{MainFrame} pinta el estado del juego en cada actualización: el tablero (cuadrícula negra de $100 \times 60$ celdas de 10 px), el jugador en magenta, los enemigos en rojo y el disparo en amarillo. También muestra el mensaje de victoria o derrota cuando la partida termina.
+            \item \texttt{StartFrame} es la pantalla inicial del juego. Se encarga de mostrar el título, las instrucciones básicas de control, y el mensaje «Pulsa SPACE para jugar». No dibuja ningún elemento del juego ni gestiona la lógica. Su responsabilidad es permitir que el usuario active el inicio de la partida.
+            \item \texttt{MainFrame} es la pantalla de juego principal y gestiona toda la representación gráfica. Dibuja el tablero como cuadrícula negra de $100 \times 60$ celdas, el jugador como rectángulo magenta, los enemigos como rectángulos rojos, y el disparo como rectángulo amarillo. También muestra el mensaje de victoria o derrota cuando la partida termina.
         \end{itemize}
 
-        Ambas vistas se registran como observadoras de \texttt{Espacio} al construirse, con la llamada \lstinline|Espacio.getEspacio().addObserver(this)|.
+        El mecanismo clave es que ambas vistas se registran automáticamente como observadoras de \texttt{Espacio} al construirse, mediante la llamada \lstinline|Espacio.getEspacio().addObserver(this)| en sus constructores. Esto garantiza que recibirán notificaciones automáticas de cualquier cambio en el estado del juego.
 
     \item[\textbf{Controlador}]
-    ---- AQUI CREO QUE HAY QUE DAR MÁS DETALLES, POR EJEMPLO LO QUE SE OBTIENE SOBREESCIBIENDO SOLO LAS FUNCIONES QUE NOS INTERESAN----:
-        Los controladores son clases internas privadas llamadas \texttt{Controller} definidas dentro de \texttt{StartFrame} y \texttt{MainFrame}. Ambas implementan \texttt{KeyListener}, de modo que reciben los eventos de teclado del usuario y los traducen en llamadas al modelo:
+        Los controladores son clases internas privadas llamadas \texttt{Controller} definidas dentro de \texttt{StartFrame} y \texttt{MainFrame}. Ambas implementan \texttt{KeyListener}. En lugar de implementar los tres métodos de la interfaz (\texttt{keyPressed}, \texttt{keyReleased} y \texttt{keyTyped}), solo se sobrescribe \texttt{keyPressed}, lo que es más eficiente. Esto permite que el controlador reciba únicamente los eventos de interés, interprete las teclas pulsadas y traduzca en llamadas concretas al modelo:
         \begin{itemize}[leftmargin=2em]
-            \item El \texttt{Controller} de \texttt{StartFrame} solo atiende la pulsación de \texttt{SPACE} para llamar a \lstinline|Espacio.getEspacio().cambiarAMain()|.
-            \item El \texttt{Controller} de \texttt{MainFrame} atiende las cuatro flechas direccionales (llamando a \lstinline|espacio.moverJugador(dx, dy)|) y la barra espaciadora (llamando a \lstinline|espacio.disparar()|), ignorando cualquier entrada si la partida ya ha terminado.
+            \item El \texttt{Controller} de \texttt{StartFrame} escucha la pulsación de \texttt{SPACE} para llamar a \lstinline|Espacio.getEspacio().cambiarAMain()|, indicando al modelo que inicie la partida.
+            \item El \texttt{Controller} de \texttt{MainFrame} atiende las cuatro flechas direccionales (llamando a \lstinline|espacio.moverJugador(dx, dy)| con los desplazamientos) y la barra espaciadora (llamando a \lstinline|espacio.disparar()|). Además, verifica si la partida ha terminado y rechaza cualquier entrada en ese caso.
         \end{itemize}
 \end{description}
 
@@ -134,32 +132,17 @@ Más adelante se verá como se implementa esta relación entre las tres capas en
 % --------------------------------------------------
 \subsection{Diagramas UML}
 
-\begin{pendiente}
-\textbf{Pendiente:} insertar los diagramas UML que ilustren la arquitectura MVC y la relación Observer entre las clases del proyecto.
-\end{pendiente}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{VistaController(1).png}
+    \caption{Diagrama UML de la arquitectura MVC y relación Observer entre las clases del proyecto Space Invaders.}
+    \label{fig:mvc_observer}
+\end{figure}
 
 % ==================================================
 \section{El Controlador en Detalle}
 
-ESTOS PARRAFOS SON INFUMABLES, SE PUEDEN RESUMIR EN 3 FRASES
-El controlador es el componente encargado de gestionar la interacción entre el usuario, el modelo y la vista dentro del patrón MVC. Su función principal es recibir las acciones del usuario, interpretarlas y coordinar la respuesta del sistema.
-
-Cuando el usuario realiza una acción en la interfaz (por ejemplo, pulsar un botón, seleccionar una opción o introducir datos), esta acción es capturada por el controlador. El controlador analiza la acción y decide qué operación debe realizarse en el modelo, que es el componente que contiene la lógica del programa y los datos.
-
-Una vez que el controlador solicita al modelo que realice una operación (por ejemplo, modificar un dato o ejecutar una acción), el modelo actualiza su estado interno. 
-
-El controlador no contiene los datos del sistema ni se encarga de mostrarlos, sino que actúa como un intermediario que conecta las acciones del usuario con las operaciones del modelo.
-
-En aplicaciones más complejas puede haber varios controladores, cada uno responsable de gestionar diferentes partes de la aplicación o diferentes tipos de interacción. Esto permite dividir la lógica de control y mantener el sistema mejor organizado y más fácil de mantener.
-
-En resumen, el controlador se encarga de:
-
-\begin{itemize}[leftmargin=2em]
-    \item Recibir las acciones del usuario.
-    \item Interpretar esas acciones.
-    \item Solicitar al modelo que realice las operaciones necesarias.
-    \item Coordinar la actualización de la vista cuando es necesario.
-\end{itemize}
+El controlador es el intermediario entre el usuario y el sistema. Recibe las acciones del usuario (eventos de teclado), las interpreta según la lógica de control definida, y solicita al modelo que execute las operaciones correspondientes. No contiene datos del juego ni se encarga de mostrarlos; simplemente traduce entrada en acciones del modelo.
 
 % --------------------------------------------------
 \subsection{Implementación del Controlador en Space Invaders}
