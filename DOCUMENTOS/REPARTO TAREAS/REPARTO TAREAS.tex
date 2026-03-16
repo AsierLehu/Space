@@ -19,7 +19,7 @@
 
 \begin{center}
     {\LARGE \textbf{Reparto de Tareas}}\\[0.4em]
-    {\large \textit{Space Invaders — Proyecto de Programación}}\\[0.3em]
+    {\large \textit{Space Invaders — Proyecto de Ingeniería del Software}}\\[0.3em]
     {\small Fecha: \today}
 \end{center}
 
@@ -45,16 +45,15 @@
 Tareas previstas antes de comenzar el desarrollo y su tiempo estimado:
 
 \begin{enumerate}[leftmargin=2em]
-    \item Diseño del modelo (MVC) — 2 horas
-    \item Patrón Observer — 1 horas
-    \item Vista y controlador — 2 horas
-    \item Lógica de disparo y colisiones — 1 horas
-    \item Movimiento de enemigos — 1 horas
-    \item Gestión del juego (Main / bucle) — 2 horas
-    \item Documentación — 3 horas
+    \item Diseño del juego Espacio (MVC) — 4 horas
+    \item Pantallas StartFrame y MainFrame — 3 horas
+    \item Vista y controlador y métodos update— 8 horas
+    \item Implementación de la lógica de juego, disparo y colisiones — 3 horas
+    \item Solución de errores en patrón MVC+Observer y el juego — 5 horas
+    \item Documentación, diagramas ... — 5 horas
 \end{enumerate}
 
-\textbf{Tiempo total estimado:} 12 horas.
+\textbf{Tiempo total estimado:} 23 horas.
 
 \vspace{1.5em}
 
@@ -64,23 +63,23 @@ Tareas previstas antes de comenzar el desarrollo y su tiempo estimado:
 Tareas efectivamente completadas y su tiempo real:
 
 \begin{enumerate}[leftmargin=2em]
-    \item Entendimiento del patrón MVC e ideamiento de las clases principales del juego — 3 horas
+    \item Entendimiento del patrón MVC e ideamiento de las clases principales del juego — 5 horas
     \item Creación del repositorio y cambios para evitar problemas con archivos de configuración — 1 hora
-    \item Desarrollo de las clases principales del modelo — 1.5 horas
-    \item Desarrollo de la lógica de juego, disparo y colisiones — 1.5 horas
+    \item Desarrollo de las clases principales del modelo — 5 horas
+    \item Desarrollo de la lógica de juego, disparo y colisiones — 4 horas
     \item Desarrollo de la vista, el controlador y los métodos update — 3 horas
-    \item Solución de los métodos notify y update para inicializar MainFrame correctamente — 0.5 horas
-    \item Solución de errores: colisiones, límites, movimiento — X horas
+    \item Solución de los métodos notify y update para inicializar MainFrame correctamente — 4 horas
+    \item Solución de errores: colisiones, límites, movimiento — 3 horas
     \item Refinamiento del modelo — 1 hora
-    \item Solución de estructura de MainFrame para implementarla con labels (Main / bucle) — 2 horas
-    \item Reestructuración del update y notify para MainFrame, evitando que MainFrame tenga lógica de negocio — 2 horas
-    \item Revisión y cambios para implementar correctamente el patrón MVC+Observer — 2 horas
+    \item Solución de estructura de MainFrame para implementarla con labels — 5 horas
+    \item Reestructuración del update y notify para MainFrame, evitando que MainFrame tenga lógica de negocio — 5 horas
+    \item Revisión y cambios para implementar correctamente el patrón MVC+Observer — 2.5 horas
 
-    \item Documentación — 3 horas
-    \item Diagramas UML y del patrón MVC+Observer — 2 horas
+    \item Documentación — 4 horas
+    \item Diagramas UML y del patrón MVC+Observer — 3 horas
 \end{enumerate}
 
-\textbf{Tiempo total real:} 24.5 horas.
+\textbf{Tiempo total real:} 45.5 horas.
 
 \vspace{1.5em}
 
@@ -90,18 +89,15 @@ Tareas efectivamente completadas y su tiempo real:
 % ---- Tarea 1 ----
 \subsection*{Tarea 1 — Entendimiento del patrón MVC e ideamiento de las clases principales del juego}
 \begin{description}[leftmargin=2em, style=nextline]
-    \item[\textbf{Descripción:}] Estudio del patrón MVC y Observer, diseño conceptual de las clases necesarias para el juego: \texttt{Espacio}, \texttt{Jugador}, \texttt{Enemigo}, \texttt{Naves}, \texttt{Disparo}, y planificación de la arquitectura general. Ademñas, pensamos y miramos en otras prácticas cómo se implementó el patrón MVC+Observer.
-    
-    \item[\textbf{Tiempo:}] 3 horas.
+    \item[\textbf{Descripción:}] Estudio del patrón MVC y Observer, diseño conceptual de las clases necesarias para el juego: \texttt{Espacio}, \texttt{Jugador}, \texttt{Enemigo}, \texttt{Naves}, \texttt{Disparo}, y planificación de la arquitectura general. Además, pensamos y miramos en otras prácticas cómo se implementó el patrón MVC+Observer.
+    \item[\textbf{Tiempo:}] 5 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 1 horas
-            \item Asier Lopez —  1 horas
-            \item Eder Lorenzo — 0.5 horas
+            \item Unai Urrutia — 2.5 horas
+            \item Asier López — 1.5 horas
+            \item Eder — 0.5 horas
             \item Ekain Ortega — 0.5 horas
-
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -114,12 +110,10 @@ Tareas efectivamente completadas y su tiempo real:
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
             \item Unai Urrutia — 0.3 horas
-            \item Asier Lopez — 0.7 horas
-            \item Eder Lorenzo — 0 horas
+            \item Asier López — 0.7 horas
+            \item Eder — 0 horas
             \item Ekain Ortega — 0 horas
-
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -128,16 +122,14 @@ Tareas efectivamente completadas y su tiempo real:
 \subsection*{Tarea 3 — Desarrollo de las clases principales del modelo}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Implementación de las clases \texttt{Naves}, \texttt{Jugador}, \texttt{Enemigo}, \texttt{Disparo} y \texttt{Espacio}. Definición de atributos, constructores y métodos básicos. Se dejaron bastantes métodos de Espacio sin implementar.
-    \item[\textbf{Tiempo:}] 1.5 horas.
+    \item[\textbf{Tiempo:}] 5 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 0.5 horas
-            \item Asier Lopez — 0.5 horas
-            \item Eder Lorenzo — 0.25 horas
-            \item Ekain Ortega — 0.25 horas
-
+            \item Unai Urrutia — 2.5 hora
+            \item Asier López — 1.5 hora
+            \item Eder — 0.5 horas
+            \item Ekain Ortega — 0.5 horas
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -146,16 +138,14 @@ Tareas efectivamente completadas y su tiempo real:
 \subsection*{Tarea 4 — Desarrollo de la lógica de juego, disparo y colisiones}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Implementación de la lógica de disparo, detección de colisiones entre disparos y enemigos, condiciones de victoria y derrota. Todo ello en la clase Espacio.
-    \item[\textbf{Tiempo:}] 1.5 horas.
+    \item[\textbf{Tiempo:}] 4 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 0.5 horas
-            \item Asier Lopez — 0.5 horas
-            \item Eder Lorenzo — 0.25 horas
-            \item Ekain Ortega — 0.25 horas
-
+            \item Unai Urrutia — 1.5 horas
+            \item Asier López — 1.5 horas
+            \item Eder — 0.5 horas
+            \item Ekain Ortega — 0.5 horas
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -167,31 +157,27 @@ Tareas efectivamente completadas y su tiempo real:
     \item[\textbf{Tiempo:}] 3 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 1 horas
-            \item Asier Lopez —  1 horas
-            \item Eder Lorenzo — 0.5 horas
+            \item Unai Urrutia — 1 hora
+            \item Asier López — 1 hora
+            \item Eder — 0.5 horas
             \item Ekain Ortega — 0.5 horas
-
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
 
 % ---- Tarea 6 ----
-\subsection*{Tarea 6 — Solución de los métodos notify y update para inicializar MainFrame}
+\subsection*{Tarea 6 — Solución de los métodos notify y update para inicializar MainFrame correctamente}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Corrección de un problema que detectamos junto al profesor. Startframe no notificaba a Espacio la inicialización del juego, por lo que no se respetaba el patrón MVC+Observer.
-    \item[\textbf{Tiempo:}] 0.5 horas.
+    \item[\textbf{Tiempo:}] 4 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 0.1 horas
-            \item Asier Lopez — 0.3 horas
-            \item Eder Lorenzo — 0.05 horas
-            \item Ekain Ortega — 0.05 horas
-
+            \item Unai Urrutia — 1.5 horas
+            \item Asier López — 1.5 horas
+            \item Eder — 0.25 horas
+            \item Ekain Ortega — 0.25 horas
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -199,17 +185,15 @@ Tareas efectivamente completadas y su tiempo real:
 % ---- Tarea 7 ----
 \subsection*{Tarea 7 — Solución de errores: colisiones, límites, movimiento}
 \begin{description}[leftmargin=2em, style=nextline]
-    \item[\textbf{Descripción:}] Tras poder empezar a probar el juego,  se detectaron errores relacionados con la detección de colisiones, los límites del tablero y el movimiento del jugador y enemigos. Se solucionaron todos estos errores.
-    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Descripción:}] Tras poder empezar a probar el juego, se detectaron errores relacionados con la detección de colisiones, los límites del tablero y el movimiento del jugador y enemigos. Se solucionaron todos estos errores.
+    \item[\textbf{Tiempo:}] 3 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 0.7 horas
-            \item Asier Lopez — 0.7 horas
-            \item Eder Lorenzo — 0.3 horas
-            \item Ekain Ortega — 0.3 horas
-
+            \item Unai Urrutia — 1 hora
+            \item Asier López — 1 hora
+            \item Eder — 0.5 horas
+            \item Ekain Ortega — 0.5 horas
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -222,12 +206,11 @@ Tareas efectivamente completadas y su tiempo real:
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
             \item Unai Urrutia — 0.25 horas
-            \item Asier Lopez — 0.25 horas
-            \item Eder Lorenzo — 0.25 horas
+            \item Asier López — 0.25 horas
+            \item Eder — 0.25 horas
             \item Ekain Ortega — 0.25 horas
 
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -236,16 +219,14 @@ Tareas efectivamente completadas y su tiempo real:
 \subsection*{Tarea 9 — Solución de estructura de MainFrame para implementarla con labels}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Tras el feedback del profesor vimos que MainFrame, y por lo tanto, la parte más importante del juego, no estaba implementada correctamente. Tuvimos que reestructurarlo y borrar mucho código. \texttt{MainFrame} pasó a ser una cuadrícula de \texttt{JLabel}. Además tuvimos que hacer cambios en update y notify, como se detalla en la siguiente tarea.
-    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Tiempo:}] 5 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 0.7 horas
-            \item Asier Lopez — 0.7 horas
-            \item Eder Lorenzo — 0.3 horas
-            \item Ekain Ortega — 0.3 horas
-
+            \item Unai Urrutia — 2 horas
+            \item Asier López — 1.5 horas
+            \item Eder — 0.5 horas
+            \item Ekain Ortega — 1 horas
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -253,17 +234,15 @@ Tareas efectivamente completadas y su tiempo real:
 % ---- Tarea 10 ----
 \subsection*{Tarea 10 — Reestructuración del update y notify para MainFrame}
 \begin{description}[leftmargin=2em, style=nextline]
-    \item[\textbf{Descripción:}] Mainframe pasó de recibir un update vacío, a recibir un array diciendo qué arrays pintar y de qué color, y cuales pintar del color del fondo. También se eliminarion variables de estado en \texttt{MainFrame} (posiciones del jugador, disparo, etc.). Toda la información necesaria para pintar y borrar se pasa a través de las notificaciones del modelo, evitando que la vista contenga lógica de negocio.
-    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Descripción:}] Mainframe pasó de recibir un update vacío, a recibir un array diciendo qué arrays pintar y de qué color, y cuáles pintar del color del fondo. También se eliminaron variables de estado en \texttt{MainFrame} (posiciones del jugador, disparo, etc.). Toda la información necesaria para pintar y borrar se pasa a través de las notificaciones del modelo, evitando que la vista contenga lógica de negocio.
+    \item[\textbf{Tiempo:}] 5 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 0.5 horas
-            \item Asier Lopez — 1 horas
-            \item Eder Lorenzo — 0.2 horas
-            \item Ekain Ortega — 0.3 horas
-
+            \item Unai Urrutia — 2 horas
+            \item Asier López — 2 horas
+            \item Eder — 0.5 horas
+            \item Ekain Ortega — 0.5 horas
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -272,15 +251,14 @@ Tareas efectivamente completadas y su tiempo real:
 \subsection*{Tarea 11 — Revisión y cambios para implementar correctamente el patrón MVC+Observer}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Revisión general del código para asegurar que se respeta el patrón MVC: la lógica de fin de partida se controla desde el modelo, el controlador no contiene lógica de negocio, y la vista solo reacciona a notificaciones. En concreto, se implementaron de forma diferente ciertas llamadas directas de MainFrame a Espacio, que detectaban si el juego había terminado.
-    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Tiempo:}] 2.5 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 0.7 horas
-            \item Asier Lopez — 0.7 horas
-            \item Eder Lorenzo — 0.3 horas
-            \item Ekain Ortega — 0.3 horas
+            \item Unai Urrutia — 0.5 horas
+            \item Asier López — 1 horas
+            \item Eder — 0.50 horas
+            \item Ekain Ortega — 0.5 horas
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -289,15 +267,14 @@ Tareas efectivamente completadas y su tiempo real:
 \subsection*{Tarea 12 — Documentación}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Redacción de la memoria del proyecto, justificación del patrón MVC+Observer, y elaboración de este documento de reparto de tareas.
-    \item[\textbf{Tiempo:}] 3 horas.
+    \item[\textbf{Tiempo:}] 4 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Eder Lorenzo — 0.5 horas
-            \item Ekain Ortega — 1 horas
-            \item Unai Urrutia — 0.5 horas
-	    \item Asier Lopez  — 1 horas
+            \item Eder — 1 hora
+            \item Ekain Ortega — 1.2 horas
+            \item Unai Urrutia — 0.8 horas
+            \item Asier López — 1 hora
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \vspace{0.8em}
@@ -306,15 +283,14 @@ Tareas efectivamente completadas y su tiempo real:
 \subsection*{Tarea 13 — Diagramas UML y del patrón MVC+Observer}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Elaboración de los diagramas UML de clases y de la arquitectura MVC+Observer del proyecto.
-    \item[\textbf{Tiempo:}] 2 horas.
+    \item[\textbf{Tiempo:}] 3 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-        \item Unai Urrutia — 0.5 horas
-	\item Eder Lorenzo — 0.5 horas
-	\item Ekain Ortega — 0.5 horas
-	\item Asier Lopez — 0.5 horas
+            \item Unai Urrutia — 1 hora
+            \item Eder — 1 horas
+            \item Ekain Ortega — 1 horas
+            \item Asier López — 0 horas
         \end{itemize}
-    \item[\textbf{Problemas encontrados:}] Describir aquí los problemas encontrados durante el desarrollo de esta tarea.
 \end{description}
 
 \end{document}
