@@ -33,6 +33,7 @@ public class Espacio extends Observable {
     	iniciarJuegoLoop(); // Iniciar el timer del juego
     	setChanged();
     	notifyObservers(new int[] {9}); // Notificación para cambiar de pantalla
+        
         notificarInicializacion();
     }
     

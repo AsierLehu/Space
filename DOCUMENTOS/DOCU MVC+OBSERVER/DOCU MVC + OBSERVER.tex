@@ -204,7 +204,7 @@ En muchos casos, el método \texttt{update} se utiliza para que el observador co
 Cada observador puede implementar su propio comportamiento en el método \texttt{update}, lo que permite que diferentes componentes reaccionen de distintas formas ante el mismo cambio en el observable.
 
 % --------------------------------------------------
-\subsection{Funcionamiento conjunto de \texttt{notify} y \texttt{update} en el proyecto - FALTA AKI}
+\subsection{Funcionamiento conjunto de \texttt{notify} y \texttt{update} en el proyecto}
 
 El funcionamiento coordinado de estos dos métodos permite mantener sincronizados los distintos componentes de un sistema que utiliza el patrón Observer. El proceso general es el siguiente:
 
@@ -275,35 +275,36 @@ Esta notificación es recibida por el Observer (\texttt{MainFrame}), que la proc
 % --------------------------------------------------
 \subsection{Transición de StartFrame a MainFrame}
 
-El cambio de la pantalla de inicio al juego principal es un proceso coordinado que involucra múltiples llamadas y notificaciones del patrón Observer. El flujo completo es el siguiente:
+El cambio de la pantalla de inicio al juego principal es uno de los procesos críticos que debe respetar el patrón MVC y Observer. El flujo completo es el siguiente:
 
 \begin{enumerate}[leftmargin=2em]
-    \item \textbf{Usuario presiona SPACE en StartFrame}: El controlador de \texttt{StartFrame} detecta la pulsación y llama a \lstinline|iniciarJuego()|.
+    \item \textbf{Usuario presiona SPACE en StartFrame}: El controlador de \texttt{StartFrame} detecta la pulsación y llama directamente a \lstinline|Espacio.getEspacio().cambiarAMain()|.
     
-    \item \textbf{Llamada a cambiarAMain()}: El método \lstinline|iniciarJuego()| ejecuta \lstinline|Espacio.getEspacio().cambiarAMain()|, que realiza tres acciones críticas:
+    \item \textbf{Ejecución de cambiarAMain()}: Este método realiza cuatro acciones en secuencia:
     \begin{itemize}[leftmargin=2em]
-        \item Inicializa el juego creando jugador y primer enemigo
-        \item Inicia el timer del game loop (50ms)
-        \item Notifica con tipo 9: \lstinline|notifyObservers(new int[]{9})|
+        \item Inicializa el juego creando jugador y primer enemigo (\lstinline|inicializar()|)
+        \item Inicia el timer del game loop (50ms) (\lstinline|iniciarJuegoLoop()|)
+        \item \textcolor{blue}{Notifica tipo 9 para cambiar de pantalla, algo que es recibido por StartFrame}
+        \item \textcolor{red}{Una vez se gestiona ese update, llama a \lstinline|notificarInicializacion()| para enviar las posiciones iniciales del jugador y primer enemigo}
     \end{itemize}
     
-    \item \textbf{StartFrame recibe notificación tipo 9}: Su método \lstinline|update()| procesa esta notificación específica:
+    \item \textcolor{blue}{\textbf{StartFrame gestiona notificación tipo 9}}: Su método \lstinline|update()| procesa esta notificación específica:
     \begin{itemize}[leftmargin=2em]
         \item Se desregistra como observer: \lstinline|deleteObserver(this)|
         \item Se oculta: \lstinline|setVisible(false)|
-        \item Crea el nuevo \texttt{MainFrame}
+        \item \textcolor{purple}{Crea el nuevo \texttt{MainFrame}}
     \end{itemize}
     
-    \item \textbf{MainFrame se inicializa}: En su constructor:
+    \item \textcolor{purple}{\textbf{MainFrame se inicializa}}: En su constructor:
     \begin{itemize}[leftmargin=2em]
-        \item Se registra como observer: \lstinline|addObserver(this)|
-        \item Llama a \lstinline|espacio.notificarInicializacion()|
+        \item Se registra como observer de Espacio: \lstinline|addObserver(this)|
     \end{itemize}
     
-    \item \textbf{Notificación tipo 6}: \lstinline|notificarInicializacion()| envía las posiciones iniciales del jugador y primer enemigo, permitiendo que \texttt{MainFrame} pinte el estado inicial del juego.
+    \item \textcolor{red}{\textbf{notificarInicializacion genera notificación tipo 6}}: Este método envía las posiciones iniciales del jugador y primer enemigo, haciendo que \texttt{MainFrame} pinte el estado inicial del juego.
 \end{enumerate}
 
 Este mecanismo garantiza una transición fluida sin dependencias directas entre las vistas, manteniendo la separación de responsabilidades del patrón MVC.
+Además, separamos la lógica que notifica a StartFrame la transición y la que notifica a MainFrame que debe pintar las posiciones iniciales del jugador y primer enemigo.
 
 % ==================================================
 \section{Conclusiones}
