@@ -67,6 +67,10 @@ public class Espacio extends Observable {
             setChanged();
             notifyObservers(new int[] {0, oldX, oldY, jugador.getX(), jugador.getY()});
         }
+        if (isGameOver()) {
+        	setChanged();
+        	notifyObservers(new int[] {7});
+        }
     }
 
     public void disparar() {
@@ -132,7 +136,7 @@ public class Espacio extends Observable {
                 e.setVivo(false);
                 d.setActivo(false);
                 setChanged();
-                notifyObservers(new int[] {5, d.getX(), d.getY(), e.getX(), e.getY()});
+                notifyObservers(new int[] {5, d.getX(), d.getY()+1, e.getX(), e.getY()});
                 if (isGameWon()) {
                 	setChanged();
                 	notifyObservers(new int[] {8});
@@ -148,7 +152,10 @@ public class Espacio extends Observable {
         if (jugador == null || !jugador.isVivo()) return true;
 
         for (Enemigo e : enemigos) {
-            if (e.isVivo() && e.getY() >= jugador.getY()) return true;
+            if (e.isVivo() && e.getY() >= jugador.getY()) 
+            {
+                return true;
+            }
         }
         return false;
     }

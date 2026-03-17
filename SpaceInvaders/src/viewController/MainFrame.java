@@ -104,7 +104,7 @@ public class MainFrame extends JFrame implements Observer {
     			celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO); // pintar nueva posición
     			break;
     		
-    		case 5: // colision - [tipo, disparoX, disparoY, enemigoX, enemigoY]
+    		case 5: // colision - [tipo, disparoX, disparoY, enemigoX, enemigoY, ]
     			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar disparo
     			celdas[datos[3]][datos[4]].setBackground(COLOR_FONDO); // borrar enemigo
     			break;
