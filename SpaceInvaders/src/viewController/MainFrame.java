@@ -19,11 +19,9 @@ public class MainFrame extends JFrame implements Observer {
 
     private JLabel[][] celdas;
     private JLabel mensajeFin;
-    private Espacio espacio;
 
     public MainFrame() {
-        espacio = Espacio.getEspacio();
-        espacio.addObserver(this);
+        Espacio.getEspacio().addObserver(this);
 
         setTitle("Space Invaders - Juego");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,14 +33,11 @@ public class MainFrame extends JFrame implements Observer {
         setLocationRelativeTo(null);
         setVisible(true);
         requestFocusInWindow();
-        
-        // Ahora que MainFrame está completamente inicializado, solicitar la notificación inicial
-        espacio.notificarInicializacion();
     }
 
     private void initPanel() {
-        int cols = espacio.getAnchura();
-        int rows = espacio.getAltura();
+        int cols = 100;
+        int rows = 60;
 
         celdas = new JLabel[cols][rows];
 
@@ -70,7 +65,7 @@ public class MainFrame extends JFrame implements Observer {
         mensajeFin.setOpaque(true);
         mensajeFin.setBackground(Color.BLACK);
         mensajeFin.setForeground(color);
-        mensajeFin.setPreferredSize(new Dimension(espacio.getAnchura() * 10, 40));
+        mensajeFin.setPreferredSize(new Dimension(100 * 10, 40));
         add(mensajeFin, BorderLayout.SOUTH);
         revalidate();
         pack();
@@ -78,17 +73,8 @@ public class MainFrame extends JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-    	if (o instanceof Espacio) {
-    		int[] datos = (int[]) arg;
-            /// de momento sin esto no da error
-    		/*SwingUtilities.invokeLater(new Runnable() {
-    			public void run() {
-    				procesarNotificacion(datos);
-    			}
-    		});
-    		*/
-    		procesarNotificacion(datos);
-    	}
+    	int[] datos = (int[]) arg;
+    	procesarNotificacion(datos);
     }
 
     private void procesarNotificacion(int[] datos) {
@@ -139,11 +125,11 @@ public class MainFrame extends JFrame implements Observer {
         public void keyPressed(KeyEvent e) {
 
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_LEFT:  espacio.moverJugador(-1,  0); break;
-                case KeyEvent.VK_RIGHT: espacio.moverJugador( 1,  0); break;
-                case KeyEvent.VK_UP:    espacio.moverJugador( 0, -1); break;
-                case KeyEvent.VK_DOWN:  espacio.moverJugador( 0,  1); break;
-                case KeyEvent.VK_SPACE: espacio.disparar();           break;
+                case KeyEvent.VK_LEFT:  Espacio.getEspacio().moverJugador(-1,  0); break;
+                case KeyEvent.VK_RIGHT: Espacio.getEspacio().moverJugador( 1,  0); break;
+                case KeyEvent.VK_UP:    Espacio.getEspacio().moverJugador( 0, -1); break;
+                case KeyEvent.VK_DOWN:  Espacio.getEspacio().moverJugador( 0,  1); break;
+                case KeyEvent.VK_SPACE: Espacio.getEspacio().disparar();           break;
             }
         }
 

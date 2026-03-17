@@ -73,13 +73,13 @@ Tareas efectivamente completadas y su tiempo real:
     \item Refinamiento del modelo — 1 hora
     \item Solución de estructura de MainFrame para implementarla con labels — 5 horas
     \item Reestructuración del update y notify para MainFrame, evitando que MainFrame tenga lógica de negocio — 5 horas
-    \item Revisión y cambios para implementar correctamente el patrón MVC+Observer — 2.5 horas
+    \item Revisión y cambios para implementar correctamente el patrón MVC+Observer — 5 horas
 
     \item Documentación — 4 horas
     \item Diagramas UML y del patrón MVC+Observer — 3 horas
 \end{enumerate}
 
-\textbf{Tiempo total real:} 45.5 horas.
+\textbf{Tiempo total real:} 48 horas.
 
 \vspace{1.5em}
 
@@ -250,12 +250,13 @@ Tareas efectivamente completadas y su tiempo real:
 % ---- Tarea 11 ----
 \subsection*{Tarea 11 — Revisión y cambios para implementar correctamente el patrón MVC+Observer}
 \begin{description}[leftmargin=2em, style=nextline]
-    \item[\textbf{Descripción:}] Revisión general del código para asegurar que se respeta el patrón MVC: la lógica de fin de partida se controla desde el modelo, el controlador no contiene lógica de negocio, y la vista solo reacciona a notificaciones. En concreto, se implementaron de forma diferente ciertas llamadas directas de MainFrame a Espacio, que detectaban si el juego había terminado.
+    \item[\textbf{Descripción:}] Revisión general del código para asegurar que se respeta el patrón MVC: la lógica de fin de partida se controla desde el modelo, el controlador no contiene lógica de negocio, y la vista solo reacciona a notificaciones. En concreto, se implementaron de forma diferente ciertas llamadas directas de MainFrame a Espacio, que detectaban si el juego había terminado. 
+    Además, en el último momento hemos visto graves fallos que han requerido de cambios importantes en la inicialización de MainFrame.
     \item[\textbf{Tiempo:}] 2.5 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — 0.5 horas
-            \item Asier López — 1 horas
+            \item Unai Urrutia — 2 horas
+            \item Asier López — 2 horas
             \item Eder — 0.50 horas
             \item Ekain Ortega — 0.5 horas
         \end{itemize}

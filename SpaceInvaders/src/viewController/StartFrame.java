@@ -75,22 +75,15 @@ public class StartFrame extends JFrame implements Observer {
         Espacio.getEspacio().addObserver(this);
     }
 
-    private void iniciarJuego() {
-        Espacio.getEspacio().cambiarAMain();
-
-        
-    }
 
 	@Override
 	public void update(Observable o, Object arg) {
 		int[] datos = (int[]) arg;
         int tipo = datos[0];
-	    if (o instanceof Espacio) {
-	        if (tipo == 9) { // Notificación para cambiar de pantalla
-	            Espacio.getEspacio().deleteObserver(this);
-                this.setVisible(false);
-                new MainFrame();
-            }
+	    if (tipo == 9) { // Notificación para cambiar de pantalla
+	        Espacio.getEspacio().deleteObserver(this);
+            this.setVisible(false);
+            new MainFrame();
         }
     }
 
@@ -104,7 +97,7 @@ public class StartFrame extends JFrame implements Observer {
         public void keyPressed(KeyEvent e) {
             // Solo SPACE inicia el juego
             if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                iniciarJuego();
+                Espacio.getEspacio().cambiarAMain();
             }
         }
 
