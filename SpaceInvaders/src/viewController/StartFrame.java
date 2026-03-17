@@ -59,18 +59,17 @@ public class StartFrame extends JFrame implements Observer {
         gbc.gridy = 3;
         panel.add(controles, gbc);
 
-        add(panel);
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
+        add(panel); // Añadir el panel principal al frame
+        pack(); // Ajustar el tamaño del frame al contenido
+        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
+        setVisible(true); // Hacer visible la ventana
 
-        // Foco en el frame para capturar teclado
-        setFocusable(true);
-        requestFocusInWindow();
+        // Configurar el foco para capturar eventos de teclado
+        setFocusable(true); // Permitir que el frame reciba el foco
+        requestFocusInWindow(); // Solicitar el foco activamente
 
-        // Añadir el Controller (clase privada interna)
-        Controller controller = new Controller();
-        addKeyListener(controller);
+        Controller controller = new Controller(); 
+        addKeyListener(controller); 
         
         Espacio.getEspacio().addObserver(this);
     }

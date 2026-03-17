@@ -10,6 +10,8 @@
 \usepackage{mdframed}
 \usepackage{hyperref}
 \usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{float}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning}
 
 \geometry{margin=2.5cm}
@@ -132,7 +134,7 @@ Más adelante se verá como se implementa esta relación entre las tres capas en
 % --------------------------------------------------
 \subsection{Diagramas UML}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{VistaController.png}
     \caption{Diagrama UML de la arquitectura MVC y relación Observer entre las clases del proyecto Space Invaders.}
@@ -144,92 +146,34 @@ Más adelante se verá como se implementa esta relación entre las tres capas en
 
 El controlador es el intermediario entre el usuario y el sistema. Recibe las acciones del usuario (eventos de teclado), las interpreta según la lógica de control definida, y solicita al modelo que execute las operaciones correspondientes. No contiene datos del juego ni se encarga de mostrarlos; simplemente traduce entrada en acciones del modelo.
 
-% --------------------------------------------------
-\subsection{Método \texttt{notificarInicializacion}}
+En ambas clases (\texttt{StartFrame} y \texttt{MainFrame}), los controladores están definidos como clases internas privadas llamadas \texttt{Controller} que implementan \texttt{KeyListener}. Esto requiere implementar obligatoriamente los tres métodos de la interfaz: \texttt{keyPressed}, \texttt{keyReleased} y \texttt{keyTyped}. En la práctica, solo \texttt{keyPressed} contiene lógica (los otros dos están vacíos).
 
-Este método es crucial para inicializar la pantalla de juego correctamente. Se llama desde el constructor de \texttt{MainFrame} después de que toda la interfaz gráfica está lista.
-
-\begin{lstlisting}
-public void notificarInicializacion() {
-    setChanged();
-    notifyObservers(new int[] {6, jugador.getX(), jugador.getY(), 
-                               enemigos.get(0).getX(), enemigos.get(0).getY()});
-}
-\end{lstlisting}
-
-Envía una notificación de tipo 6 con las posiciones iniciales del jugador y el primer enemigo. Esto permite que \texttt{MainFrame} pinte estos elementos en el tablero sin necesidad de que ocurra movimiento alguno.
-
-% --------------------------------------------------
-\subsection{Método \texttt{cambiarAMain}}
-
-Este método realiza tres tareas críticas:
-
-\begin{lstlisting}
-public void cambiarAMain() {
-    inicializar();           // Crear jugador y primer enemigo
-    iniciarJuegoLoop();      // Iniciar el timer de 50ms
-    setChanged();
-    notifyObservers(new int[] {9}); // Notificación para cambiar de pantalla
-}
-\end{lstlisting}
+El flujo común de funcionamiento es el siguiente:
 
 \begin{enumerate}[leftmargin=2em]
-    \item \textbf{Inicializar}: Crea la instancia del \texttt{Jugador} en posición (50, 55) y añade el primer \texttt{Enemigo} en una posición aleatoria en la fila superior (y entre 0-4).
-    \item \textbf{Iniciar game loop}: Arranca el \texttt{Timer} de 50 ms que ejecutará el bucle principal del juego.
-    \item \textbf{Notificar}: Envía notificación tipo 9 para que \texttt{StartFrame} cierre y \texttt{MainFrame} se abra.
+    \item En el constructor de cada frame se crea una instancia del controlador e inmediatamente se registra con \lstinline|addKeyListener(controller)|.
+    \item La ventana solicita el foco del sistema con \lstinline|requestFocusInWindow()|. Esto es crucial porque solo la ventana que tiene el foco puede recibir eventos del teclado.
+    \item Cuando el usuario pulsa una tecla, el sistema operativo detecta el evento y lo envía automáticamente al método \texttt{keyPressed} del \texttt{Controller} registrado. Este método recibe un objeto \texttt{KeyEvent} que contiene información sobre qué tecla fue pulsada.
 \end{enumerate}
+
+\subsubsection*{En la clase \texttt{StartFrame}}
+
+En esta clase, su única función es detectar si el usuario pulsa la barra espaciadora, en tal caso llama a \lstinline|iniciarJuego()| que veremos posteriormente qué hace.
 
 \subsubsection*{Clase \texttt{MainFrame}}
 
-El \texttt{Controller} de esta clase es la parte que traduce las teclas del usuario en acciones del juego. Está definido como una clase interna en \texttt{MainFrame} e implementa \texttt{KeyListener}, por lo que escucha eventos del teclado.
-
-Su flujo es el siguiente:
-
-\begin{enumerate}[leftmargin=2em]
-    \item Se crea en \texttt{MainFrame} con \lstinline|Controller controller = new Controller()|.
-    \item Se registra en la ventana con \lstinline|addKeyListener(...)| en \texttt{MainFrame}.
-    \item Para que realmente reciba teclas, el frame solicita el foco en \texttt{MainFrame}.
-\end{enumerate}
-
-Lo importante ocurre en \texttt{keyPressed} en \texttt{MainFrame}:
+El \texttt{Controller} de esta clase traduce las teclas del usuario en acciones del juego. En \texttt{keyPressed} se implementa la lógica específica:
 
 \begin{itemize}[leftmargin=2em]
     \item Lee qué tecla se pulsó con \lstinline|e.getKeyCode()|.
     \item Según la tecla, llama al modelo \texttt{Espacio}:
     \begin{itemize}[leftmargin=2em]
-        \item \textbf{Flecha izquierda:} ejecuta \lstinline|espacio.moverJugador(-1, 0)|.
-        \item \textbf{Flecha derecha:} ejecuta \lstinline|espacio.moverJugador(1, 0)|.
-        \item \textbf{Flecha arriba:} ejecuta \lstinline|espacio.moverJugador(0, -1)|.
-        \item \textbf{Flecha abajo:} ejecuta \lstinline|espacio.moverJugador(0, 1)|.
+        \item \textbf{Flechas direccionales:} ejecutan \lstinline|espacio.moverJugador(dx, dy)| con los desplazamientos correspondientes (izquierda: -1,0; derecha: 1,0; arriba: 0,-1; abajo: 0,1).
         \item \textbf{Espacio:} ejecuta \lstinline|espacio.disparar()|.
     \end{itemize}
 \end{itemize}
 
-Importante: El \texttt{Controller} \textbf{no verifica} si la partida ha terminado. Esa validación ocurre dentro del modelo en los métodos \texttt{moverJugador()} y \texttt{disparar()}, que comprueban internamente con \lstinline|isGameOver()| y \lstinline|isGameWon()| antes de ejecutar.
-
-En resumen: el \texttt{Controller} no contiene lógica de juego ni dibuja nada; solo captura la entrada del teclado y translada a llamadas de modelo. El modelo valida y ejecuta. Después, cuando el modelo notifica a la vista, el método \texttt{update} actualiza el panel gráfico.
-
-\subsubsection*{Clase \texttt{StartFrame}}
-
-En esta clase, el \texttt{Controller} sirve para controlar la pantalla de inicio usando el teclado. Está definido al final de \texttt{StartFrame} como una clase interna que implementa \texttt{KeyListener}.
-
-Su función es muy simple: escuchar si el usuario pulsa la barra espaciadora.
-
-El flujo es el siguiente:
-
-\begin{enumerate}[leftmargin=2em]
-    \item En el constructor de \texttt{StartFrame} se crea el controller e inmediatamente se registra con \lstinline|addKeyListener(controller)|.
-    \item La ventana pide el foco con \lstinline|requestFocusInWindow()|, por lo que puede recibir eventos del teclado.
-    \item Cuando el usuario pulsa una tecla, se ejecuta \texttt{keyPressed} en el \texttt{Controller}.
-\end{enumerate}
-
-Dentro de \texttt{keyPressed}, el controller hace una sola comprobación:
-
-\begin{itemize}[leftmargin=2em]
-    \item Si la tecla pulsada es \texttt{VK\_SPACE}, llama a \lstinline|iniciarJuego()| que a su vez llama a \lstinline|Espacio.getEspacio().cambiarAMain()|.
-\end{itemize}
-
-Ese método \texttt{cambiarAMain()} en \texttt{Espacio} dispara todo el proceso de transición en cascada: inicializa el juego, arranca el timer, y notifica a los observers. Como \texttt{StartFrame} es una de los observadores, su método \texttt{update} recibe la notificación de tipo 9 y cierra la ventana de inicio.
+\textbf{IMPORTANTE:}  El \texttt{Controller} \textbf{no verifica} si la partida ha terminado. Esa validación ocurre dentro del modelo en los métodos \texttt{moverJugador()} y \texttt{disparar()}, que comprueban internamente con \lstinline|isGameOver()| y \lstinline|isGameWon()| antes de ejecutar. Este fue uno de los muchos cambios que se hicieron tras el feedback del profesor.
 
 % ==================================================
 \section{Patrón Observer: Notificación y Actualización}
@@ -280,12 +224,12 @@ Gracias a este mecanismo, los cambios en el sistema se propagan automáticamente
 
 En el proyecto, el observable es \texttt{Espacio}. Las notificaciones a los observadores se realizan directamente con la secuencia:
 
-\begin{lstlisting}
+\begin{lstlisting}[language=Java]
 setChanged();
 notifyObservers(new int[] {tipo, datos...});
 \end{lstlisting}
 
-La llamada a \lstinline|setChanged()| es obligatoria antes de \lstinline|notifyObservers()|: sin ella, la clase \texttt{Observable} no propagar\u00eda nada. \texttt{notifyObservers()} recorre internamente la lista de observers registrados y llama al \texttt{update} de cada uno, pasando un array de enteros con información espec\u00edfica sobre el cambio.
+La llamada a \lstinline|setChanged()| es obligatoria antes de \lstinline|notifyObservers()|: sin ella, la clase \texttt{Observable} no propagaría nada. \texttt{notifyObservers()} recorre internamente la lista de observers registrados y llama al \texttt{update} de cada uno, pasando un array de enteros con información específica sobre el cambio.
 
 Las notificaciones se invocan desde varios puntos del modelo, cada vez que el estado del juego cambia y la pantalla debe reflejarlo. Los tipos de notificación (primer elemento del array) son:
 
@@ -306,126 +250,27 @@ Las notificaciones se invocan desde varios puntos del modelo, cada vez que el es
 
 Cada notificación es un array de enteros que comienza con un identificador de tipo (0-9) seguido de parámetros específicos:
 
+
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Primer elemento (índice 0)}]
         Siempre es el tipo de notificación (0-9). Define qué acción ocurrió en el modelo.
+        
+        \textbf{IMPORTANTE:} El hecho de que exista un identificador de tipo en la vista, y que esta distinga entre varias acciones, no implica que la vista implemente lógica de negocio. La vista simplemente recibe el array de datos, y según el caso que se esté dando, se pinta la celda o celdas del color correspondiente.
 
     \item[\textbf{Elementos posteriores}]
-        Dependen del tipo. Pueden ser coordenadas (x, y), posiciones anteriores y nuevas, o una combinación de ambas. La longitud del array varía según el tipo:
-        \begin{itemize}[leftmargin=2em]
-            \item Tipos 0, 2, 4: 5 elementos (tipo + 4 coordenadas: oldX, oldY, newX, newY)
-            \item Tipos 1, 3: 3 elementos (tipo + 2 coordenadas: X, Y)
-            \item Tipo 5: 5 elementos (tipo + posición disparo + posición enemigo)
-            \item Tipo 6: 5 elementos (tipo + posición jugador + posición primer enemigo)
-            \item Tipos 7, 8, 9: 1 elemento (solo el tipo)
-        \end{itemize}
+        Dependen del tipo. Pueden ser coordenadas (x, y), posiciones anteriores y nuevas, o una combinación de ambas. 
+        Como la vista conoce el tipo de notificación a procesar, no surgirán errores de índice.
 \end{description}
 
 \textbf{Ejemplo práctico:} Cuando el jugador se mueve de (50, 55) a (51, 55) presionando flecha derecha, el modelo ejecuta:
 
-\begin{lstlisting}
-int oldX = 50, oldY = 55;  // Posición anterior
-jugador.mover(1, 0);       // dx=1, dy=0 (flecha derecha)
-int newX = jugador.getX(); // Ahora 51
-int newY = jugador.getY(); // Sigue siendo 55
+\begin{lstlisting}[language=Java]
 setChanged();
 notifyObservers(new int[] {0, 50, 55, 51, 55});
 \end{lstlisting}
 
-Esta notificación se envía a ambos frames (\texttt{MainFrame} y \texttt{StartFrame}), pero solo \texttt{MainFrame} la procesa porque está en el juego principal.
+Esta notificación es recibida por el Observer (\texttt{MainFrame}), que la procesará y pintará la celda (50, 55) de color negro y la celda (51, 55) de color magenta.
 
-\subsubsection{Cómo responde \texttt{MainFrame} en su \texttt{update}}
-
-\texttt{MainFrame} implementa \texttt{Observer} y se registra en \texttt{Espacio} al construirse. Su método \texttt{update} procesa las notificaciones específicas:
-
-\begin{lstlisting}
-@Override
-public void update(Observable o, Object arg) {
-    if (o instanceof Espacio) {
-        int[] datos = (int[]) arg;
-        procesarNotificacion(datos);
-    }
-}
-\end{lstlisting}
-
-El método \texttt{procesarNotificacion} es un switch que analiza el primer elemento del array (el tipo de evento, del 0 al 8) y actualiza selectivamente las celdas en la matriz \texttt{celdas[x][y]} según el caso:
-
-\begin{itemize}[leftmargin=2em]
-    \item Borra posiciones anteriores estableciendo el color de fondo a negro.
-    \item Pinta nuevas posiciones con el color correspondiente: magenta para el jugador, rojo para enemigos, amarillo para el disparo.
-    \item Para tipos 7 y 8, muestra un mensaje de fin de partida ("GAME OVER" en rojo o "HAS GANADO!" en verde).
-    \item \textbf{Nota:} El switch solo procesa tipos 0-8. Las notificaciones de tipo 9 no son procesadas aquí; solo \texttt{StartFrame} las maneja.
-\end{itemize}
-
-\textbf{Ejemplo de procesamiento en MainFrame:}
-
-Cuando llega la notificación tipo 0 (movimiento del jugador) con array \lstinline|{0, 50, 55, 51, 55}|:
-
-\begin{lstlisting}
-// Dentro del switch de procesarNotificacion():
-case 0: // jugador se mueve - [tipo, oldX, oldY, newX, newY]
-    celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);      // datos[1]=50, datos[2]=55
-    celdas[datos[3]][datos[4]].setBackground(COLOR_JUGADOR);    // datos[3]=51, datos[4]=55
-    break;
-\end{lstlisting}
-
-Esto:
-\begin{enumerate}[leftmargin=2em]
-    \item Lee la celda en la posición anterior (50, 55).
-    \item La pinta de color negro (fondo), borrando visualmente el jugador de ahí.
-    \item Lee la celda en la nueva posición (51, 55).
-    \item La pinta de color magenta, mostrando el jugador en su nueva ubicación.
-\end{enumerate}
-
-El resultado visual es instantáneo: el jugador desaparece de (50, 55) y reaparece en (51, 55).
-
-Esta aproximación de actualización selectiva de celdas es más eficiente que repintar todo el tablero en cada cambio y permite actualizaciones visuales precisas.
-
-Adicionalmente, en el constructor de \texttt{MainFrame} se llama a \lstinline|espacio.notificarInicializacion()| para que el modelo envíe una notificación tipo 6 con las posiciones iniciales del jugador y primer enemigo.
-
-\subsubsection{Cómo responde \texttt{StartFrame} en su \texttt{update}}
-
-\texttt{StartFrame} también implementa \texttt{Observer} y se registra en \texttt{Espacio} al construirse. Su método \texttt{update} tiene un comportamiento distinto: no dibuja nada, sino que gestiona la transición entre pantallas. \textbf{Es el único que procesa notificaciones de tipo 9}, que es la señal para cambiar a \texttt{MainFrame}:
-
-\begin{lstlisting}
-@Override
-public void update(Observable o, Object arg) {
-    int[] datos = (int[]) arg;
-    int tipo = datos[0];
-    if (o instanceof Espacio) {
-        if (tipo == 9) {       // Solo reacciona a tipo 9
-            Espacio.getEspacio().deleteObserver(this);
-            this.setVisible(false);
-            new MainFrame();
-        }
-        // Tipos 0-8 se ignoran completamente en StartFrame
-    }
-}
-\end{lstlisting}
-
-Cuando \texttt{Espacio} notifica con tipo 9 (lo que ocurre al llamar a \texttt{cambiarAMain()} desde el controlador de \texttt{StartFrame}), este \texttt{update}:
-\begin{enumerate}[leftmargin=2em]
-    \item Extrae el array de datos: \lstinline|int[] datos = (int[]) arg|
-    \item Lee el tipo en \lstinline|datos[0]|, que es 9
-    \item Verifica: ¿es este el evento que me interesa? (Solo tipo 9)
-    \item Si es tipo 9, ejecuta el flujo de transición:
-    \begin{enumerate}[leftmargin=2em]
-        \item Se desregistra como observer con \lstinline|deleteObserver(this)|, para no recibir más notificaciones futuras del juego.
-        \item Oculta la ventana de inicio con \lstinline|setVisible(false)|.
-        \item Crea un nuevo \texttt{MainFrame}, que al construirse se registra automáticamente como observer de \texttt{Espacio} y abre la pantalla de juego.
-    \end{enumerate}
-\end{enumerate}
-
-\textbf{Diferencia crítica entre frames:}
-
-\begin{itemize}[leftmargin=2em]
-    \item \texttt{MainFrame}: Recibe \textbf{todos} los tipos (0-8) y procesa cada uno en el switch. Ignora los tipos 9.
-    \item \texttt{StartFrame}: Recibe \textbf{todos} los tipos, pero solo procesa tipo 9. Ignora todos los demás.
-\end{itemize}
-
-Este diseño es eficiente porque cada frame solo reacciona a lo que le es relevante, incluso aunque ambos sean observadores del mismo observable. No hay desperdicio de recursos procesando eventos que no interesan.
-
-Además, un único evento de notificación tipo 9 actúa como señal de arranque coordinada: hace desaparecer la pantalla de inicio y aparece la pantalla de juego, sin que ninguna de las dos clases necesite conocerse directamente entre sí.
 
 % ==================================================
 \section{Conclusiones}
