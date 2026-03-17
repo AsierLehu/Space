@@ -57,6 +57,7 @@
     {\LARGE \textbf{Documentación: Patrón MVC + Observer}}\\[0.4em]
     {\large \textit{Space Invaders — Proyecto de Programación}}\\[0.3em]
     {\small Fecha: \today}
+    {\small Grupo: Cachopin}
 \end{center}
 
 \vspace{0.5em}
@@ -103,8 +104,8 @@ En el proyecto Space Invaders, las tres capas del patrón MVC se distribuyen de 
         Las clases auxiliares del modelo definen la estructura de las naves y los disparos del juego:
         \begin{itemize}[leftmargin=2em]
             \item \texttt{Naves} — clase abstracta que encapsula el comportamiento común de todas las naves. Define atributos: \texttt{x} (posición horizontal), \texttt{y} (posición vertical), \texttt{velocidad} (píxeles por actualización, por defecto 1) y \texttt{vivo} (estado actual). Incluye el método abstracto \texttt{mover()}, que cada subclase implementa según su lógica de movimiento. \textbf{Nota:} El atributo \texttt{velocidad} solo lo utiliza la clase \texttt{Jugador}; la clase \texttt{Enemigo} no lo usa.
-            \item \texttt{Jugador} — extiende \texttt{Naves} y representa la nave controlable. Implementa \texttt{mover()} multiplicando los desplazamientos por \texttt{velocidad}, permitiendo movimiento dentro de los límites del tablero visible (0-99 en x, 0-59 en y). Posee un objeto \texttt{Disparo} que se dispara cuando el usuario presiona espacio. Solo hay una instancia del jugador simultáneamente y solo un disparo activo por jugador.
-            \item \texttt{Enemigo} — extiende \texttt{Naves} y representa un enemigo del juego. Implementa \texttt{mover()} sumando directamente los desplazamientos sin usar \texttt{velocidad}. Se crean inicialmente en una posición aleatoria en la fila superior (y entre 0-4) y descienden verticalmente. Se eliminan al salir del tablero o ser impactados por un disparo. El juego comienza con un único enemigo.
+            \item \texttt{Jugador} — extiende \texttt{Naves} y representa la nave controlable. Implementa \texttt{mover()} multiplicando los desplazamientos por \texttt{velocidad}, permitiendo movimiento dentro de los límites del tablero visible (0-99 en x, 0-59 en y). Posee un objeto \texttt{Disparo} que se dispara cuando el usuario presiona la tecla espacio. Solo hay una instancia del jugador simultáneamente y solo un disparo activo por jugador.
+            \item \texttt{Enemigo} — extiende \texttt{Naves} y representa un enemigo del juego. Implementa \texttt{mover()} sumando directamente los desplazamientos sin usar \texttt{velocidad}. Se crean inicialmente en una posición aleatoria en la fila superior (y entre 0-4) y descienden verticalmente. Se eliminan al ser impactados por un disparo. El juego comienza con un único enemigo.
             \item \texttt{Disparo} — representa el proyectil disparado por el jugador. Almacena su posición actual (\texttt{x}, \texttt{y}) y un booleano (\texttt{activo}) para saber si está en vuelo. Se crea un nuevo \texttt{Disparo} cada vez que el jugador presiona espacio, con posición inicial \texttt{(x\_jugador, y\_jugador - 1)}, reemplazando el anterior. Asciende un píxel por tick (cada 50ms) mediante el método \texttt{subir()}. Se desactiva automáticamente cuando alcanza y<0 (sale del tablero).
         \end{itemize}
 
@@ -144,7 +145,7 @@ Más adelante se verá como se implementa esta relación entre las tres capas en
 % ==================================================
 \section{El Controlador en Detalle}
 
-El controlador es el intermediario entre el usuario y el sistema. Recibe las acciones del usuario (eventos de teclado), las interpreta según la lógica de control definida, y solicita al modelo que execute las operaciones correspondientes. No contiene datos del juego ni se encarga de mostrarlos; simplemente traduce entrada en acciones del modelo.
+El controlador es el intermediario entre el usuario y el sistema. Recibe las acciones del usuario (eventos de teclado), las interpreta según la lógica de control definida, y solicita al modelo que ejecute las operaciones correspondientes. No contiene datos del juego ni se encarga de mostrarlos; simplemente traduce entrada en acciones del modelo.
 
 En ambas clases (\texttt{StartFrame} y \texttt{MainFrame}), los controladores están definidos como clases internas privadas llamadas \texttt{Controller} que implementan \texttt{KeyListener}. Esto requiere implementar obligatoriamente los tres métodos de la interfaz: \texttt{keyPressed}, \texttt{keyReleased} y \texttt{keyTyped}. En la práctica, solo \texttt{keyPressed} contiene lógica (los otros dos están vacíos).
 
@@ -158,7 +159,7 @@ El flujo común de funcionamiento es el siguiente:
 
 \subsubsection*{En la clase \texttt{StartFrame}}
 
-En esta clase, su única función es detectar si el usuario pulsa la barra espaciadora, en tal caso llama a \lstinline|iniciarJuego()| que veremos posteriormente qué hace.
+En esta clase, su única función es detectar si el usuario pulsa la barra espaciadora, en tal caso llama a \lstinline|cambiarAMain()| que veremos posteriormente qué hace.
 
 \subsubsection*{Clase \texttt{MainFrame}}
 
