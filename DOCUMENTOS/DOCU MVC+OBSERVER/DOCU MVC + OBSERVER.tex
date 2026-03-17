@@ -204,7 +204,7 @@ En muchos casos, el método \texttt{update} se utiliza para que el observador co
 Cada observador puede implementar su propio comportamiento en el método \texttt{update}, lo que permite que diferentes componentes reaccionen de distintas formas ante el mismo cambio en el observable.
 
 % --------------------------------------------------
-\subsection{Funcionamiento conjunto de \texttt{notify} y \texttt{update}}
+\subsection{Funcionamiento conjunto de \texttt{notify} y \texttt{update} en el proyecto - FALTA AKI}
 
 El funcionamiento coordinado de estos dos métodos permite mantener sincronizados los distintos componentes de un sistema que utiliza el patrón Observer. El proceso general es el siguiente:
 
@@ -219,7 +219,7 @@ El funcionamiento coordinado de estos dos métodos permite mantener sincronizado
 Gracias a este mecanismo, los cambios en el sistema se propagan automáticamente a los objetos que dependen de ellos, sin necesidad de que exista una dependencia directa entre todas las clases.
 
 % --------------------------------------------------
-\subsection{Aplicación al proyecto Space Invaders}
+\subsection{Sistema de notificaciones en Space Invaders}
 
 \subsubsection{Quién notifica y cuándo}
 
@@ -235,16 +235,16 @@ La llamada a \lstinline|setChanged()| es obligatoria antes de \lstinline|notifyO
 Las notificaciones se invocan desde varios puntos del modelo, cada vez que el estado del juego cambia y la pantalla debe reflejarlo. Los tipos de notificación (primer elemento del array) son:
 
 \begin{itemize}[leftmargin=2em]
-    \item \textbf{Tipo 0: Movimiento del jugador} — dentro de \texttt{moverJugador()}, tras actualizar la posición. Array: \lstinline|{0, oldX, oldY, newX, newY}|
-    \item \textbf{Tipo 1: Nuevo disparo} — dentro de \texttt{disparar()}, tras crear un nuevo \texttt{Disparo}. Array: \lstinline|{1, newX, newY}|
-    \item \textbf{Tipo 2: Movimiento del disparo} — dentro de \texttt{actualizarDisparo()}, en cada tick del \textit{game loop} (cada 50 ms) mientras el proyectil está activo. Array: \lstinline|{2, oldX, oldY, newX, newY}|
-    \item \textbf{Tipo 3: Disparo sale del tablero} — dentro de \texttt{actualizarDisparo()}, cuando el disparo alcanza y=0. Array: \lstinline|{3, oldX, oldY}|
-    \item \textbf{Tipo 4: Movimiento de enemigo} — dentro de \texttt{actualizarEnemigos()}, cada 200 ms (cada 4 ticks de 50ms), tras desplazar un enemigo. Array: \lstinline|{4, oldX, oldY, newX, newY}|
-    \item \textbf{Tipo 5: Colisión disparo-enemigo} — dentro de \texttt{comprobarColisiones()}, cuando el disparo alcanza a un enemigo. Array: \lstinline|{5, disparoX, disparoY, enemigoX, enemigoY}|
-    \item \textbf{Tipo 6: Inicialización del juego} — dentro de \texttt{notificarInicializacion()}, al abrir \texttt{MainFrame}. Pinta el jugador y el \textbf{primer} enemigo del array. Array: \lstinline|{6, jugadorX, jugadorY, enemigoX, enemigoY}|
-    \item \textbf{Tipo 7: Game Over} — dentro de \texttt{actualizarEnemigos()}, cuando se detecta que un enemigo ha llegado a la fila del jugador. Array: \lstinline|{7}|
-    \item \textbf{Tipo 8: Victoria} — dentro de \texttt{comprobarColisiones()}, cuando se elimina el último enemigo vivo. Array: \lstinline|{8}|
-    \item \textbf{Tipo 9: Cambio a MainFrame} — dentro de \texttt{cambiarAMain()}, para señalar que \texttt{StartFrame} debe ceder control a \texttt{MainFrame}. \textbf{Solo es procesado por StartFrame}, no por MainFrame. Array: \lstinline|{9}|
+    \item \textbf{Tipo 0: Movimiento del jugador} — Array: \lstinline|{0, oldX, oldY, newX, newY}|
+    \item \textbf{Tipo 1: Nuevo disparo} — Array: \lstinline|{1, newX, newY}|
+    \item \textbf{Tipo 2: Movimiento del disparo} — Array: \lstinline|{2, oldX, oldY, newX, newY}|
+    \item \textbf{Tipo 3: Disparo sale del tablero} — Array: \lstinline|{3, oldX, oldY}|
+    \item \textbf{Tipo 4: Movimiento de enemigo} — Array: \lstinline|{4, oldX, oldY, newX, newY}|
+    \item \textbf{Tipo 5: Colisión disparo-enemigo} — Array: \lstinline|{5, disparoX, disparoY, enemigoX, enemigoY}|
+    \item \textbf{Tipo 6: Inicialización del juego} — Array: \lstinline|{6, jugadorX, jugadorY, enemigoX, enemigoY}|
+    \item \textbf{Tipo 7: Game Over} — Array: \lstinline|{7}|
+    \item \textbf{Tipo 8: Victoria} — Array: \lstinline|{8}|
+    \item \textbf{Tipo 9: Cambio a MainFrame} — Array: \lstinline|{9}|
 \end{itemize}
 
 \subsubsection{Estructura de datos en las notificaciones}
@@ -272,6 +272,38 @@ notifyObservers(new int[] {0, 50, 55, 51, 55});
 
 Esta notificación es recibida por el Observer (\texttt{MainFrame}), que la procesará y pintará la celda (50, 55) de color negro y la celda (51, 55) de color magenta.
 
+% --------------------------------------------------
+\subsection{Transición de StartFrame a MainFrame}
+
+El cambio de la pantalla de inicio al juego principal es un proceso coordinado que involucra múltiples llamadas y notificaciones del patrón Observer. El flujo completo es el siguiente:
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{Usuario presiona SPACE en StartFrame}: El controlador de \texttt{StartFrame} detecta la pulsación y llama a \lstinline|iniciarJuego()|.
+    
+    \item \textbf{Llamada a cambiarAMain()}: El método \lstinline|iniciarJuego()| ejecuta \lstinline|Espacio.getEspacio().cambiarAMain()|, que realiza tres acciones críticas:
+    \begin{itemize}[leftmargin=2em]
+        \item Inicializa el juego creando jugador y primer enemigo
+        \item Inicia el timer del game loop (50ms)
+        \item Notifica con tipo 9: \lstinline|notifyObservers(new int[]{9})|
+    \end{itemize}
+    
+    \item \textbf{StartFrame recibe notificación tipo 9}: Su método \lstinline|update()| procesa esta notificación específica:
+    \begin{itemize}[leftmargin=2em]
+        \item Se desregistra como observer: \lstinline|deleteObserver(this)|
+        \item Se oculta: \lstinline|setVisible(false)|
+        \item Crea el nuevo \texttt{MainFrame}
+    \end{itemize}
+    
+    \item \textbf{MainFrame se inicializa}: En su constructor:
+    \begin{itemize}[leftmargin=2em]
+        \item Se registra como observer: \lstinline|addObserver(this)|
+        \item Llama a \lstinline|espacio.notificarInicializacion()|
+    \end{itemize}
+    
+    \item \textbf{Notificación tipo 6}: \lstinline|notificarInicializacion()| envía las posiciones iniciales del jugador y primer enemigo, permitiendo que \texttt{MainFrame} pinte el estado inicial del juego.
+\end{enumerate}
+
+Este mecanismo garantiza una transición fluida sin dependencias directas entre las vistas, manteniendo la separación de responsabilidades del patrón MVC.
 
 % ==================================================
 \section{Conclusiones}
