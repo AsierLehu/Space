@@ -1,3 +1,5 @@
+![Portada del Proyecto](DOCUMENTOS/PORTADA.png)
+
 # Space Invaders
 
 Proyecto de Space Invaders desarrollado en Java por **Cachopín** con el patrón **MVC + Observer**.
