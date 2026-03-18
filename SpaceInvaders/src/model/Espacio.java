@@ -153,15 +153,14 @@ public class Espacio extends Observable {
         if (jugador == null || !jugador.isVivo()) return true;
 
         for (Enemigo e : enemigos) {
-            if (e.isVivo() && e.getY() >= jugador.getY()) 
-            {
+            if (e.isVivo() && e.getY() == altura -1){
                 return true;
             }
         }
         return false;
     }
 
-    // Victor�a: hay al menos un enemigo Y todos est�n eliminados
+    // Victoria: hay al menos un enemigo Y todos est�n eliminados
     public boolean isGameWon() {
         if (enemigos.isEmpty()) return false;
         for (Enemigo e : enemigos) {
