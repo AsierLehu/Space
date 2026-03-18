@@ -198,11 +198,9 @@ En Java, este método se implementa mediante \texttt{setChanged()} seguido de \t
 
 El método \texttt{update} pertenece a los \textbf{observadores}. Cada observador debe implementar este método para definir cómo reaccionará cuando el observable le notifique un cambio.
 
-Cuando el observable ejecuta el método \texttt{notify}, este llama al método \texttt{update} de cada observador registrado. En ese momento, el observador recibe la notificación y puede realizar las acciones necesarias para actualizar su estado.
+En muchos casos, el método \texttt{update} se utiliza para que el observador reciba el nuevo estado del observable y adapte su comportamiento o su representación visual. 
 
-En muchos casos, el método \texttt{update} se utiliza para que el observador consulte el nuevo estado del observable y adapte su comportamiento o su representación visual. Por ejemplo, si el observable es el modelo de una aplicación y el observador es una vista, el método \texttt{update} se encargará de actualizar la información que se muestra al usuario para reflejar los cambios recientes.
-
-Cada observador puede implementar su propio comportamiento en el método \texttt{update}, lo que permite que diferentes componentes reaccionen de distintas formas ante el mismo cambio en el observable.
+Cada observador puede implementar su propio comportamiento en el método \texttt{update}, lo que permite que diferentes componentes reaccionen de distintas formas ante el mismo cambio en el observable. En este proyecyo, de momento, no se ha implementado.
 
 A continuación se muestra un ejemplo concreto con el movimiento del jugador en nuestro proyecto:
  
@@ -214,20 +212,9 @@ A continuación se muestra un ejemplo concreto con el movimiento del jugador en 
     \item \texttt{MainFrame.update()} recibe el array, entra en \texttt{case 0}, borra la celda anterior y pinta la nueva en su nueva posición.
 \end{enumerate}
 
-% --------------------------------------------------
-\subsection{Funcionamiento conjunto de \texttt{notify} y \texttt{update} en el proyecto}
+\textcolor{blue}{\textbf{El funcionamiento coordinado de estos dos métodos permite mantener sincronizados los distintos componentes de un sistema que utiliza el patrón Observer.}}
 
-El funcionamiento coordinado de estos dos métodos permite mantener sincronizados los distintos componentes de un sistema que utiliza el patrón Observer. El proceso general es el siguiente:
-
-\begin{enumerate}[leftmargin=2em]
-    \item Se produce un cambio en el estado del objeto observable.
-    \item El observable detecta ese cambio y ejecuta el método \texttt{notify}.
-    \item El método \texttt{notify} recorre la lista de observadores registrados.
-    \item Para cada observador, se llama a su método \texttt{update}.
-    \item Cada observador recibe la notificación y actualiza su estado o su información según corresponda.
-\end{enumerate}
-
-Gracias a este mecanismo, los cambios en el sistema se propagan automáticamente a los objetos que dependen de ellos, sin necesidad de que exista una dependencia directa entre todas las clases.
+\textbf{Gracias a este mecanismo, los cambios en el sistema se propagan automáticamente a los objetos que dependen de ellos, sin necesidad de que exista una dependencia directa entre todas las clases.}
 
 % --------------------------------------------------
 \subsection{Sistema de notificaciones en Space Invaders}
