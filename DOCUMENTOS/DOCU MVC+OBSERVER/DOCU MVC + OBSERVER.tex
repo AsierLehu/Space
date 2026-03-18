@@ -192,6 +192,7 @@ Cuando ocurre un cambio relevante en el estado del observable (por ejemplo, una 
 
 Una característica importante del método \texttt{notify} es que el observable \textbf{no necesita conocer los detalles internos de los observadores}. Simplemente se encarga de avisarlos de que ha ocurrido un cambio. Esto permite mantener un bajo acoplamiento entre las clases, lo que facilita la reutilización del código y el mantenimiento del sistema.
 
+En Java, este método se implementa mediante \texttt{setChanged()} seguido de \texttt{notifyObservers(datos)}, que siempre deben ir juntos.
 % --------------------------------------------------
 \subsection{Método \texttt{update}}
 
@@ -202,6 +203,16 @@ Cuando el observable ejecuta el método \texttt{notify}, este llama al método \
 En muchos casos, el método \texttt{update} se utiliza para que el observador consulte el nuevo estado del observable y adapte su comportamiento o su representación visual. Por ejemplo, si el observable es el modelo de una aplicación y el observador es una vista, el método \texttt{update} se encargará de actualizar la información que se muestra al usuario para reflejar los cambios recientes.
 
 Cada observador puede implementar su propio comportamiento en el método \texttt{update}, lo que permite que diferentes componentes reaccionen de distintas formas ante el mismo cambio en el observable.
+
+A continuación se muestra un ejemplo concreto con el movimiento del jugador en nuestro proyecto:
+ 
+\begin{enumerate}[leftmargin=2em]
+    \item El jugador pulsa la flecha derecha.
+    \item \texttt{Controller} llama a \texttt{Espacio.moverJugador(1, 0)}.
+    \item \texttt{Espacio} actualiza la posición y ejecuta \texttt{setChanged()} y \texttt{notifyObservers(new int[]\{0, oldX, oldY, newX, newY\})}.
+    \item Java recorre la lista de observadores registrados y llama a \texttt{update()} de \texttt{MainFrame}.
+    \item \texttt{MainFrame.update()} recibe el array, entra en \texttt{case 0}, borra la celda anterior y pinta la nueva en su nueva posición.
+\end{enumerate}
 
 % --------------------------------------------------
 \subsection{Funcionamiento conjunto de \texttt{notify} y \texttt{update} en el proyecto}
