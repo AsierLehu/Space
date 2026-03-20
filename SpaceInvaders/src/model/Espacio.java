@@ -4,189 +4,218 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Random;
 import javax.swing.Timer;
 
 @SuppressWarnings("deprecation")
 public class Espacio extends Observable {
+
+    // ─── Singleton ────────────────────────────────────────────────────────────
     private static Espacio miEspacio;
-	private ArrayList<Enemigo> enemigos;
-	private Jugador jugador;
-	private static int anchura = 100;
-	private static int altura = 60;
-	
-	// Timer del juego
-	private Timer gameTimer;
-	private int frameCount;
+
+    // ─── Estado del mundo ─────────────────────────────────────────────────────
+    private FlotaEnemigos flotaEnemigos;
+    private Jugador jugador;
+    private static int anchura = 100;
+    private static int altura  = 60;
+
+    // Timer del juego
+    private Timer gameTimer;
+    private int frameCount;
+
+    // ─── Constructor / Singleton ──────────────────────────────────────────────
 
     private Espacio() {
-        this.enemigos = new ArrayList<>();
+        this.flotaEnemigos = new FlotaEnemigos();
     }
+
     public static Espacio getEspacio() {
         if (miEspacio == null) {
             miEspacio = new Espacio();
         }
         return miEspacio;
     }
+
+    // ─── Inicio de partida ────────────────────────────────────────────────────
+
     public void cambiarAMain() {
-    	inicializar();
-    	iniciarJuegoLoop(); // Iniciar el timer del juego
-    	setChanged();
-    	notifyObservers(new int[] {9}); // Notificación para cambiar de pantalla
-        
+        inicializar();
+        iniciarJuegoLoop();
+        notificarCambioPantalla();
         notificarInicializacion();
     }
-    
-    private void notificarInicializacion() {
-    	setChanged();
-    	notifyObservers(new int[] {6, jugador.getX(), jugador.getY(), enemigos.get(0).getX(), enemigos.get(0).getY()});
-    }
-    
+
     private void inicializar() {
         jugador = new Jugador(50, 55);
-
-        Random rand = new Random();
-        int ex = rand.nextInt(anchura);
-        int ey = rand.nextInt(5);
-        enemigos.add(new Enemigo(ex, ey));
+        flotaEnemigos.inicializar(anchura);
     }
+
+    // ─── Consultas públicas ───────────────────────────────────────────────────
 
     public Jugador getJugador() {
         return jugador;
     }
 
     public ArrayList<Enemigo> getEnemigos() {
-        return enemigos;
+        return flotaEnemigos.getEnemigos();
     }
+
+    public int getAnchura() { return anchura; }
+    public int getAltura()  { return altura;  }
+
+    // ─── Estado del juego ─────────────────────────────────────────────────────
+
+    // Derrota: jugador muerto o algún enemigo llegó al límite inferior
+    public boolean isGameOver() {
+        if (jugador == null || !jugador.isVivo()) return true;
+        return flotaEnemigos.algunoLlegoAbajo(altura);
+    }
+
+    // Victoria: la flota existe y todos los enemigos han sido destruidos
+    public boolean isGameWon() {
+        return flotaEnemigos.todosDestruidos();
+    }
+
+    // ─── Acciones del jugador ─────────────────────────────────────────────────
 
     public void moverJugador(int dx, int dy) {
         if (jugador != null && jugador.isVivo() && !isGameOver() && !isGameWon()) {
             int oldX = jugador.getX();
             int oldY = jugador.getY();
             jugador.mover(dx, dy);
-            
-            setChanged();
-            notifyObservers(new int[] {0, oldX, oldY, jugador.getX(), jugador.getY()});
+            notificarMovimientoJugador(oldX, oldY);
         }
         if (isGameOver()) {
-        	setChanged();
-        	notifyObservers(new int[] {7});
+            notificarGameOver();
         }
     }
 
     public void disparar() {
         if (jugador != null && jugador.isVivo() && !isGameOver() && !isGameWon()) {
             jugador.disparar();
-            Disparo d = jugador.getDisparo();
-            setChanged();
-            notifyObservers(new int[] {1, d.getX(), d.getY()});
+            notificarDisparoNuevo(jugador.getDisparo());
         }
     }
 
-    // Llamado cada 50ms: mueve el disparo 1 p�xel hacia arriba
+    // ─── Actualización del disparo ────────────────────────────────────────────
+
+    // Llamado cada 50 ms: mueve el disparo y comprueba colisiones
     public void actualizarDisparo() {
         if (jugador == null) return;
 
         Disparo d = jugador.getDisparo();
-        if (d.isActivo()) {
-            int oldX = d.getX();
-            int oldY = d.getY();
-            d.subir();
-            if (!d.isActivo()) {
-            	// El disparo sali� del tablero
-            	setChanged();
-            	notifyObservers(new int[] {3, oldX, oldY});
-            }
-            else {
-            	boolean colision = comprobarColisiones(d);
-            	if (!colision){
-            		setChanged();
-            		notifyObservers(new int[] {2, oldX, oldY, d.getX(), d.getY()});
-            	}
+        if (!d.isActivo()) return;
+
+        int oldX = d.getX();
+        int oldY = d.getY();
+        d.subir();
+
+        if (!d.isActivo()) {
+            notificarDisparoFueraDeTablero(oldX, oldY);
+        } else {
+            Enemigo golpeado = flotaEnemigos.comprobarColision(d);
+            if (golpeado != null) {
+                notificarColision(oldX, oldY, golpeado);
+                if (isGameWon()) {
+                    notificarVictoria();
+                }
+            } else {
+                notificarMovimientoDisparo(oldX, oldY, d);
             }
         }
     }
 
-    // Llamado cada 200ms: baja los enemigos 1 píxel
+    // ─── Actualización de enemigos ────────────────────────────────────────────
+
+    // Llamado cada 200 ms: baja los enemigos 1 píxel
     public void actualizarEnemigos() {
+        ArrayList<Enemigo> enemigos = flotaEnemigos.getEnemigos();
         Disparo d = jugador.getDisparo();
-        for (int i = 0; i < enemigos.size(); i++) {
-        	Enemigo e = enemigos.get(i);
+
+        for (Enemigo e : enemigos) {
             if (e.isVivo()) {
                 int oldX = e.getX();
                 int oldY = e.getY();
                 e.mover(0, 1);
                 if (d != null && d.isActivo()) {
-                	comprobarColisiones(d);
+                    flotaEnemigos.comprobarColision(d);
                 }
-                setChanged();
-                notifyObservers(new int[] {4, oldX, oldY, e.getX(), e.getY()});
+                notificarMovimientoEnemigo(oldX, oldY, e);
             }
         }
+
         if (isGameOver()) {
-        	setChanged();
-        	notifyObservers(new int[] {7});
+            notificarGameOver();
         }
     }
 
-    private boolean comprobarColisiones(Disparo d) {
-        for (int i = 0; i < enemigos.size(); i++) {
-        	Enemigo e = enemigos.get(i);
-            if (e.isVivo() && d.getX() == e.getX()
-                    && d.getY() <= e.getY() && d.getY() >= e.getY() - 1) { // ventana de 2 píxeles: evitamos el error de que no "choquen" 
-                e.setVivo(false);
-                d.setActivo(false);
-                setChanged();
-                notifyObservers(new int[] {5, d.getX(), d.getY()+1, e.getX(), e.getY()});
-                if (isGameWon()) {
-                	setChanged();
-                	notifyObservers(new int[] {8});
-                }
-                return true;
-            }
-        }
-        return false;
+    // ─── Notificaciones ───────────────────────────────────────────────────────
+
+    private void notificarCambioPantalla() {
+        setChanged();
+        notifyObservers(new int[] {9});
     }
 
-    // Derrota: un enemigo llega a la fila del jugador o m�s abajo
-    public boolean isGameOver() {
-        if (jugador == null || !jugador.isVivo()) return true;
-
-        for (Enemigo e : enemigos) {
-            if (e.isVivo() && e.getY() == altura -1){
-                return true;
-            }
-        }
-        return false;
+    private void notificarInicializacion() {
+        ArrayList<Enemigo> enemigos = flotaEnemigos.getEnemigos();
+        setChanged();
+        notifyObservers(new int[] {
+            6,
+            jugador.getX(), jugador.getY(),
+            enemigos.get(0).getX(), enemigos.get(0).getY()
+        });
     }
 
-    // Victoria: hay al menos un enemigo Y todos est�n eliminados
-    public boolean isGameWon() {
-        if (enemigos.isEmpty()) return false;
-        for (Enemigo e : enemigos) {
-            if (e.isVivo()) return false;
-        }
-        return true;
+    private void notificarMovimientoJugador(int oldX, int oldY) {
+        setChanged();
+        notifyObservers(new int[] {0, oldX, oldY, jugador.getX(), jugador.getY()});
     }
 
+    private void notificarDisparoNuevo(Disparo d) {
+        setChanged();
+        notifyObservers(new int[] {1, d.getX(), d.getY()});
+    }
 
-    public int getAnchura() { return anchura; }
-    public int getAltura()  { return altura;  }
+    private void notificarMovimientoDisparo(int oldX, int oldY, Disparo d) {
+        setChanged();
+        notifyObservers(new int[] {2, oldX, oldY, d.getX(), d.getY()});
+    }
 
-    /**
-     * Inicia el bucle principal del juego (game loop)
-     * Tick cada 50ms para disparos, cada 200ms para enemigos
-     */
+    private void notificarDisparoFueraDeTablero(int oldX, int oldY) {
+        setChanged();
+        notifyObservers(new int[] {3, oldX, oldY});
+    }
+
+    private void notificarMovimientoEnemigo(int oldX, int oldY, Enemigo e) {
+        setChanged();
+        notifyObservers(new int[] {4, oldX, oldY, e.getX(), e.getY()});
+    }
+
+    private void notificarColision(int disparoOldX, int disparoOldY, Enemigo golpeado) {
+        setChanged();
+        notifyObservers(new int[] {5, disparoOldX, disparoOldY + 1, golpeado.getX(), golpeado.getY()});
+    }
+
+    private void notificarGameOver() {
+        setChanged();
+        notifyObservers(new int[] {7});
+    }
+
+    private void notificarVictoria() {
+        setChanged();
+        notifyObservers(new int[] {8});
+    }
+
+    // ─── Bucle principal ──────────────────────────────────────────────────────
+
+    // Tick cada 50 ms para disparos, cada 200 ms (4 ticks) para enemigos
     public void iniciarJuegoLoop() {
         frameCount = 0;
-        // Tick cada 50ms (20 FPS)
         gameTimer = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!isGameOver() && !isGameWon()) {
                     actualizarDisparo();
                     frameCount++;
-                    // Cada 4 ticks = 200ms: bajar enemigos
                     if (frameCount % 4 == 0) {
                         actualizarEnemigos();
                     }
@@ -195,5 +224,4 @@ public class Espacio extends Observable {
         });
         gameTimer.start();
     }
-
 }
