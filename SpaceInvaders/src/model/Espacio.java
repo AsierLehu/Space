@@ -64,10 +64,25 @@ public class Espacio extends Observable {
 
     // ─── Estado del juego ─────────────────────────────────────────────────────
 
-    // Derrota: jugador muerto o algún enemigo llegó al límite inferior
+    // Derrota: jugador muerto, algún enemigo llegó al límite inferior, o colisión jugador-enemigo
     public boolean isGameOver() {
         if (jugador == null || !jugador.isVivo()) return true;
-        return flotaEnemigos.algunoLlegoAbajo(altura);
+        if (flotaEnemigos.algunoLlegoAbajo(altura)) return true;
+        return hayColisionJugadorEnemigo();
+    }
+    
+    // Verifica si el jugador ha colisionado directamente con algún enemigo
+    private boolean hayColisionJugadorEnemigo() {
+        if (jugador == null || !jugador.isVivo()) return false;
+        
+        for (Enemigo enemigo : flotaEnemigos.getEnemigos()) {
+            if (enemigo.isVivo() && 
+                jugador.getX() == enemigo.getX() && 
+                jugador.getY() == enemigo.getY()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Victoria: la flota existe y todos los enemigos han sido destruidos

@@ -21,13 +21,17 @@ public class FlotaEnemigos {
 
     // ─── Inicialización ───────────────────────────────────────────────────────
 
-    // Limpia la flota y añade un enemigo en posición aleatoria de la fila superior
+    // Limpia la flota y añade 4 enemigos en posiciones aleatorias de la fila superior
     public void inicializar(int anchura) {
         enemigos.clear();
         Random rand = new Random();
-        int ex = rand.nextInt(anchura);
-        int ey = rand.nextInt(5);
-        enemigos.add(new Enemigo(ex, ey));
+        
+        // Crear 4 enemigos en posiciones aleatorias
+        for (int i = 0; i < 4; i++) {
+            int ex = rand.nextInt(anchura);
+            int ey = rand.nextInt(5);
+            enemigos.add(new Enemigo(ex, ey));
+        }
     }
 
     // ─── Consultas de estado ──────────────────────────────────────────────────
