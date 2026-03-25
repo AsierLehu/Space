@@ -13,10 +13,18 @@ import java.util.Random;
  */
 public class FlotaEnemigos {
 
+    private static FlotaEnemigos miFlotaEnemigos;
     private ArrayList<Enemigo> enemigos;
 
-    public FlotaEnemigos() {
+    private FlotaEnemigos() {
         this.enemigos = new ArrayList<>();
+    }
+
+    public static FlotaEnemigos getFlotaEnemigos() {
+        if (miFlotaEnemigos == null) {
+            miFlotaEnemigos = new FlotaEnemigos();
+        }
+        return miFlotaEnemigos;
     }
 
     // ─── Inicialización ───────────────────────────────────────────────────────
@@ -25,9 +33,9 @@ public class FlotaEnemigos {
     public void inicializar(int anchura) {
         enemigos.clear();
         Random rand = new Random();
-        
+        int n_enemigos = rand.nextInt(4)+1;
         // Crear 4 enemigos en posiciones aleatorias
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < n_enemigos; i++) {
             int ex = rand.nextInt(anchura);
             int ey = rand.nextInt(5);
             enemigos.add(new Enemigo(ex, ey));
