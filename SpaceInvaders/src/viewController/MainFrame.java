@@ -132,6 +132,7 @@ public class MainFrame extends JFrame implements Observer {
                 case KeyEvent.VK_UP:    Espacio.getEspacio().moverJugador( 0, -1); break;
                 case KeyEvent.VK_DOWN:  Espacio.getEspacio().moverJugador( 0,  1); break;
                 case KeyEvent.VK_SPACE: Espacio.getEspacio().disparar();           break;
+                case KeyEvent.VK_P:     Espacio.getEspacio().cambiarTipoDisparo(); break;
             }
         }
 

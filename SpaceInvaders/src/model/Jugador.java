@@ -33,6 +33,8 @@ public class Jugador extends Naves {
 		return disparo;
 	}
 
-
-	
+	// Delega al Disparo el cambio de estrategia (Patrón Strategy encapsulado)
+	public void cambiarTipoDisparo() {
+		disparo.cambiarTipoDisparo();
+	}
 }

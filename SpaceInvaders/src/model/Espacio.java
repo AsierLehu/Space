@@ -100,6 +100,12 @@ public class Espacio extends Observable {
         }
     }
 
+    public void cambiarTipoDisparo() {
+        if (jugador != null && jugador.isVivo()) {
+            jugador.cambiarTipoDisparo();
+        }
+    }
+
     // ─── Actualización del disparo ────────────────────────────────────────────
 
     // Llamado cada 50 ms: mueve el disparo y comprueba colisiones
