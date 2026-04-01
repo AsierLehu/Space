@@ -13,4 +13,8 @@ public class Enemigo extends Naves {
 		y += dy;
 	}
 
+	@Override
+	public void construir() {
+	}
+
 }

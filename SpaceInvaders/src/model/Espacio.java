@@ -13,7 +13,7 @@ public class Espacio extends Observable {
     private static Espacio miEspacio;
 
     // ─── Estado del mundo ─────────────────────────────────────────────────────
-    private Jugador jugador;
+    // La nave del jugador está en JugadorBueno#getNave()
     private static int anchura = 100;
     private static int altura  = 60;
 
@@ -43,8 +43,12 @@ public class Espacio extends Observable {
     }
 
     private void inicializar() {
-        jugador = new Jugador(50, 55);
+        JugadorBueno.getJugadorBueno().crearNaveParaPartida();
         FlotaEnemigos.getFlotaEnemigos().inicializar(anchura);
+    }
+
+    private Jugador naveJugador() {
+        return JugadorBueno.getJugadorBueno().getNave();
     }
 
 
@@ -55,19 +59,21 @@ public class Espacio extends Observable {
 
     // Derrota: jugador muerto, algún enemigo llegó al límite inferior, o colisión jugador-enemigo
     public boolean isGameOver() {
-        if (jugador == null || !jugador.isVivo()) return true;
+        Jugador j = naveJugador();
+        if (j == null || !j.isVivo()) return true;
         if (FlotaEnemigos.getFlotaEnemigos().algunoLlegoAbajo(altura)) return true;
         return hayColisionJugadorEnemigo();
     }
     
     // Verifica si el jugador ha colisionado directamente con algún enemigo
     private boolean hayColisionJugadorEnemigo() {
-        if (jugador == null || !jugador.isVivo()) return false;
-        
+        Jugador j = naveJugador();
+        if (j == null || !j.isVivo()) return false;
+
         for (Enemigo enemigo : FlotaEnemigos.getFlotaEnemigos().getEnemigos()) {
-            if (enemigo.isVivo() && 
-                jugador.getX() == enemigo.getX() && 
-                jugador.getY() == enemigo.getY()) {
+            if (enemigo.isVivo()
+                    && j.getX() == enemigo.getX()
+                    && j.getY() == enemigo.getY()) {
                 return true;
             }
         }
@@ -82,27 +88,28 @@ public class Espacio extends Observable {
     // ─── Acciones del jugador ─────────────────────────────────────────────────
 
     public void moverJugador(int dx, int dy) {
-        if (jugador != null && jugador.isVivo() && !isGameOver() && !isGameWon()) {
-            int oldX = jugador.getX();
-            int oldY = jugador.getY();
-            jugador.mover(dx, dy);
-            notificarMovimientoJugador(oldX, oldY);
-        }
+        JugadorBueno.getJugadorBueno().mover(dx, dy);
+    }
+
+    /** Tras un intento de movimiento del jugador: notifica derrota si corresponde. */
+    void trasIntentoMoverJugador() {
         if (isGameOver()) {
             notificarGameOver();
         }
     }
 
     public void disparar() {
-        if (jugador != null && jugador.isVivo() && !isGameOver() && !isGameWon()) {
-            jugador.disparar();
-            notificarDisparoNuevo(jugador.getDisparo());
+        Jugador j = naveJugador();
+        if (j != null && j.isVivo() && !isGameOver() && !isGameWon()) {
+            j.disparar();
+            notificarDisparoNuevo(j.getDisparo());
         }
     }
 
     public void cambiarTipoDisparo() {
-        if (jugador != null && jugador.isVivo()) {
-            jugador.cambiarTipoDisparo();
+        Jugador j = naveJugador();
+        if (j != null && j.isVivo()) {
+            j.cambiarTipoDisparo();
         }
     }
 
@@ -110,9 +117,9 @@ public class Espacio extends Observable {
 
     // Llamado cada 50 ms: mueve el disparo y comprueba colisiones
     public void actualizarDisparo() {
-        if (jugador == null) return;
+        if (naveJugador() == null) return;
 
-        Disparo d = jugador.getDisparo();
+        Disparo d = naveJugador().getDisparo();
         if (!d.isActivo()) return;
         int oldX = d.getX();
         int oldY = d.getY();
@@ -138,7 +145,7 @@ public class Espacio extends Observable {
     // Llamado cada 200 ms: baja los enemigos 1 píxel
     public void actualizarEnemigos() {
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
-        Disparo d = jugador.getDisparo();
+        Disparo d = naveJugador().getDisparo();
 
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
@@ -165,18 +172,24 @@ public class Espacio extends Observable {
     }
 
     private void notificarInicializacion() {
+        Jugador n = naveJugador();
+        if (n == null) return;
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
+        int[][] celdasJ = n.celdasOcupadas();
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
-                setChanged();
-                notifyObservers(new int[] {6, jugador.getX(), jugador.getY(), e.getX(), e.getY()});
+                for (int[] c : celdasJ) {
+                    setChanged();
+                    notifyObservers(new int[] {6, c[0], c[1], e.getX(), e.getY()});
+                }
             }
         }
     }
 
-    private void notificarMovimientoJugador(int oldX, int oldY) {
+    /** Invocado desde {@link PixelNave} al cambiar de celda; dispara el Observer de la vista. */
+    void notificarMovimientoJugador(int oldX, int oldY, int newX, int newY) {
         setChanged();
-        notifyObservers(new int[] {0, oldX, oldY, jugador.getX(), jugador.getY()});
+        notifyObservers(new int[] {0, oldX, oldY, newX, newY});
     }
 
     private void notificarDisparoNuevo(Disparo d) {

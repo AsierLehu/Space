@@ -1,8 +1,7 @@
 package model;
 
-
 public abstract class Naves {
-	
+
 	protected int x;
 	protected int y;
 	protected int velocidad;
@@ -40,4 +39,7 @@ public abstract class Naves {
 	}
 	
 	public abstract void mover(int dx, int dy);
+
+	/** Inicializa la estructura interna de la nave (p. ej. componentes del patrón Composite). */
+	public abstract void construir();
 }

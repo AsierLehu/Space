@@ -10,9 +10,15 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.Espacio;
+import model.JugadorBueno;
 
 @SuppressWarnings("deprecation")
 public class StartFrame extends JFrame implements Observer {
+
+    private JLabel etiquetaNave;
+
+    /** Selección en pantalla de inicio; solo se copia a {@link JugadorBueno} al pulsar SPACE. */
+    private String tipoNavePendiente = "Nave1";
 
 	/**
 	 * Create the frame.
@@ -45,18 +51,26 @@ public class StartFrame extends JFrame implements Observer {
         gbc.gridy = 1;
         panel.add(subtitulo, gbc);
 
+        // Selección de nave (1 / 2 / 3)
+        etiquetaNave = new JLabel();
+        etiquetaNave.setForeground(Color.CYAN);
+        etiquetaNave.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        gbc.gridy = 2;
+        panel.add(etiquetaNave, gbc);
+        actualizarTextoNave();
+
         // Instrucci�n para iniciar
         JLabel pressSpace = new JLabel("Pulsa SPACE para jugar");
         pressSpace.setForeground(Color.GREEN);
         pressSpace.setFont(new Font("Monospaced", Font.BOLD, 14));
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         panel.add(pressSpace, gbc);
 
         // Controles
-        JLabel controles = new JLabel("FLECHAS mover   |   SPACE disparar");
+        JLabel controles = new JLabel("1 / 2 / 3 = tipo de nave   |   FLECHAS mover   |   SPACE disparar");
         controles.setForeground(Color.DARK_GRAY);
         controles.setFont(new Font("Monospaced", Font.PLAIN, 11));
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         panel.add(controles, gbc);
 
         add(panel); // Añadir el panel principal al frame
@@ -72,6 +86,10 @@ public class StartFrame extends JFrame implements Observer {
         addKeyListener(controller); 
         
         Espacio.getEspacio().addObserver(this);
+    }
+
+    private void actualizarTextoNave() {
+        etiquetaNave.setText("Nave elegida: " + tipoNavePendiente + "   (pulsa 1, 2 o 3 para cambiar)");
     }
 
 
@@ -94,8 +112,24 @@ public class StartFrame extends JFrame implements Observer {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            // Solo SPACE inicia el juego
-            if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            int k = e.getKeyCode();
+            if (k == KeyEvent.VK_1) {
+                tipoNavePendiente = "Nave1";
+                actualizarTextoNave();
+                return;
+            }
+            if (k == KeyEvent.VK_2) {
+                tipoNavePendiente = "Nave2";
+                actualizarTextoNave();
+                return;
+            }
+            if (k == KeyEvent.VK_3) {
+                tipoNavePendiente = "Nave3";
+                actualizarTextoNave();
+                return;
+            }
+            if (k == KeyEvent.VK_SPACE) {
+                JugadorBueno.getJugadorBueno().setTipoNaveElegido(tipoNavePendiente);
                 Espacio.getEspacio().cambiarAMain();
             }
         }
