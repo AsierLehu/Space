@@ -201,7 +201,7 @@ public class Espacio extends Observable {
 
     private void notificarColision(int disparoOldX, int disparoOldY, Enemigo golpeado) {
         setChanged();
-        notifyObservers(new int[] {5, disparoOldX, disparoOldY + 1, golpeado.getX(), golpeado.getY()});
+        notifyObservers(new int[] {5, disparoOldX, disparoOldY, golpeado.getX(), golpeado.getY()});
     }
 
     private void notificarGameOver() {
