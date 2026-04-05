@@ -1,13 +1,31 @@
 package model;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
 public class DisparoRombo implements StrategyDisparo {
 
-    @Override
-    public void disparar(Graphics g, int x, int y) {
-        g.setColor(Color.GREEN);
-        g.fillRect(x, y, 1, 1);
-    }
+	private int municion = 20;
+	
+	@Override
+	public String getTipo() {
+		return "rombo";
+	}
+
+	@Override
+	public int getMunicion() {
+		return municion;
+	}
+
+	@Override
+	public boolean gastar() {
+		if (municion > 0) {
+			municion--;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean tieneMunicion() {
+		return municion > 0;
+	}
+
 }

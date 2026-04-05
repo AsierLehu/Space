@@ -1,13 +1,32 @@
 package model;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
 public class DisparoFlecha implements StrategyDisparo {
 
-    @Override
-    public void disparar(Graphics g, int x, int y) {
-        g.setColor(Color.CYAN);
-        g.fillRect(x, y, 1, 1);
-    }
+	private int municion = 30;
+	
+	@Override
+	public String getTipo() {
+		return "flecha";
+	}
+
+	@Override
+	public int getMunicion() {
+		return municion;
+	}
+
+	@Override
+	public boolean gastar() {
+		if (municion > 0) {
+			municion--;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean tieneMunicion() {
+		return municion > 0;
+	}
+
+    
 }

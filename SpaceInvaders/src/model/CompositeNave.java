@@ -8,13 +8,16 @@ import java.util.List;
  */
 public class CompositeNave implements ComponenteNave {
 
-    private final List<ComponenteNave> components = new ArrayList<>();
+    private List<ComponenteNave> components = new ArrayList<>();
 
-    public CompositeNave() {
-    }
+    public CompositeNave() {}
 
     public void addComponent(ComponenteNave c) {
         components.add(c);
+    }
+    
+    public void removeComponent (ComponenteNave c) {
+    	components.remove(c);
     }
 
     @Override

@@ -1,67 +1,90 @@
 package model;
 
-import java.awt.Graphics;
-
 public class Disparo {
 	
-	private int x;
-	private int y;
+	private ComponenteDisparo cuerpo;
 	private boolean activo;
+	
+	// Estrategia activa
 	private StrategyDisparo estrategia;
-	
-	// Array de estrategias del patrÃ³n Strategy
-	private static final StrategyDisparo[] ESTRATEGIAS = {
-		new DisparoPixel(),
-		new DisparoFlecha(),
-		new DisparoRombo()
-	};
-	private int indiceEstrategia = 0;
-	
+		
 	// Constructor: inicializa con la primera estrategia
-	public Disparo(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Disparo(int x, int y, StrategyDisparo estrategia) {
+		this.cuerpo = construirCuerpo(x, y, estrategia.getTipo());
 		this.activo = false;
-		this.estrategia = ESTRATEGIAS[0];
+		this.estrategia = estrategia;
+	}
+	
+	private ComponenteDisparo construirCuerpo(int x, int y, String tipo) {
+		switch (tipo) {
+		case "flecha": {
+			CompositeDisparo comp = new CompositeDisparo();
+			comp.addComponent(new PixelDisparo(x, y));
+			comp.addComponent(new PixelDisparo(x-1, y+1));
+			comp.addComponent(new PixelDisparo(x+1, y+1));
+			return comp;
+		}
+		case "rombo": {
+			CompositeDisparo comp = new CompositeDisparo();
+			comp.addComponent(new PixelDisparo(x, y));
+			comp.addComponent(new PixelDisparo(x-1, y+1));
+			comp.addComponent(new PixelDisparo(x+1, y+1));
+			return comp;
+		}
+		default: // píxel
+			return new PixelDisparo(x,y);
+		}
+	}
+	
+	// Identficador del tipo actual
+	public String getTipoActual() {
+		return estrategia.getTipo();
+	}
+	
+	// Munición restante. -1 infinita
+	public int getMunicionActual() {
+		return estrategia.getMunicion();
+	}
+	
+	// Cambiar la estrategia activa
+	public void setEstrategia(StrategyDisparo nueva) {
+		this.estrategia = nueva;
+	}
+	
+	// Itenta activar el disparo de la estratega actual si queda munición
+	public boolean activar(int origenX, int origenY) {
+		if (!activo && estrategia.tieneMunicion()) {
+			estrategia.gastar();
+			cuerpo = construirCuerpo(origenX, origenY, estrategia.getTipo());
+			this.activo = true;
+			return true;
+		}
+		return false;
+	}
+	
+	// El disparo sube 1 pÃ­xel cada llamada
+	public void subir() {
+		if (activo) {
+			cuerpo.mover();
+			if (!cuerpo.isActivo()) {
+				activo = false;
+			}
+		}
 	}
 	
 	public int getX() {
-		return x;
+		return cuerpo.getX();
 	}
 	
 	public int getY() {
-		return y;
+		return cuerpo.getY();
 	}
 	
 	public boolean isActivo() {
 		return activo;
 	}
 	
-	public void setActivo(boolean b) {
-		this.activo = b;
-	}
-	
-	// El disparo sube 1 pÃ­xel cada llamada
-	public void subir() {
-		if (activo) {
-			y--;
-			// Si sale del tablero, se desactiva
-			if (y<0) {
-				activo = false;
-			}
-		}
-	}
+	// Celdas ocupadas por el disparo -- FALTA POR IMPLEMENTAR
+	public int[][] celdasOcupadas(){return null;}
 
-	// PATRÃ“N STRATEGY: Cambiar el tipo de disparo dinÃ¡micamente
-	public void cambiarTipoDisparo() {
-		indiceEstrategia = (indiceEstrategia + 1) % ESTRATEGIAS.length;
-		estrategia = ESTRATEGIAS[indiceEstrategia];
-	}
-
-	// Disparar: delega a la estrategia actual
-	public void disparar(Graphics g) {
-    	if (activo && estrategia != null) {
-        	estrategia.disparar(g, x, y);
-    	}
-	}
 }
