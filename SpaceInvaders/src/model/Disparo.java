@@ -84,6 +84,11 @@ public class Disparo {
 		return activo;
 	}
 	
+	public void setActivo(boolean b) {
+        this.activo = b;
+        cuerpo.setActivo(b);
+    }
+	
 	// Celdas ocupadas por el disparo -- FALTA POR IMPLEMENTAR
 	public int[][] celdasOcupadas(){return null;}
 

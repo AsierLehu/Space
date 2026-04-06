@@ -7,8 +7,7 @@ public class NaveFactory {
 
 	private static NaveFactory myFactory;
 
-	private NaveFactory() {
-	}
+	private NaveFactory() {}
 
 	public static NaveFactory getNaveFactory() {
 		if (myFactory == null) {
@@ -21,7 +20,7 @@ public class NaveFactory {
 	 * Crea la nave jugable según el identificador. Punto único de instanciación
 	 * (patrón Factory); las clases concretas son {@link Nave1}, {@link Nave2}, {@link Nave3}.
 	 */
-	public Jugador generate(String pNave) {
+	public Naves generate(String pNave) {
 		int x = 50;
 		int y = 55;
 		if (pNave == null) {
@@ -34,6 +33,8 @@ public class NaveFactory {
 				return new Nave2(x, y);
 			case "Nave3":
 				return new Nave3(x, y);
+			default:
+				return null;
 		}
 	}
 }

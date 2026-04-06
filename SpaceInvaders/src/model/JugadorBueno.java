@@ -5,16 +5,23 @@ package model;
  */
 public class JugadorBueno {
 
-	private static JugadorBueno instancia;
+	private static JugadorBueno miJugadorBueno;
 
-	private String tipoNaveElegido = "Nave1";
+	private String tipoNaveElegido;
 
 	/** Nave jugable de la partida actual (creada con {@link #crearNaveParaPartida()}). */
-	private Jugador nave;
+	private Naves nave;
 
-	private JugadorBueno() {
+	private JugadorBueno() {}
+	
+	public static JugadorBueno getJugadorBueno() {
+		if (miJugadorBueno == null) {
+			miJugadorBueno = new JugadorBueno();
+		}
+		return miJugadorBueno;
 	}
 
+	// Selecci�n de nave
 	public String getTipoNaveElegido() {
 		return tipoNaveElegido;
 	}
@@ -24,7 +31,11 @@ public class JugadorBueno {
 			this.tipoNaveElegido = tipo;
 	}
 
-	public Jugador getNave() {
+	public boolean haElegidoNave() {
+		return tipoNaveElegido != null;
+	}
+	
+	public Naves getNave() {
 		return nave;
 	}
 
@@ -32,16 +43,12 @@ public class JugadorBueno {
 	 * Crea la nave jugable para la partida vía {@link NaveFactory} (patrón Factory +
 	 * Singleton), usando {@link #tipoNaveElegido}, y la guarda en {@link #nave}.
 	 */
-	public Jugador crearNaveParaPartida() {
-		nave = NaveFactory.getNaveFactory().generate(tipoNaveElegido);
-		return nave;
-	}
-
-	public static JugadorBueno getJugadorBueno() {
-		if (instancia == null) {
-			instancia = new JugadorBueno();
+	public boolean crearNaveParaPartida() {
+		if (!haElegidoNave()) {
+			return false;
 		}
-		return instancia;
+		nave = NaveFactory.getNaveFactory().generate(tipoNaveElegido);
+		return nave != null;
 	}
 
 	/**
@@ -53,5 +60,22 @@ public class JugadorBueno {
 			nave.mover(dx, dy);
 		}
 		espacio.trasIntentoMoverJugador();
+	}
+	
+	public void disparar() {
+		Espacio espacio = Espacio.getEspacio();
+		if (nave != null && nave.isVivo()
+				&& !espacio.isGameOver() && !espacio.isGameWon()) {
+			boolean disparado = nave.disparar();
+			if (disparado) {
+				espacio.notificarDisparoNuevo(nave.getDisparo());
+			}
+		}
+	}
+	
+	public void cambiarTipoDisparo() {
+		if (nave != null && nave.isVivo()) {
+			nave.cambiarTipoDisparo();
+		}
 	}
 }

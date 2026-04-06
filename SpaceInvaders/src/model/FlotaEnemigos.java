@@ -34,10 +34,10 @@ public class FlotaEnemigos {
         enemigos.clear();
         Random rand = new Random();
         int n_enemigos = rand.nextInt(4)+1;
-        // Crear 4 enemigos en posiciones aleatorias
+        // Crear 4 enemigos en posiciones aleatorias, dejando margen para que los enemigos ahora multiplexados no salgan del espacio
         for (int i = 0; i < n_enemigos; i++) {
-            int ex = rand.nextInt(anchura);
-            int ey = rand.nextInt(5);
+            int ex = rand.nextInt(anchura-2);
+            int ey = rand.nextInt(4);
             enemigos.add(new Enemigo(ex, ey));
         }
     }
@@ -66,17 +66,6 @@ public class FlotaEnemigos {
             if (e.isVivo()) return false;
         }
         return true;
-    }
-
-    // ─── Movimiento ───────────────────────────────────────────────────────────
-
-    // Mueve todos los enemigos vivos en la dirección indicada
-     public void moverTodos(int dx, int dy) {
-        for (Enemigo e : enemigos) {
-            if (e.isVivo()) {
-                e.mover(dx, dy);
-            }
-        }
     }
 
     // ─── Colisiones ───────────────────────────────────────────────────────────
