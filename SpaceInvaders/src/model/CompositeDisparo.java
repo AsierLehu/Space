@@ -3,6 +3,22 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Compuesto del patrÃ³n Composite: agrupa mÃºltiples {@link ComponenteDisparo} 
+ * para formar disparos con formas (flecha, rombo).
+ * 
+ * Responsabilidades:
+ * - Agregar y remover componentes individuales (PixelDisparo)
+ * - Delegar el movimiento a todos sus componentes
+ * - Notificar a {@link Espacio} como un todo cuando se mueve
+ * 
+ * Uso:
+ * - "flecha": 3 pÃ­xeles en forma triangular
+ * - "rombo": 3 pÃ­xeles en forma de rombo
+ * 
+ * Nota: Usa el mÃ©todo default de {@link ComponenteDisparo#notificarMovimiento(int, int, int, int)}
+ * para notificar sin tener acceso directo a Espacio.
+ */
 public class CompositeDisparo implements ComponenteDisparo{
 
 	private List<ComponenteDisparo> components = new ArrayList<>();
@@ -17,15 +33,21 @@ public class CompositeDisparo implements ComponenteDisparo{
     	components.remove(c);
     }
 
-    // Mueve los píxeles hacia arriba
+    // Mueve los pÃ­xeles hacia arriba
 	@Override
 	public void mover() {
+		int oldX = getX();
+		int oldY = getY();
+		
 		for (ComponenteDisparo c : components) {
 			c.mover();
 		}
+		
+		// Notificar el cambio del composite como un todo
+		notificarMovimiento(oldX, oldY, getX(), getY());
 	}
 
-	// El disparo esta activo si al menos un píxel esta activo
+	// El disparo esta activo si al menos un pï¿½xel esta activo
 	@Override
 	public boolean isActivo() {
 		for (ComponenteDisparo c : components) {
@@ -36,7 +58,7 @@ public class CompositeDisparo implements ComponenteDisparo{
 		return false;
 	}
 	
-	// Desactivar todos los píxeles del disparo
+	// Desactivar todos los pï¿½xeles del disparo
 	@Override
 	public void setActivo(boolean b) {
 		for (ComponenteDisparo c : components) {
@@ -44,7 +66,7 @@ public class CompositeDisparo implements ComponenteDisparo{
 		}
 	}
 	
-	// Posición X de referencia: el píxel más a la izquierda
+	// Posiciï¿½n X de referencia: el pï¿½xel mï¿½s a la izquierda
 	@Override
 	public int getX() {
 		int min = Integer.MAX_VALUE;
@@ -54,7 +76,7 @@ public class CompositeDisparo implements ComponenteDisparo{
         return min == Integer.MAX_VALUE ? 0 : min;
 	}
 	
-	// Posición Y de referencia: el píxel más a la derecha
+	// Posiciï¿½n Y de referencia: el pï¿½xel mï¿½s a la derecha
 	@Override
 	public int getY() {
 		int min = Integer.MAX_VALUE;

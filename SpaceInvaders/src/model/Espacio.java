@@ -98,14 +98,6 @@ public class Espacio extends Observable {
         }
     }
 
-    public void disparar() {
-        Jugador j = naveJugador();
-        if (j != null && j.isVivo() && !isGameOver() && !isGameWon()) {
-            j.disparar();
-            notificarDisparoNuevo(j.getDisparo());
-        }
-    }
-
     public void cambiarTipoDisparo() {
         Jugador j = naveJugador();
         if (j != null && j.isVivo()) {
@@ -115,7 +107,17 @@ public class Espacio extends Observable {
 
     // ─── Actualización del disparo ────────────────────────────────────────────
 
-    // Llamado cada 50 ms: mueve el disparo y comprueba colisiones
+    /**
+     * Llamado cada 50 ms: mueve el disparo y comprueba colisiones.
+     * 
+     * Flujo:
+     * 1. Valida que exista disparo activo
+     * 2. Llama a {@link Disparo#subir()} que mueve el {@link ComponenteDisparo}
+     * 3. ComponenteDisparo.mover() notifica automáticamente a través de 
+     *    {@link ComponenteDisparo#notificarMovimiento(int, int, int, int)}
+     * 4. Si el disparo sale del tablero, notifica con {@link #notificarDisparoFueraDeTablero(int, int)}
+     * 5. Si hay colisión con enemigo, notifica con {@link #notificarColision(int, int, Enemigo)}
+     */
     public void actualizarDisparo() {
         if (naveJugador() == null) return;
 
@@ -134,8 +136,6 @@ public class Espacio extends Observable {
                 if (isGameWon()) {
                     notificarVictoria();
                 }
-            } else {
-                notificarMovimientoDisparo(oldX, oldY, d);
             }
         }
     }
@@ -186,32 +186,37 @@ public class Espacio extends Observable {
         }
     }
 
-    /** Invocado desde {@link PixelNave} al cambiar de celda; dispara el Observer de la vista. */
-    void notificarMovimientoJugador(int oldX, int oldY, int newX, int newY) {
+    /** Invocado desde {@link ComponenteNave} al cambiar de celda; dispara el Observer de la vista. */
+    public void notificarMovimientoJugador(int oldX, int oldY, int newX, int newY) {
         setChanged();
         notifyObservers(new int[] {0, oldX, oldY, newX, newY});
     }
 
-    private void notificarDisparoNuevo(Disparo d) {
+    /** Invocado desde {@link ComponenteDisparo} cuando se dispara un nuevo proyectil. */
+    public void notificarDisparoNuevo(int x, int y) {
         setChanged();
-        notifyObservers(new int[] {1, d.getX(), d.getY()});
+        notifyObservers(new int[] {1, x, y});
     }
 
-    private void notificarMovimientoDisparo(int oldX, int oldY, Disparo d) {
+    /** Invocado desde {@link ComponenteDisparo} cuando el disparo se mueve. */
+    public void notificarMovimientoDisparo(int oldX, int oldY, int newX, int newY) {
         setChanged();
-        notifyObservers(new int[] {2, oldX, oldY, d.getX(), d.getY()});
+        notifyObservers(new int[] {2, oldX, oldY, newX, newY});
     }
 
+    /** Invocado desde {@link Espacio#actualizarDisparo()} cuando el disparo sale del tablero. */
     private void notificarDisparoFueraDeTablero(int oldX, int oldY) {
         setChanged();
         notifyObservers(new int[] {3, oldX, oldY});
     }
 
+    /** Invocado desde {@link Espacio#actualizarEnemigos()} cuando un enemigo se mueve. */
     private void notificarMovimientoEnemigo(int oldX, int oldY, Enemigo e) {
         setChanged();
         notifyObservers(new int[] {4, oldX, oldY, e.getX(), e.getY()});
     }
 
+    /** Invocado desde {@link Espacio#actualizarDisparo()} cuando hay colisión entre disparo y enemigo. */
     private void notificarColision(int disparoOldX, int disparoOldY, Enemigo golpeado) {
         setChanged();
         notifyObservers(new int[] {5, disparoOldX, disparoOldY, golpeado.getX(), golpeado.getY()});

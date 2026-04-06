@@ -2,7 +2,6 @@ package model;
 
 public abstract class Jugador extends Naves {
 
-	private Disparo disparo;
 	protected final CompositeNave nave;
 	private final String tipoNave;
 
@@ -13,7 +12,7 @@ public abstract class Jugador extends Naves {
 		construir();
 		this.x = nave.getRefX();
 		this.y = nave.getRefY();
-		this.disparo = new Disparo(origenDisparoX(), origenDisparoY());
+		// El disparo se inicializa en Naves.inicializarNaveJugador()
 	}
 
 	public String getTipoNave() {
@@ -35,17 +34,16 @@ public abstract class Jugador extends Naves {
 		Espacio espacio = Espacio.getEspacio();
 		int edx = dx * velocidad;
 		int edy = dy * velocidad;
-		nave.mover(edx, edy, espacio);
+		nave.mover(edx, edy);
 		x = nave.getRefX();
 		y = nave.getRefY();
 	}
 
-	public void disparar() {
-		if (!disparo.isActivo()) {
-			disparo = new Disparo(origenDisparoX(), origenDisparoY());
-			disparo.setActivo(true);
-		}
-	}
+	/**
+	 * El disparo es manejado por Naves.disparar() que usa Disparo.activar()
+	 * respetando la estrategia activa. No se sobrescribe aquí.
+	 */
+	// Disparo heredado de Naves
 
 	public Disparo getDisparo() {
 		return disparo;

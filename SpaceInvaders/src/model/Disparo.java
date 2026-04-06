@@ -1,5 +1,16 @@
 package model;
 
+/**
+ * Gestor del disparo del jugador.
+ * 
+ * Responsabilidades:
+ * - Mantener la estrategia de disparo activa (rombo, flecha, pixel)
+ * - Controlar la activaci贸n y desactivaci贸n del disparo
+ * - Delegar el movimiento al {@link ComponenteDisparo} (patr贸n Composite)
+ * 
+ * Nota: La clase Disparo crea el cuerpo (ComponenteDisparo) inactivo en el constructor.
+ * Se activa cuando {@link #activar(int, int)} es llamado.
+ */
 public class Disparo {
 	
 	private ComponenteDisparo cuerpo;
@@ -15,6 +26,19 @@ public class Disparo {
 		this.estrategia = estrategia;
 	}
 	
+	/**
+	 * Construye el cuerpo del disparo seg煤n la estrategia actual.
+	 * Utiliza el patr贸n Composite con {@link ComponenteDisparo}:
+	 * 
+	 * - "flecha": {@link CompositeDisparo} con 3 p铆xeles en forma de flecha
+	 * - "rombo": {@link CompositeDisparo} con 3 p铆xeles en forma de rombo
+	 * - "pixel": {@link PixelDisparo} simple
+	 * 
+	 * @param x posici贸n X del origen del disparo
+	 * @param y posici贸n Y del origen del disparo
+	 * @param tipo la estrategia de disparo activa
+	 * @return el {@link ComponenteDisparo} creado
+	 */
 	private ComponenteDisparo construirCuerpo(int x, int y, String tipo) {
 		switch (tipo) {
 		case "flecha": {
@@ -31,7 +55,7 @@ public class Disparo {
 			comp.addComponent(new PixelDisparo(x+1, y+1));
 			return comp;
 		}
-		default: // p韝el
+		default: // p锟絰el
 			return new PixelDisparo(x,y);
 		}
 	}
@@ -41,7 +65,7 @@ public class Disparo {
 		return estrategia.getTipo();
 	}
 	
-	// Munici髇 restante. -1 infinita
+	// Munici锟絥 restante. -1 infinita
 	public int getMunicionActual() {
 		return estrategia.getMunicion();
 	}
@@ -51,18 +75,38 @@ public class Disparo {
 		this.estrategia = nueva;
 	}
 	
-	// Itenta activar el disparo de la estratega actual si queda munici髇
+	/**
+	 * Intenta activar el disparo con la estrategia actual si queda munici贸n.
+	 * 
+	 * Flujo:
+	 * 1. Valida que el disparo no est茅 activo y haya munici贸n
+	 * 2. Gasta munici贸n de la estrategia
+	 * 3. Crea el cuerpo del disparo ({@link ComponenteDisparo}) seg煤n el tipo de estrategia:
+	 *    - "flecha": {@link CompositeDisparo} con forma de flecha
+	 *    - "rombo": {@link CompositeDisparo} con forma de rombo
+	 *    - "pixel": {@link PixelDisparo} simple
+	 * 4. Llama a {@link ComponenteDisparo#notificarDisparoNuevo()} para notificar a {@link Espacio}
+	 * 
+	 * @return true si el disparo fue activado exitosamente
+	 */
 	public boolean activar(int origenX, int origenY) {
 		if (!activo && estrategia.tieneMunicion()) {
 			estrategia.gastar();
 			cuerpo = construirCuerpo(origenX, origenY, estrategia.getTipo());
 			this.activo = true;
+			// Notificar a ComponenteDisparo que hay un nuevo disparo
+			cuerpo.notificarDisparoNuevo();
 			return true;
 		}
 		return false;
 	}
 	
-	// El disparo sube 1 p铆xel cada llamada
+	/**
+	 * Mueve el disparo un p铆xel hacia arriba cada tick del game loop.
+	 * 
+	 * El movimiento notifica autom谩ticamente a {@link Espacio} a trav茅s de 
+	 * {@link ComponenteDisparo#notificarMovimiento(int, int, int, int)}.
+	 */
 	public void subir() {
 		if (activo) {
 			cuerpo.mover();

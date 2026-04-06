@@ -4,7 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Compuesto del patrón Composite: agrupa otros {@link ComponenteNave} y delega el movimiento.
+ * Compuesto del patrón Composite: agrupa múltiples {@link ComponenteNave} 
+ * para formar una nave completa.
+ * 
+ * Responsabilidades:
+ * - Agregar y remover componentes individuales (PixelNave)
+ * - Delegar el movimiento a todos sus componentes
+ * - Mantener la referencia X/Y máxima como punto de referencia
+ * 
+ * Nota: Cada PixelNave notifica independientemente a Espacio cuando se mueve,
+ * usando {@link ComponenteNave#notificarMovimiento(int, int, int, int)}.
  */
 public class CompositeNave implements ComponenteNave {
 
@@ -21,9 +30,9 @@ public class CompositeNave implements ComponenteNave {
     }
 
     @Override
-    public void mover(int dx, int dy, Espacio espacio) {
+    public void mover(int dx, int dy) {
         for (ComponenteNave c : components) {
-            c.mover(dx, dy, espacio);
+            c.mover(dx, dy);
         }
     }
 

@@ -21,7 +21,7 @@ public class JugadorBueno {
 		return miJugadorBueno;
 	}
 
-	// Selección de nave
+	// Selecciï¿½n de nave
 	public String getTipoNaveElegido() {
 		return tipoNaveElegido;
 	}
@@ -62,14 +62,17 @@ public class JugadorBueno {
 		espacio.trasIntentoMoverJugador();
 	}
 	
+	/**
+	 * Disparo del jugador:
+	 * 1. Valida que el jugador pueda disparar
+	 * 2. Delega a la nave para que dispare
+	 * 3. La notificaciÃ³n es manejada por {@link ComponenteDisparo#notificarDisparoNuevo()}
+	 */
 	public void disparar() {
 		Espacio espacio = Espacio.getEspacio();
 		if (nave != null && nave.isVivo()
 				&& !espacio.isGameOver() && !espacio.isGameWon()) {
-			boolean disparado = nave.disparar();
-			if (disparado) {
-				espacio.notificarDisparoNuevo(nave.getDisparo());
-			}
+			nave.disparar();
 		}
 	}
 	

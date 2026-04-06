@@ -1,7 +1,15 @@
 package model;
 
 /**
- * Hoja del patrón Composite: un píxel de la nave con posición absoluta en el tablero.
+ * Hoja del patrón Composite: un píxel individual de la nave.
+ * 
+ * Responsabilidades:
+ * - Mantener su posición absoluta en el tablero
+ * - Comprobar límites del tablero antes de moverse
+ * - Notificar a {@link Espacio} cuando cambia de posición
+ * 
+ * Nota: Usa el método default de {@link ComponenteNave#notificarMovimiento(int, int, int, int)}
+ * para notificar sin tener acceso directo a Espacio.
  */
 public class PixelNave implements ComponenteNave {
     private int x;
@@ -13,26 +21,27 @@ public class PixelNave implements ComponenteNave {
     }
     
     @Override
-    public void mover(int dx, int dy, Espacio espacio) {
+    public void mover(int dx, int dy) {
+    	int oldX = x;
+    	int oldY = y;
     	int newX = x + dx;
     	int newY = y + dy;
-    	// L�mites del tablero
+    	// Límites del tablero
     	if (newX >= 0 && newX < 100 && newY >= 0 && newY < 60) {
-    		espacio.notificarMovimientoJugador(x, y, newX, newY);
     		x = newX;
     		y = newY;
+    		// Notificar al Espacio
+    		notificarMovimiento(oldX, oldY, newX, newY);
     	}
     }
 
 	@Override
 	public int getRefX() {
-		// TODO Auto-generated method stub
 		return x;
 	}
 
 	@Override
 	public int getRefY() {
-		// TODO Auto-generated method stub
 		return y;
 	}
 }

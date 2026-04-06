@@ -49,7 +49,7 @@ public abstract class Naves {
 	/** Define que estrategias de disparo puede usar esta nave. Enemigo devuelve null. */
 	public abstract ArrayList<StrategyDisparo> getEstrategiasPermitidas();
 	
-	/** Celdas del tablero que ocupa la nave. Las naves devolveran sus píxeles del composite, el enemigo tiene forma fija de momento. */
+	/** Celdas del tablero que ocupa la nave. Las naves devolveran sus pï¿½xeles del composite, el enemigo tiene forma fija de momento. */
 	public abstract int[][] celdasOcupadas();
 	
 	// Origen X del disparo
@@ -72,7 +72,16 @@ public abstract class Naves {
 		this.disparo = new Disparo(origenDisparoX(), origenDisparoY(), estrategias.get(0));
 	}
 	
-	/** Intenta disparar con la estrategia activa. Devuelve false si no hay munición */
+	/**
+	 * Intenta disparar con la estrategia activa. Devuelve false si no hay municiÃ³n.
+	 * 
+	 * Flujo:
+	 * 1. Llama a {@link Disparo#activar(int, int)} para activar el disparo
+	 * 2. Disparo comprueba la estrategia activa (rombo, flecha, pixel)
+	 * 3. Si hay municiÃ³n, crea el {@link ComponenteDisparo} (CompositeDisparo o PixelDisparo)
+	 * 4. ComponenteDisparo notifica a {@link Espacio} mediante {@link ComponenteDisparo#notificarDisparoNuevo()}
+	 * 5. Espacio actualiza el juego en el game loop ({@link Espacio#actualizarDisparo()})
+	 */
 	public boolean disparar() {
 		if (disparo == null) {
 			return false;
