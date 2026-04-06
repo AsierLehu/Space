@@ -47,7 +47,7 @@ public class Espacio extends Observable {
         FlotaEnemigos.getFlotaEnemigos().inicializar(anchura);
     }
 
-    private Jugador naveJugador() {
+    private Naves naveJugador() {
         return JugadorBueno.getJugadorBueno().getNave();
     }
 
@@ -59,7 +59,7 @@ public class Espacio extends Observable {
 
     // Derrota: jugador muerto, algún enemigo llegó al límite inferior, o colisión jugador-enemigo
     public boolean isGameOver() {
-        Jugador j = naveJugador();
+        Naves j = naveJugador();
         if (j == null || !j.isVivo()) return true;
         if (FlotaEnemigos.getFlotaEnemigos().algunoLlegoAbajo(altura)) return true;
         return hayColisionJugadorEnemigo();
@@ -67,7 +67,7 @@ public class Espacio extends Observable {
     
     // Verifica si el jugador ha colisionado directamente con algún enemigo
     private boolean hayColisionJugadorEnemigo() {
-        Jugador j = naveJugador();
+        Naves j = naveJugador();
         if (j == null || !j.isVivo()) return false;
 
         for (Enemigo enemigo : FlotaEnemigos.getFlotaEnemigos().getEnemigos()) {
@@ -99,7 +99,7 @@ public class Espacio extends Observable {
     }
 
     public void cambiarTipoDisparo() {
-        Jugador j = naveJugador();
+        Naves j = naveJugador();
         if (j != null && j.isVivo()) {
             j.cambiarTipoDisparo();
         }
@@ -172,7 +172,7 @@ public class Espacio extends Observable {
     }
 
     private void notificarInicializacion() {
-        Jugador n = naveJugador();
+        Naves n = naveJugador();
         if (n == null) return;
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
         int[][] celdasJ = n.celdasOcupadas();

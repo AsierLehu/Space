@@ -9,7 +9,6 @@ public class JugadorBueno {
 
 	private String tipoNaveElegido;
 
-	/** Nave jugable de la partida actual (creada con {@link #crearNaveParaPartida()}). */
 	private Naves nave;
 
 	private JugadorBueno() {}
@@ -44,9 +43,7 @@ public class JugadorBueno {
 	 * Singleton), usando {@link #tipoNaveElegido}, y la guarda en {@link #nave}.
 	 */
 	public boolean crearNaveParaPartida() {
-		if (!haElegidoNave()) {
-			return false;
-		}
+		
 		nave = NaveFactory.getNaveFactory().generate(tipoNaveElegido);
 		return nave != null;
 	}

@@ -107,4 +107,21 @@ public abstract class Naves {
 	public Disparo getDisparo() {
 		return disparo;
 	}
+
+	/**
+	 * Si hay {@link #nave} (composite del jugador), mueve la figura y sincroniza la referencia;
+	 * si no (p. ej. {@link Enemigo}), desplaza solo las coordenadas.
+	 */
+	public void mover(int dx, int dy) {
+		int edx = dx * velocidad;
+		int edy = dy * velocidad;
+		if (nave != null) {
+			nave.mover(edx, edy);
+			x = nave.getRefX();
+			y = nave.getRefY();
+		} else {
+			x += edx;
+			y += edy;
+		}
+	}
 }
