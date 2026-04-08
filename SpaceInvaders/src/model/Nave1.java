@@ -27,10 +27,16 @@ public class Nave1 extends Naves {
 	public void construir() {
 		int bx = x;
 		int by = y;
-		nave.addComponent(new PixelNave(bx + 1, by));
+		nave.addComponent(new PixelNave(bx, by));
+		nave.addComponent(new PixelNave(bx + 2, by));
 		nave.addComponent(new PixelNave(bx, by + 1));
 		nave.addComponent(new PixelNave(bx + 1, by + 1));
 		nave.addComponent(new PixelNave(bx + 2, by + 1));
+		nave.addComponent(new PixelNave(bx - 1, by + 2));
+		nave.addComponent(new PixelNave(bx, by + 2));
+		nave.addComponent(new PixelNave(bx + 1, by + 2));
+		nave.addComponent(new PixelNave(bx + 2, by + 2));
+		nave.addComponent(new PixelNave(bx + 3, by + 2));
 	}
 
 	@Override
@@ -46,10 +52,16 @@ public class Nave1 extends Naves {
 	@Override
 	public int[][] celdasOcupadas() {
 		return new int[][] {
-			{ x + 1, y },
+			{ x, y },
+			{ x + 2, y },
 			{ x, y + 1 },
 			{ x + 1, y + 1 },
-			{ x + 2, y + 1 }
+			{ x + 2, y + 1 },
+			{ x - 1, y + 2 },
+			{ x, y + 2 },
+			{ x + 1, y + 2 },
+			{ x + 2, y + 2 },
+			{ x + 3, y + 2 },
 		};
 	}
 

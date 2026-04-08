@@ -20,6 +20,9 @@ public class Nave2 extends Naves {
 		nave.addComponent(new PixelNave(bx, by + 1));
 		nave.addComponent(new PixelNave(bx + 1, by + 1));
 		nave.addComponent(new PixelNave(bx + 2, by + 1));
+		nave.addComponent(new PixelNave(bx, by + 2));
+		nave.addComponent(new PixelNave(bx + 1, by + 2));
+		nave.addComponent(new PixelNave(bx + 2, by + 2));
 	}
 
 	@Override
@@ -39,7 +42,10 @@ public class Nave2 extends Naves {
 			{ x + 2, y },
 			{ x, y + 1 },
 			{ x + 1, y + 1 },
-			{ x + 2, y + 1 }
+			{ x + 2, y + 1 },
+			{ x, y + 2 },
+			{ x + 1, y + 2 },
+			{ x + 2, y + 2 }
 		};
 	}
 
