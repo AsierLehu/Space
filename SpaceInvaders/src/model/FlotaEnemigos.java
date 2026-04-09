@@ -29,16 +29,27 @@ public class FlotaEnemigos {
 
     // ─── Inicialización ───────────────────────────────────────────────────────
 
-    // Limpia la flota y añade 4 enemigos en posiciones aleatorias de la fila superior
+    // Limpia la flota y añade 4-8 enemigos en posiciones aleatorias de la fila superior sin tocarse
     public void inicializar(int anchura) {
         enemigos.clear();
         Random rand = new Random();
-        int n_enemigos = rand.nextInt(4)+1;
-        // Crear 4 enemigos en posiciones aleatorias, dejando margen para que los enemigos ahora multiplexados no salgan del espacio
-        for (int i = 0; i < n_enemigos; i++) {
-            int ex = rand.nextInt(anchura-2);
+        int n_enemigos = rand.nextInt(5)+4;
+        ArrayList<Integer> xOcupadas = new ArrayList<>();
+        
+        // Crear 4-8 enemigos en posiciones aleatorias, sin que se toquen
+        int intentos = 0;
+        while (enemigos.size() < n_enemigos && intentos < 100) {
+            int ex = rand.nextInt(anchura-4);
             int ey = rand.nextInt(4);
-            enemigos.add(new Enemigo(ex, ey));
+            
+            // Verificar que la posición X no está ocupada (para evitar que se toquen horizontalmente)
+            if (!xOcupadas.contains(ex) && !xOcupadas.contains(ex+1) && !xOcupadas.contains(ex+2)) {
+                enemigos.add(new Enemigo(ex, ey));
+                xOcupadas.add(ex);
+                xOcupadas.add(ex+1);
+                xOcupadas.add(ex+2);
+            }
+            intentos++;
         }
     }
 
@@ -52,8 +63,14 @@ public class FlotaEnemigos {
     // Devuelve true si algún enemigo vivo llegó al límite inferior del tablero
     public boolean algunoLlegoAbajo(int altura) {
         for (Enemigo e : enemigos) {
-            if (e.isVivo() && e.getY() >= altura - 1) {
-                return true;
+            if (e.isVivo()) {
+                // Verificar todos los píxeles del enemigo, no solo la referencia
+                int[][] celdas = e.celdasOcupadas();
+                for (int[] celda : celdas) {
+                    if (celda[1] >= altura - 1) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
@@ -80,7 +97,6 @@ public class FlotaEnemigos {
         			if (celdaDisparo[0] == celdaEnemigo[0]
         					&& celdaDisparo[1] == celdaEnemigo[1]) {
         				e.setVivo(false);
-        				d.setActivo(false);
         				return e;
         			}
         		}

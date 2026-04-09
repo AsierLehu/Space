@@ -52,6 +52,7 @@ public class Disparo {
 			CompositeDisparo comp = new CompositeDisparo();
 			comp.addComponent(new PixelDisparo(x, y));       // punta arriba
 			comp.addComponent(new PixelDisparo(x-1, y+1));  // ala izq
+			comp.addComponent(new PixelDisparo(x, y+1));    // píxel del medio
 			comp.addComponent(new PixelDisparo(x+1, y+1));  // ala der
 			comp.addComponent(new PixelDisparo(x, y+2));    // punta abajo
 			return comp;

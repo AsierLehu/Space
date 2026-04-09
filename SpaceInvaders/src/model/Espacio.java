@@ -70,11 +70,24 @@ public class Espacio extends Observable {
         Naves j = naveJugador();
         if (j == null || !j.isVivo()) return false;
 
+        // Obtener todos los píxeles de la nave del jugador
+        CompositeNave naveJugador = j.getCompositeNave();
+        if (naveJugador == null) return false;
+        
+        // Verificar colisión pixel a pixel
         for (Enemigo enemigo : FlotaEnemigos.getFlotaEnemigos().getEnemigos()) {
-            if (enemigo.isVivo()
-                    && j.getX() == enemigo.getX()
-                    && j.getY() == enemigo.getY()) {
-                return true;
+            if (!enemigo.isVivo()) continue;
+            
+            int[][] celdasEnemigo = enemigo.celdasOcupadas();
+            for (ComponenteNave c : naveJugador.getComponents()) {
+                int x = c.getRefX();
+                int y = c.getRefY();
+                
+                for (int[] celdaEnemigo : celdasEnemigo) {
+                    if (x == celdaEnemigo[0] && y == celdaEnemigo[1]) {
+                        return true; // Hay colisión
+                    }
+                }
             }
         }
         return false;
@@ -125,16 +138,22 @@ public class Espacio extends Observable {
         ArrayList<Disparo> disparosParaMantener = new ArrayList<>();
 
         for (Disparo d : disparos) {
-            int oldX = d.getX();
-            int oldY = d.getY();
             d.subir();
 
             if (!d.isActivo()) {
-                notificarDisparoFueraDeTablero(oldX, oldY);
+                // Disparo salió del tablero - borrar TODOS sus píxeles
+                int[][] celdasDisparo = d.celdasOcupadas();
+                for (int[] celda : celdasDisparo) {
+                    setChanged();
+                    notifyObservers(new int[] {3, celda[0], celda[1]});
+                }
             } else {
                 Enemigo golpeado = FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
                 if (golpeado != null) {
-                    notificarColision(oldX, oldY, golpeado);
+                    // Guardar celdas ANTES de desactivar el disparo
+                    int[][] celdasDisparoEnColision = d.celdasOcupadas();
+                    d.setActivo(false);  // Desactivar aquí
+                    notificarColision(celdasDisparoEnColision, golpeado);
                     if (isGameWon()) {
                         notificarVictoria();
                     }
@@ -151,19 +170,31 @@ public class Espacio extends Observable {
     // Llamado cada 200 ms: baja los enemigos 1 píxel
     public void actualizarEnemigos() {
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
-        ArrayList<Disparo> disparos = naveJugador().getDisparos();
 
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
-                int oldX = e.getX();
-                int oldY = e.getY();
-                e.mover(0, 1);
-                for (Disparo d : disparos) {
-                    if (d.isActivo()) {
-                        FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
+                // Guardar posiciones antiguas de todos los píxeles
+                ArrayList<int[]> oldPixels = new ArrayList<>();
+                CompositeNave naveEnemigo = e.getCompositeNave();
+                if (naveEnemigo != null) {
+                    for (ComponenteNave c : naveEnemigo.getComponents()) {
+                        oldPixels.add(new int[] { c.getRefX(), c.getRefY() });
                     }
                 }
-                notificarMovimientoEnemigo(oldX, oldY, e);
+                
+                // Mover el enemigo
+                e.mover(0, 1);
+                
+                // Guardar posiciones nuevas
+                ArrayList<int[]> newPixels = new ArrayList<>();
+                if (naveEnemigo != null) {
+                    for (ComponenteNave c : naveEnemigo.getComponents()) {
+                        newPixels.add(new int[] { c.getRefX(), c.getRefY() });
+                    }
+                }
+                
+                // Notificar movimiento de todos los píxeles
+                notificarMovimientoEnemigo(oldPixels, newPixels);
             }
         }
 
@@ -192,12 +223,17 @@ public class Espacio extends Observable {
             }
         }
         
-        // Pintar los enemigos
+        // Pintar los enemigos - pintar TODOS los píxeles de cada enemigo
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
-                setChanged();
-                notifyObservers(new int[] {14, e.getX(), e.getY()});
+                CompositeNave naveEnemigo = e.getCompositeNave();
+                if (naveEnemigo != null) {
+                    for (ComponenteNave c : naveEnemigo.getComponents()) {
+                        setChanged();
+                        notifyObservers(new int[] {14, c.getRefX(), c.getRefY()});
+                    }
+                }
             }
         }
     }
@@ -239,16 +275,34 @@ public class Espacio extends Observable {
         notifyObservers(new int[] {3, oldX, oldY});
     }
 
-    /** Invocado desde {@link Espacio#actualizarEnemigos()} cuando un enemigo se mueve. */
-    private void notificarMovimientoEnemigo(int oldX, int oldY, Enemigo e) {
-        setChanged();
-        notifyObservers(new int[] {4, oldX, oldY, e.getX(), e.getY()});
+    /** Invocado desde {@link Espacio#actualizarEnemigos()} cuando un enemigo se mueve - notifica todos los píxeles. */
+    private void notificarMovimientoEnemigo(ArrayList<int[]> oldPixels, ArrayList<int[]> newPixels) {
+    	// Borrar píxeles antiguos
+        for (int[] pixel : oldPixels) {
+            setChanged();
+            notifyObservers(new int[] {12, pixel[0], pixel[1]});  // tipo 12: borrar enemigo
+        }
+        // Pintar píxeles nuevos
+        for (int[] pixel : newPixels) {
+            setChanged();
+            notifyObservers(new int[] {14, pixel[0], pixel[1]});  // tipo 14: pintar enemigo
+        }
     }
 
     /** Invocado desde {@link Espacio#actualizarDisparo()} cuando hay colisión entre disparo y enemigo. */
-    private void notificarColision(int disparoOldX, int disparoOldY, Enemigo golpeado) {
-        setChanged();
-        notifyObservers(new int[] {5, disparoOldX, disparoOldY, golpeado.getX(), golpeado.getY()});
+    private void notificarColision(int[][] celdasDisparo, Enemigo golpeado) {
+        // Borrar TODOS los píxeles del disparo
+        for (int[] celda : celdasDisparo) {
+            setChanged();
+            notifyObservers(new int[] {3, celda[0], celda[1]});  // tipo 3: borrar píxel disparo
+        }
+        
+        // Borrar TODOS los píxeles del enemigo golpeado
+        int[][] celdasEnemigo = golpeado.celdasOcupadas();
+        for (int[] celda : celdasEnemigo) {
+            setChanged();
+            notifyObservers(new int[] {12, celda[0], celda[1]});  // tipo 12: borrar píxel enemigo
+        }
     }
 
     private void notificarGameOver() {

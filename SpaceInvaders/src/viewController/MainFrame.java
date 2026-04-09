@@ -113,11 +113,15 @@ public class MainFrame extends JFrame implements Observer {
     			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO);
     			break;
     		
+    		case 12: // borrar píxel de enemigo - [tipo, x, y]
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			break;
+    		
     		case 13: // inicialización de nave - [tipo, x, y]
     			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR);
     			break;
     		
-    		case 14: // inicialización de enemigo - [tipo, x, y]
+    		case 14: // inicialización de enemigo o pintar píxel de enemigo - [tipo, x, y]
     			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_ENEMIGO);
     			break;
     			
