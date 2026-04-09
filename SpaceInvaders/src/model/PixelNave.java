@@ -22,17 +22,9 @@ public class PixelNave implements ComponenteNave {
     
     @Override
     public void mover(int dx, int dy) {
-    	int oldX = x;
-    	int oldY = y;
-    	int newX = x + dx;
-    	int newY = y + dy;
-    	// LÃ­mites del tablero
-    	if (newX >= 0 && newX < 100 && newY >= 0 && newY < 60) {
-    		x = newX;
-    		y = newY;
-    		// Notificar al Espacio
-    		notificarMovimiento(oldX, oldY, newX, newY);
-    	}
+    	// Sin comprobación de límites: CompositeNave ya lo garantiza
+    	x += dx;
+    	y += dy;
     }
 
 	@Override

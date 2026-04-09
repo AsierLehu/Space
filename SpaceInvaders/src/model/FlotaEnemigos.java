@@ -72,16 +72,19 @@ public class FlotaEnemigos {
 
     // Comprueba colisión del disparo con la flota. Devuelve el enemigo golpeado o null
     public Enemigo comprobarColision(Disparo d) {
+        int[][] celdasDisparo = d.celdasOcupadas();
         for (Enemigo e : enemigos) {
-            // Ventana de 2 píxeles para evitar que el disparo "pase de largo"
-            if (e.isVivo()
-                    && d.getX() == e.getX()
-                    && d.getY() <= e.getY()
-                    && d.getY() >= e.getY() - 1) {
-                e.setVivo(false);
-                d.setActivo(false);
-                return e;  // devolvemos el enemigo golpeado para que Espacio notifique
-            }
+        	if (!e.isVivo()) continue;
+        	for (int[] celdaDisparo : celdasDisparo) {
+        		for (int[] celdaEnemigo : e.celdasOcupadas()) {
+        			if (celdaDisparo[0] == celdaEnemigo[0]
+        					&& celdaDisparo[1] == celdaEnemigo[1]) {
+        				e.setVivo(false);
+        				d.setActivo(false);
+        				return e;
+        			}
+        		}
+        	}
         }
         return null;
     }

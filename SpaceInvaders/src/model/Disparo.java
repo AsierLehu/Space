@@ -53,6 +53,7 @@ public class Disparo {
 			comp.addComponent(new PixelDisparo(x, y));
 			comp.addComponent(new PixelDisparo(x-1, y+1));
 			comp.addComponent(new PixelDisparo(x+1, y+1));
+			comp.addComponent(new PixelDisparo(x, y+2));
 			return comp;
 		}
 		default: // p�xel
@@ -133,7 +134,12 @@ public class Disparo {
         cuerpo.setActivo(b);
     }
 	
-	// Celdas ocupadas por el disparo -- FALTA POR IMPLEMENTAR
-	public int[][] celdasOcupadas(){return null;}
-
+	// Celdas ocupadas por el disparo
+	public int[][] celdasOcupadas(){
+		if (cuerpo instanceof CompositeDisparo) {
+			java.util.List<int[]> lista = ((CompositeDisparo) cuerpo).celdasOcupadas();
+            return lista.toArray(new int[0][]);
+		}
+		return new int[][] {{cuerpo.getX(), cuerpo.getY() }};
+	}
 }

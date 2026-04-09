@@ -31,8 +31,21 @@ public class CompositeNave implements ComponenteNave {
 
     @Override
     public void mover(int dx, int dy) {
+    	// Primero comprobar que todos los píxeles pueden moverse
         for (ComponenteNave c : components) {
-            c.mover(dx, dy);
+        	int newX = c.getRefX() + dx;
+        	int newY = c.getRefY() + dy;
+        	if (newX < 0 || newX >= 100 || newY < 0 || newY >= 60) {
+        		return; // Algún píxel saldría del tablero - cancelar movimiento
+        	}
+        }
+        
+        // Todos pueden moverse - mover y notificar movimiento
+        for (ComponenteNave c : components) {
+        	int oldX = c.getRefX();
+        	int oldy = c.getRefY();
+        	c.mover(dx, dy);
+        	c.notificarMovimiento(oldX, oldy, c.getRefX(), c.getRefY());
         }
     }
 

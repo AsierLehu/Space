@@ -4,7 +4,7 @@ public class DisparoPixel implements StrategyDisparo {
 
 	@Override
 	public String getTipo() {
-		return "píxel";
+		return "pixel";
 	}
 
 	@Override

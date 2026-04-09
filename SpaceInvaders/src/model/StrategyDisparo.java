@@ -1,9 +1,7 @@
 package model;
 
-import java.awt.Graphics;
-
 public interface StrategyDisparo {
-    // Identificar tipo: "píxel", "flecha" o "rombo"
+    // Identificar tipo: "pixel", "flecha" o "rombo"
 	String getTipo();
 	
 	// Munición restante. -1 significa infinita
