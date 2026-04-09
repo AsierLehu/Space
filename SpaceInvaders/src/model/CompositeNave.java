@@ -28,25 +28,38 @@ public class CompositeNave implements ComponenteNave {
     public void removeComponent (ComponenteNave c) {
     	components.remove(c);
     }
+    
+    public List<ComponenteNave> getComponents() {
+    	return components;
+    }
 
     @Override
     public void mover(int dx, int dy) {
-    	// Primero comprobar que todos los píxeles pueden moverse
+    	// Primero comprobar que todos los pï¿½xeles pueden moverse
         for (ComponenteNave c : components) {
         	int newX = c.getRefX() + dx;
         	int newY = c.getRefY() + dy;
         	if (newX < 0 || newX >= 100 || newY < 0 || newY >= 60) {
-        		return; // Algún píxel saldría del tablero - cancelar movimiento
+        		return; // Algï¿½n pï¿½xel saldrï¿½a del tablero - cancelar movimiento
         	}
         }
         
-        // Todos pueden moverse - mover y notificar movimiento
-        for (ComponenteNave c : components) {
-        	int oldX = c.getRefX();
-        	int oldy = c.getRefY();
-        	c.mover(dx, dy);
-        	c.notificarMovimiento(oldX, oldy, c.getRefX(), c.getRefY());
+        // Guardar posiciones antiguas antes de mover
+        int[] oldPositionsX = new int[components.size()];
+        int[] oldPositionsY = new int[components.size()];
+        for (int i = 0; i < components.size(); i++) {
+        	oldPositionsX[i] = components.get(i).getRefX();
+        	oldPositionsY[i] = components.get(i).getRefY();
         }
+        
+        // Mover todos los pÃ­xeles
+        for (ComponenteNave c : components) {
+        	c.mover(dx, dy);
+        }
+        
+        // Notificar todas las borraduras y pinturas de una sola vez
+        Espacio espacio = Espacio.getEspacio();
+        espacio.notificarMovimientoJugadorCompleto(oldPositionsX, oldPositionsY, components);
     }
 
     @Override

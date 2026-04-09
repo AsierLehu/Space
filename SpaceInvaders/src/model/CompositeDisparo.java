@@ -36,18 +36,12 @@ public class CompositeDisparo implements ComponenteDisparo{
     // Mueve los píxeles hacia arriba
 	@Override
 	public void mover() {
-		int oldX = getX();
-		int oldY = getY();
-		
 		for (ComponenteDisparo c : components) {
 			c.mover();
 		}
-		
-		// Notificar el cambio del composite como un todo
-		notificarMovimiento(oldX, oldY, getX(), getY());
 	}
 
-	// El disparo esta activo si al menos un p�xel esta activo
+	// El disparo esta activo si al menos un píxel esta activo
 	@Override
 	public boolean isActivo() {
 		for (ComponenteDisparo c : components) {
@@ -58,7 +52,7 @@ public class CompositeDisparo implements ComponenteDisparo{
 		return false;
 	}
 	
-	// Desactivar todos los p�xeles del disparo
+	// Desactivar todos los píxeles del disparo
 	@Override
 	public void setActivo(boolean b) {
 		for (ComponenteDisparo c : components) {
@@ -66,7 +60,7 @@ public class CompositeDisparo implements ComponenteDisparo{
 		}
 	}
 	
-	// Posici�n X de referencia: el p�xel m�s a la izquierda
+	// Posición X de referencia: el píxel más a la izquierda
 	@Override
 	public int getX() {
 		int min = Integer.MAX_VALUE;
@@ -76,7 +70,7 @@ public class CompositeDisparo implements ComponenteDisparo{
         return min == Integer.MAX_VALUE ? 0 : min;
 	}
 	
-	// Posici�n Y de referencia: el p�xel m�s a la derecha
+	// Posición Y de referencia: el píxel más arriba
 	@Override
 	public int getY() {
 		int min = Integer.MAX_VALUE;
@@ -94,5 +88,13 @@ public class CompositeDisparo implements ComponenteDisparo{
 			}
 		}
 		return celdas;
+	}
+	
+	@Override
+	public void notificarDisparoNuevo() {
+		// Cada píxel del composite notifica su creación
+		for (ComponenteDisparo c : components) {
+			c.notificarDisparoNuevo();
+		}
 	}
 }

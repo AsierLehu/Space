@@ -11,7 +11,7 @@ public abstract class Naves {
 	private static final int VELOCIDAD_DEFAULT = 1;
 	
 	protected CompositeNave nave;
-	protected Disparo disparo;
+	protected ArrayList<Disparo> disparos;
 	private int indiceEstrategia = 0;
 
 	// Constructor con velocidad por defecto - no está implementado que influya en el movimiento del enemigo
@@ -59,7 +59,7 @@ public abstract class Naves {
 	
 	// Origen Y del disparo
 	protected int origenDisparoY() {
-		return y-1;
+		return y-3;
 	}
 	
 	/** Inicializa el Composite y el disparo */
@@ -68,25 +68,33 @@ public abstract class Naves {
 		construir();
 		this.x = nave.getRefX();
 		this.y = nave.getRefY();
-		ArrayList<StrategyDisparo> estrategias = getEstrategiasPermitidas();
-		this.disparo = new Disparo(origenDisparoX(), origenDisparoY(), estrategias.get(0));
+		this.disparos = new ArrayList<>();
 	}
 	
 	/**
-	 * Intenta disparar con la estrategia activa. Devuelve false si no hay munición.
+	 * Crea y añade un nuevo disparo a la lista de disparos activos.
 	 * 
 	 * Flujo:
-	 * 1. Llama a {@link Disparo#activar(int, int)} para activar el disparo
-	 * 2. Disparo comprueba la estrategia activa (rombo, flecha, pixel)
-	 * 3. Si hay munición, crea el {@link ComponenteDisparo} (CompositeDisparo o PixelDisparo)
+	 * 1. Obtiene la estrategia activa
+	 * 2. Si hay munición, crea un nuevo Disparo
+	 * 3. Lo activa y lo añade a la lista de disparos
 	 * 4. ComponenteDisparo notifica a {@link Espacio} mediante {@link ComponenteDisparo#notificarDisparoNuevo()}
 	 * 5. Espacio actualiza el juego en el game loop ({@link Espacio#actualizarDisparo()})
 	 */
 	public boolean disparar() {
-		if (disparo == null) {
+		ArrayList<StrategyDisparo> estrategias = getEstrategiasPermitidas();
+		if (estrategias == null || estrategias.isEmpty()) {
 			return false;
 		}
-		return disparo.activar(origenDisparoX(), origenDisparoY());
+		StrategyDisparo estrategiaActual = estrategias.get(indiceEstrategia);
+		if (estrategiaActual.tieneMunicion()) {
+			Disparo nuevoDisparo = new Disparo(origenDisparoX(), origenDisparoY(), estrategiaActual);
+			if (nuevoDisparo.activar(origenDisparoX(), origenDisparoY())) {
+				disparos.add(nuevoDisparo);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/** Cambia el tipo de disparo permitida para esta nave */
@@ -101,11 +109,14 @@ public abstract class Naves {
 			intentos++;
 		} while (!estrategias.get(indiceEstrategia).tieneMunicion() 
 				&& intentos < estrategias.size());
-		disparo.setEstrategia(estrategias.get(indiceEstrategia));
 	}
 	
-	public Disparo getDisparo() {
-		return disparo;
+	public ArrayList<Disparo> getDisparos() {
+		return disparos;
+	}
+	
+	public CompositeNave getCompositeNave() {
+		return nave;
 	}
 
 	/**

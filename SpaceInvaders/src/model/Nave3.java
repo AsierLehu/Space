@@ -29,7 +29,7 @@ public class Nave3 extends Naves {
 
 	@Override
 	protected int origenDisparoY() {
-		return y - 1;
+		return y - 3;
 	}
 
 	@Override

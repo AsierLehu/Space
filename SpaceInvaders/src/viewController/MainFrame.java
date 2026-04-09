@@ -81,36 +81,44 @@ public class MainFrame extends JFrame implements Observer {
     	
     	switch (tipo) {
     		case 0: // jugador se mueve - [tipo, oldX, oldY, newX, newY]
-    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar posición anterior
-    			celdas[datos[3]][datos[4]].setBackground(COLOR_JUGADOR); // pintar nueva posición
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_JUGADOR);
     			break;
         
     		case 1: // disparo nuevo - [tipo, newX, newY]
-    			celdas[datos[1]][datos[2]].setBackground(COLOR_DISPARO);
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_DISPARO);
     			break;
     			
     		case 2: // disparo se mueve - [tipo, oldX, oldY, newX, newY]
-    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar posición anterior
-    			celdas[datos[3]][datos[4]].setBackground(COLOR_DISPARO); // pintar nueva posición
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_DISPARO);
     			break;
     			
     		case 3: // disparo salio del tablero - [tipo, oldX, oldY]
-    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar disparo
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
     			break;
     		
     		case 4: // enemigo baja - [tipo, oldX, oldY, newX, newY]
-    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar posición anterior
-    			celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO); // pintar nueva posición
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO);
     			break;
     		
     		case 5: // colision - [tipo, disparoX, disparoY, enemigoX, enemigoY, ]
-    			celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO); // borrar disparo
-    			celdas[datos[3]][datos[4]].setBackground(COLOR_FONDO); // borrar enemigo
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_FONDO);
     			break;
     			
     		case 6: // inicialización del juego - [tipo, jugadorX, jugadorY, enemigoX, enemigoY]
-    			celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR); // pintar jugador
-    			celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO); // pintar enemigo
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR);
+    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO);
+    			break;
+    		
+    		case 13: // inicialización de nave - [tipo, x, y]
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR);
+    			break;
+    		
+    		case 14: // inicialización de enemigo - [tipo, x, y]
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_ENEMIGO);
     			break;
     			
     		case 7: //mostrarMensajeFin("GAME OVER",   Color.RED);   break;
@@ -119,7 +127,19 @@ public class MainFrame extends JFrame implements Observer {
     		case 8: //mostrarMensajeFin("HAS GANADO!", Color.GREEN); break;
             mostrarGameWon();
                 break;
+    		
+    		case 10: // borrar celda de jugador - [tipo, x, y]
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			break;
+    		
+    		case 11: // pintar celda de jugador - [tipo, x, y]
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR);
+    			break;
     	}
+    }
+    
+    private boolean esValido(int x, int y) {
+    	return x >= 0 && x < 100 && y >= 0 && y < 60;
     }
     
     private class Controller implements KeyListener {
@@ -133,7 +153,7 @@ public class MainFrame extends JFrame implements Observer {
                 case KeyEvent.VK_UP:    JugadorBueno.getJugadorBueno().mover( 0, -1); break;
                 case KeyEvent.VK_DOWN:  JugadorBueno.getJugadorBueno().mover( 0,  1); break;
                 case KeyEvent.VK_SPACE: JugadorBueno.getJugadorBueno().disparar();           break;
-                case KeyEvent.VK_P:     JugadorBueno.getJugadorBueno().cambiarTipoDisparo(); break;
+                case KeyEvent.VK_M:     JugadorBueno.getJugadorBueno().cambiarTipoDisparo(); break;
             }
         }
 

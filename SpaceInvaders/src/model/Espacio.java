@@ -121,23 +121,29 @@ public class Espacio extends Observable {
     public void actualizarDisparo() {
         if (naveJugador() == null) return;
 
-        Disparo d = naveJugador().getDisparo();
-        if (!d.isActivo()) return;
-        int oldX = d.getX();
-        int oldY = d.getY();
-        d.subir();
+        ArrayList<Disparo> disparos = naveJugador().getDisparos();
+        ArrayList<Disparo> disparosParaMantener = new ArrayList<>();
 
-        if (!d.isActivo()) {
-            notificarDisparoFueraDeTablero(oldX, oldY);
-        } else {
-            Enemigo golpeado = FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
-            if (golpeado != null) {
-                notificarColision(oldX, oldY, golpeado);
-                if (isGameWon()) {
-                    notificarVictoria();
+        for (Disparo d : disparos) {
+            int oldX = d.getX();
+            int oldY = d.getY();
+            d.subir();
+
+            if (!d.isActivo()) {
+                notificarDisparoFueraDeTablero(oldX, oldY);
+            } else {
+                Enemigo golpeado = FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
+                if (golpeado != null) {
+                    notificarColision(oldX, oldY, golpeado);
+                    if (isGameWon()) {
+                        notificarVictoria();
+                    }
+                } else {
+                    disparosParaMantener.add(d);
                 }
             }
         }
+        naveJugador().getDisparos().retainAll(disparosParaMantener);
     }
 
     // ─── Actualización de enemigos ────────────────────────────────────────────
@@ -145,15 +151,17 @@ public class Espacio extends Observable {
     // Llamado cada 200 ms: baja los enemigos 1 píxel
     public void actualizarEnemigos() {
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
-        Disparo d = naveJugador().getDisparo();
+        ArrayList<Disparo> disparos = naveJugador().getDisparos();
 
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
                 int oldX = e.getX();
                 int oldY = e.getY();
                 e.mover(0, 1);
-                if (d != null && d.isActivo()) {
-                    FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
+                for (Disparo d : disparos) {
+                    if (d.isActivo()) {
+                        FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
+                    }
                 }
                 notificarMovimientoEnemigo(oldX, oldY, e);
             }
@@ -174,15 +182,36 @@ public class Espacio extends Observable {
     private void notificarInicializacion() {
         Naves n = naveJugador();
         if (n == null) return;
+        
+        // Pintar la nave del jugador usando los componentes directamente
+        CompositeNave naveComposite = n.getCompositeNave();
+        if (naveComposite != null) {
+            for (ComponenteNave c : naveComposite.getComponents()) {
+                setChanged();
+                notifyObservers(new int[] {13, c.getRefX(), c.getRefY()});
+            }
+        }
+        
+        // Pintar los enemigos
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
-        int[][] celdasJ = n.celdasOcupadas();
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
-                for (int[] c : celdasJ) {
-                    setChanged();
-                    notifyObservers(new int[] {6, c[0], c[1], e.getX(), e.getY()});
-                }
+                setChanged();
+                notifyObservers(new int[] {14, e.getX(), e.getY()});
             }
+        }
+    }
+
+    public void notificarMovimientoJugadorCompleto(int[] oldX, int[] oldY, java.util.List<ComponenteNave> componentes) {
+        // Primero borra todas las celdas antiguas
+        for (int i = 0; i < oldX.length; i++) {
+            setChanged();
+            notifyObservers(new int[] {10, oldX[i], oldY[i]});
+        }
+        // Luego pinta todas las celdas nuevas
+        for (ComponenteNave c : componentes) {
+            setChanged();
+            notifyObservers(new int[] {11, c.getRefX(), c.getRefY()});
         }
     }
 

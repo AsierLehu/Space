@@ -43,17 +43,17 @@ public class Disparo {
 		switch (tipo) {
 		case "flecha": {
 			CompositeDisparo comp = new CompositeDisparo();
-			comp.addComponent(new PixelDisparo(x, y));
-			comp.addComponent(new PixelDisparo(x-1, y+1));
-			comp.addComponent(new PixelDisparo(x+1, y+1));
+			comp.addComponent(new PixelDisparo(x, y));       // punta arriba
+			comp.addComponent(new PixelDisparo(x-1, y+1));  // ala izq abajo
+			comp.addComponent(new PixelDisparo(x+1, y+1));  // ala der abajo
 			return comp;
 		}
 		case "rombo": {
 			CompositeDisparo comp = new CompositeDisparo();
-			comp.addComponent(new PixelDisparo(x, y));
-			comp.addComponent(new PixelDisparo(x-1, y+1));
-			comp.addComponent(new PixelDisparo(x+1, y+1));
-			comp.addComponent(new PixelDisparo(x, y+2));
+			comp.addComponent(new PixelDisparo(x, y));       // punta arriba
+			comp.addComponent(new PixelDisparo(x-1, y+1));  // ala izq
+			comp.addComponent(new PixelDisparo(x+1, y+1));  // ala der
+			comp.addComponent(new PixelDisparo(x, y+2));    // punta abajo
 			return comp;
 		}
 		default: // p�xel
@@ -91,7 +91,7 @@ public class Disparo {
 	 * @return true si el disparo fue activado exitosamente
 	 */
 	public boolean activar(int origenX, int origenY) {
-		if (!activo && estrategia.tieneMunicion()) {
+		if (estrategia.tieneMunicion()) {
 			estrategia.gastar();
 			cuerpo = construirCuerpo(origenX, origenY, estrategia.getTipo());
 			this.activo = true;

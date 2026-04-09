@@ -31,7 +31,7 @@ public class PixelDisparo implements ComponenteDisparo{
 			if (y < 0) {
 				activo = false;
 			}
-			// Notificar al Espacio
+			// Notificar siempre el movimiento (incluso si sale del tablero)
 			notificarMovimiento(x, oldY, x, y);
 		}
 	}
@@ -55,6 +55,5 @@ public class PixelDisparo implements ComponenteDisparo{
 	public int getY() {
 		return y;
 	}
-	
 	
 }

@@ -41,12 +41,12 @@ public class Nave1 extends Naves {
 
 	@Override
 	protected int origenDisparoX() {
-		return x + 1;
+		return x + 2;
 	}
 
 	@Override
 	protected int origenDisparoY() {
-		return y - 1;
+		return y - 3;
 	}
 
 	@Override
