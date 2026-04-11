@@ -17,7 +17,7 @@ public class StartFrame extends JFrame implements Observer {
 
     private JLabel etiquetaNave;
 
-    /** Selección en pantalla de inicio; solo se copia a {@link JugadorBueno} al pulsar SPACE. */
+    /** Selección en pantalla de inicio; solo se copia a JugadorBueno al pulsar SPACE. */
     private String tipoNavePendiente = "Nave1";
 
 	/**

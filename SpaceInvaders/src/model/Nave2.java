@@ -15,14 +15,14 @@ public class Nave2 extends Naves {
 	public void construir() {
 		int bx = x;
 		int by = y;
-		anadirComponenteNave(new PixelNave(bx, by));
-		anadirComponenteNave(new PixelNave(bx + 2, by));
-		anadirComponenteNave(new PixelNave(bx, by + 1));
-		anadirComponenteNave(new PixelNave(bx + 1, by + 1));
-		anadirComponenteNave(new PixelNave(bx + 2, by + 1));
-		anadirComponenteNave(new PixelNave(bx, by + 2));
-		anadirComponenteNave(new PixelNave(bx + 1, by + 2));
-		anadirComponenteNave(new PixelNave(bx + 2, by + 2));
+		anadirComponente(new Pixel(bx, by));
+		anadirComponente(new Pixel(bx + 2, by));
+		anadirComponente(new Pixel(bx, by + 1));
+		anadirComponente(new Pixel(bx + 1, by + 1));
+		anadirComponente(new Pixel(bx + 2, by + 1));
+		anadirComponente(new Pixel(bx, by + 2));
+		anadirComponente(new Pixel(bx + 1, by + 2));
+		anadirComponente(new Pixel(bx + 2, by + 2));
 	}
 
 	@Override

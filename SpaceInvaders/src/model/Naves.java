@@ -8,8 +8,8 @@ public abstract class Naves {
 	protected int y;
 	protected int velocidad;
 	protected boolean vivo;
-	
-	protected ComponenteNave nave;
+
+	protected Component nave;
 	protected ArrayList<Disparo> disparos;
 	private int indiceEstrategia = 0;
 
@@ -23,64 +23,47 @@ public abstract class Naves {
 	public int getX() {
 		return x;
 	}
-	
+
 	public int getY() {
 		return y;
 	}
-	
+
 	public boolean isVivo() {
 		return vivo;
 	}
-	
+
 	public void setVivo(boolean b) {
 		this.vivo = b;
 	}
 
-	/** Inicializa la estructura interna de la nave (p. ej. componentes del patrón Composite). */
 	public abstract void construir();
-	
-	/** Define que estrategias de disparo puede usar esta nave. Enemigo devuelve null. */
+
 	public abstract ArrayList<StrategyDisparo> getEstrategiasPermitidas();
-	
-	/** Celdas del tablero que ocupa la nave. Las naves devolveran sus p�xeles del composite, el enemigo tiene forma fija de momento. */
+
 	public abstract int[][] celdasOcupadas();
-	
-	// Origen X del disparo
+
 	protected int origenDisparoX() {
 		return x;
 	}
-	
-	// Origen Y del disparo
+
 	protected int origenDisparoY() {
-		return y-3;
+		return y - 3;
 	}
-	
-	/** Inicializa el Composite y el disparo */
+
 	protected void inicializarNaveJugador() {
-		this.nave = new CompositeNave();
+		this.nave = new Composite();
 		construir();
 		this.x = nave.getRefX();
 		this.y = nave.getRefY();
 		this.disparos = new ArrayList<>();
 	}
 
-
-	protected void anadirComponenteNave(ComponenteNave componente) {
-		if (nave instanceof CompositeNave raiz) {
+	protected void anadirComponente(Component componente) {
+		if (nave instanceof Composite raiz) {
 			raiz.addComponent(componente);
 		}
 	}
-	
-	/**
-	 * Crea y añade un nuevo disparo a la lista de disparos activos.
-	 * 
-	 * Flujo:
-	 * 1. Obtiene la estrategia activa
-	 * 2. Si hay munición, crea un nuevo Disparo
-	 * 3. Lo activa y lo añade a la lista de disparos
-	 * 4. ComponenteDisparo notifica a {@link Espacio} mediante {@link ComponenteDisparo#notificarDisparoNuevo()}
-	 * 5. Espacio actualiza el juego en el game loop ({@link Espacio#actualizarDisparo()})
-	 */
+
 	public boolean disparar() {
 		ArrayList<StrategyDisparo> estrategias = getEstrategiasPermitidas();
 		if (estrategias == null || estrategias.isEmpty()) {
@@ -96,8 +79,7 @@ public abstract class Naves {
 		}
 		return false;
 	}
-	
-	/** Cambia el tipo de disparo permitida para esta nave */
+
 	public void cambiarTipoDisparo() {
 		ArrayList<StrategyDisparo> estrategias = getEstrategiasPermitidas();
 		if (estrategias == null) {
@@ -107,22 +89,18 @@ public abstract class Naves {
 		do {
 			indiceEstrategia = (indiceEstrategia + 1) % estrategias.size();
 			intentos++;
-		} while (!estrategias.get(indiceEstrategia).tieneMunicion() 
+		} while (!estrategias.get(indiceEstrategia).tieneMunicion()
 				&& intentos < estrategias.size());
 	}
-	
+
 	public ArrayList<Disparo> getDisparos() {
 		return disparos;
 	}
-	
-	public ComponenteNave getComponenteNave() {
+
+	public Component getComponente() {
 		return nave;
 	}
 
-	/**
-	 * Si hay {@link #nave}, delega el movimiento en el componente y sincroniza {@code x}/{@code y};
-	 * si no, desplaza solo las coordenadas escalares.
-	 */
 	public void mover(int dx, int dy) {
 		int edx = dx * velocidad;
 		int edy = dy * velocidad;

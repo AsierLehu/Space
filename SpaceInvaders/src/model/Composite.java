@@ -1,0 +1,131 @@
+package model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Compuesto del patrón Composite: agrupa Component (normalmente Pixel).
+ * proyectil == false: raíz de nave; comprueba límites y notifica movimiento del jugador en bloque.
+ * proyectil == true: cuerpo de disparo compuesto.
+ */
+public class Composite implements Component {
+
+	private final List<Component> components = new ArrayList<>();
+	private final boolean proyectil;
+
+	public Composite() {
+		this(false);
+	}
+
+	public Composite(boolean proyectil) {
+		this.proyectil = proyectil;
+	}
+
+	public void addComponent(Component c) {
+		components.add(c);
+	}
+
+	public void removeComponent(Component c) {
+		components.remove(c);
+	}
+
+	public List<Component> getComponents() {
+		return components;
+	}
+
+	/**
+	 * Celdas ocupadas por píxeles activos (disparos); recursivo por si hubiera anidación.
+	 */
+	public List<int[]> celdasOcupadasActivas() {
+		List<int[]> celdas = new ArrayList<>();
+		for (Component c : components) {
+			if (c instanceof Composite comp) {
+				celdas.addAll(comp.celdasOcupadasActivas());
+			} else if (c.isActivo()) {
+				celdas.add(new int[] { c.getRefX(), c.getRefY() });
+			}
+		}
+		return celdas;
+	}
+
+	@Override
+	public void mover(int dx, int dy) {
+		if (proyectil) {
+			for (Component c : components) {
+				c.mover(dx, dy);
+			}
+			return;
+		}
+
+		for (Component c : components) {
+			int newX = c.getRefX() + dx;
+			int newY = c.getRefY() + dy;
+			if (newX < 0 || newX >= 100 || newY < 0 || newY >= 60) {
+				return;
+			}
+		}
+
+		int[] oldPositionsX = new int[components.size()];
+		int[] oldPositionsY = new int[components.size()];
+		for (int i = 0; i < components.size(); i++) {
+			oldPositionsX[i] = components.get(i).getRefX();
+			oldPositionsY[i] = components.get(i).getRefY();
+		}
+
+		for (Component c : components) {
+			c.mover(dx, dy);
+		}
+
+		Espacio espacio = Espacio.getEspacio();
+		espacio.notificarMovimientoJugadorCompleto(oldPositionsX, oldPositionsY, components);
+	}
+
+	@Override
+	public int getRefX() {
+		int min = Integer.MAX_VALUE;
+		for (Component c : components) {
+			min = Math.min(min, c.getRefX());
+		}
+		return min == Integer.MAX_VALUE ? 0 : min;
+	}
+
+	@Override
+	public int getRefY() {
+		int min = Integer.MAX_VALUE;
+		for (Component c : components) {
+			min = Math.min(min, c.getRefY());
+		}
+		return min == Integer.MAX_VALUE ? 0 : min;
+	}
+
+	@Override
+	public boolean isActivo() {
+		if (proyectil) {
+			for (Component c : components) {
+				if (c.isActivo()) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void setActivo(boolean b) {
+		if (proyectil) {
+			for (Component c : components) {
+				c.setActivo(b);
+			}
+		}
+	}
+
+	@Override
+	public void notificarDisparoNuevo() {
+		if (proyectil) {
+			for (Component c : components) {
+				c.notificarDisparoNuevo();
+			}
+		}
+	}
+}

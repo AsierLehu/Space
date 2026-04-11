@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Jugador (singleton) que utiliza {@link NaveFactory} para obtener instancias de naves.
+ * Jugador (singleton) que utiliza NaveFactory para obtener instancias de naves.
  */
 public class JugadorBueno {
 
@@ -25,7 +25,7 @@ public class JugadorBueno {
 		return tipoNaveElegido;
 	}
 
-	/** Uno de: {@code "Nave1"}, {@code "Nave2"}, {@code "Nave3"}. */
+	/** Uno de: "Nave1", "Nave2", "Nave3". */
 	public void setTipoNaveElegido(String tipo) {
 			this.tipoNaveElegido = tipo;
 	}
@@ -39,8 +39,8 @@ public class JugadorBueno {
 	}
 
 	/**
-	 * Crea la nave jugable para la partida vía {@link NaveFactory} (patrón Factory +
-	 * Singleton), usando {@link #tipoNaveElegido}, y la guarda en {@link #nave}.
+	 * Crea la nave jugable para la partida vía NaveFactory (Factory + Singleton),
+	 * usando tipoNaveElegido, y la guarda en nave.
 	 */
 	public boolean crearNaveParaPartida() {
 		
@@ -48,9 +48,7 @@ public class JugadorBueno {
 		return nave != null;
 	}
 
-	/**
-	 * Pide el movimiento a la nave almacenada en {@link #nave}.
-	 */
+	/** Pide el movimiento a la nave almacenada en nave. */
 	public void mover(int dx, int dy) {
 		Espacio espacio = Espacio.getEspacio();
 		if (nave != null && nave.isVivo() && !espacio.isGameOver() && !espacio.isGameWon()) {
@@ -60,10 +58,7 @@ public class JugadorBueno {
 	}
 	
 	/**
-	 * Disparo del jugador:
-	 * 1. Valida que el jugador pueda disparar
-	 * 2. Delega a la nave para que dispare
-	 * 3. La notificación es manejada por {@link ComponenteDisparo#notificarDisparoNuevo()}
+	 * Disparo del jugador: valida, delega en la nave; el proyectil notifica al crearse y al moverse.
 	 */
 	public void disparar() {
 		Espacio espacio = Espacio.getEspacio();

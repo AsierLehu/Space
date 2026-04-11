@@ -18,7 +18,7 @@ public class NaveFactory {
 
 	/**
 	 * Crea la nave jugable según el identificador. Punto único de instanciación
-	 * (patrón Factory); las clases concretas son {@link Nave1}, {@link Nave2}, {@link Nave3}.
+	 * (patrón Factory); las clases concretas son Nave1, Nave2, Nave3.
 	 */
 	public Naves generate(String pNave) {
 		int x = 50;

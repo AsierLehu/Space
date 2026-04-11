@@ -4,13 +4,12 @@ import java.util.ArrayList;
 
 /**
  * Nave en forma de T invertida (tetromino): 4 celdas según diseño,
- * construidas con {@link CompositeNave} y {@link PixelNave}.
  * <p>
- * Coordenadas relativas al ancla {@code (x,y)} (esquina superior izquierda del
+ * Coordenadas relativas al ancla (x,y) (esquina superior izquierda del
  * rectángulo que envuelve la figura, s = 1 celda):
  * <ul>
- *   <li>Fila superior: un píxel en {@code (x+1, y)}</li>
- *   <li>Fila inferior: tres píxel en {@code (x, y+1)}, {@code (x+1, y+1)}, {@code (x+2, y+1)}</li>
+ *   <li>Fila superior: un píxel en (x+1, y)</li>
+ *   <li>Fila inferior: tres píxel en (x, y+1), (x+1, y+1), (x+2, y+1)</li>
  * </ul>
  */
 public class Nave1 extends Naves {
@@ -27,16 +26,16 @@ public class Nave1 extends Naves {
 	public void construir() {
 		int bx = x;
 		int by = y;
-		anadirComponenteNave(new PixelNave(bx, by));
-		anadirComponenteNave(new PixelNave(bx + 2, by));
-		anadirComponenteNave(new PixelNave(bx, by + 1));
-		anadirComponenteNave(new PixelNave(bx + 1, by + 1));
-		anadirComponenteNave(new PixelNave(bx + 2, by + 1));
-		anadirComponenteNave(new PixelNave(bx - 1, by + 2));
-		anadirComponenteNave(new PixelNave(bx, by + 2));
-		anadirComponenteNave(new PixelNave(bx + 1, by + 2));
-		anadirComponenteNave(new PixelNave(bx + 2, by + 2));
-		anadirComponenteNave(new PixelNave(bx + 3, by + 2));
+		anadirComponente(new Pixel(bx, by));
+		anadirComponente(new Pixel(bx + 2, by));
+		anadirComponente(new Pixel(bx, by + 1));
+		anadirComponente(new Pixel(bx + 1, by + 1));
+		anadirComponente(new Pixel(bx + 2, by + 1));
+		anadirComponente(new Pixel(bx - 1, by + 2));
+		anadirComponente(new Pixel(bx, by + 2));
+		anadirComponente(new Pixel(bx + 1, by + 2));
+		anadirComponente(new Pixel(bx + 2, by + 2));
+		anadirComponente(new Pixel(bx + 3, by + 2));
 	}
 
 	@Override

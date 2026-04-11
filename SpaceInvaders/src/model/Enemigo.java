@@ -3,8 +3,8 @@ package model;
 import java.util.ArrayList;
 
 /**
- * Enemigo multipixel (Composite). Forma en rejilla 5×3 relativa al ancla {@code (x,y)}:
- * fila superior {@code (0,0)(1,0) · (3,0)(4,0)}, media {@code (1,1)(2,1)(3,1)}, inferior {@code (2,2)}.
+ * Enemigo multipixel (Composite). Forma en rejilla 5×3 relativa al ancla (x,y):
+ * fila superior (0,0)(1,0) · (3,0)(4,0), media (1,1)(2,1)(3,1), inferior (2,2).
  */
 public class Enemigo extends Naves {
 	
@@ -19,16 +19,16 @@ public class Enemigo extends Naves {
 		int bx = x;
 		int by = y;
 
-		anadirComponenteNave(new PixelNave(bx, by));
-		anadirComponenteNave(new PixelNave(bx + 1, by));
-		anadirComponenteNave(new PixelNave(bx + 3, by));
-		anadirComponenteNave(new PixelNave(bx + 4, by));
+		anadirComponente(new Pixel(bx, by));
+		anadirComponente(new Pixel(bx + 1, by));
+		anadirComponente(new Pixel(bx + 3, by));
+		anadirComponente(new Pixel(bx + 4, by));
 
-		anadirComponenteNave(new PixelNave(bx + 1, by + 1));
-		anadirComponenteNave(new PixelNave(bx + 2, by + 1));
-		anadirComponenteNave(new PixelNave(bx + 3, by + 1));
+		anadirComponente(new Pixel(bx + 1, by + 1));
+		anadirComponente(new Pixel(bx + 2, by + 1));
+		anadirComponente(new Pixel(bx + 3, by + 1));
 
-		anadirComponenteNave(new PixelNave(bx + 2, by + 2));
+		anadirComponente(new Pixel(bx + 2, by + 2));
 	}
 
 	@Override
