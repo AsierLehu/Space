@@ -3,20 +3,14 @@ package model;
 import java.util.ArrayList;
 
 /**
- * Enemigo Multipixel usando patrón Composite.
- * Forma: flecha de 3 píxeles hacia abajo
- * <p>
- * Coordenadas relativas al ancla (x,y):
- * <ul>
- *   <li>Píxel superior (punta):  (x+1, y)</li>
- *   <li>Píxeles inferiores (base):  (x, y+1), (x+1, y+1)</li>
- * </ul>
+ * Enemigo multipixel (Composite). Forma en rejilla 5×3 relativa al ancla {@code (x,y)}:
+ * fila superior {@code (0,0)(1,0) · (3,0)(4,0)}, media {@code (1,1)(2,1)(3,1)}, inferior {@code (2,2)}.
  */
 public class Enemigo extends Naves {
 	
 	//Posici�n aleatoria en la parte superior
-	public Enemigo(int x, int y) {
-		super(x, y);
+	public Enemigo(int x, int y, int velocidad) {
+		super(x, y, velocidad);
 		inicializarNaveJugador();
 	}
 
@@ -24,13 +18,17 @@ public class Enemigo extends Naves {
 	public void construir() {
 		int bx = x;
 		int by = y;
-		
-		// Píxel superior (punta de la flecha)
-		nave.addComponent(new PixelNave(bx + 1, by));
-		
-		// Píxeles inferiores (base de la flecha)
-		nave.addComponent(new PixelNave(bx, by + 1));
-		nave.addComponent(new PixelNave(bx + 1, by + 1));
+
+		anadirComponenteNave(new PixelNave(bx, by));
+		anadirComponenteNave(new PixelNave(bx + 1, by));
+		anadirComponenteNave(new PixelNave(bx + 3, by));
+		anadirComponenteNave(new PixelNave(bx + 4, by));
+
+		anadirComponenteNave(new PixelNave(bx + 1, by + 1));
+		anadirComponenteNave(new PixelNave(bx + 2, by + 1));
+		anadirComponenteNave(new PixelNave(bx + 3, by + 1));
+
+		anadirComponenteNave(new PixelNave(bx + 2, by + 2));
 	}
 
 	@Override
@@ -41,9 +39,14 @@ public class Enemigo extends Naves {
 	@Override
 	public int[][] celdasOcupadas() {
 		return new int[][] {
+			{ x, y },
 			{ x + 1, y },
-			{ x, y + 1 },
-			{ x + 1, y + 1 }
+			{ x + 3, y },
+			{ x + 4, y },
+			{ x + 1, y + 1 },
+			{ x + 2, y + 1 },
+			{ x + 3, y + 1 },
+			{ x + 2, y + 2 }
 		};
 	}
 

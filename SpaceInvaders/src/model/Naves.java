@@ -8,18 +8,11 @@ public abstract class Naves {
 	protected int y;
 	protected int velocidad;
 	protected boolean vivo;
-	private static final int VELOCIDAD_DEFAULT = 1;
 	
-	protected CompositeNave nave;
+	protected ComponenteNave nave;
 	protected ArrayList<Disparo> disparos;
 	private int indiceEstrategia = 0;
 
-	// Constructor con velocidad por defecto - no está implementado que influya en el movimiento del enemigo
-	public Naves(int x, int y) {
-		this(x, y, VELOCIDAD_DEFAULT);
-	}
-
-	// Constructor con velocidad personalizada
 	public Naves(int x, int y, int velocidad) {
 		this.x = x;
 		this.y = y;
@@ -70,6 +63,13 @@ public abstract class Naves {
 		this.y = nave.getRefY();
 		this.disparos = new ArrayList<>();
 	}
+
+
+	protected void anadirComponenteNave(ComponenteNave componente) {
+		if (nave instanceof CompositeNave raiz) {
+			raiz.addComponent(componente);
+		}
+	}
 	
 	/**
 	 * Crea y añade un nuevo disparo a la lista de disparos activos.
@@ -115,13 +115,13 @@ public abstract class Naves {
 		return disparos;
 	}
 	
-	public CompositeNave getCompositeNave() {
+	public ComponenteNave getComponenteNave() {
 		return nave;
 	}
 
 	/**
-	 * Si hay {@link #nave} (composite del jugador), mueve la figura y sincroniza la referencia;
-	 * si no (p. ej. {@link Enemigo}), desplaza solo las coordenadas.
+	 * Si hay {@link #nave}, delega el movimiento en el componente y sincroniza {@code x}/{@code y};
+	 * si no, desplaza solo las coordenadas escalares.
 	 */
 	public void mover(int dx, int dy) {
 		int edx = dx * velocidad;

@@ -7,8 +7,8 @@ public class Nave3 extends Naves {
 	private DisparoFlecha estrategiaFlecha = new DisparoFlecha();
 	private DisparoRombo estrategiaRombo = new DisparoRombo();
 	
-	public Nave3(int x, int y) {
-		super(x, y);
+	public Nave3(int x, int y, int velocidad) {
+		super(x, y, velocidad);
 		inicializarNaveJugador();
 	}
 
@@ -16,10 +16,10 @@ public class Nave3 extends Naves {
 	public void construir() {
 		int bx = x;
 		int by = y;
-		nave.addComponent(new PixelNave(bx + 1, by));
-		nave.addComponent(new PixelNave(bx, by + 1));
-		nave.addComponent(new PixelNave(bx + 1, by + 1));
-		nave.addComponent(new PixelNave(bx + 2, by + 1));
+		anadirComponenteNave(new PixelNave(bx + 1, by));
+		anadirComponenteNave(new PixelNave(bx, by + 1));
+		anadirComponenteNave(new PixelNave(bx + 1, by + 1));
+		anadirComponenteNave(new PixelNave(bx + 2, by + 1));
 	}
 
 	@Override

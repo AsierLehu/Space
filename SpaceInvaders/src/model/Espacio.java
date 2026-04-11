@@ -47,7 +47,7 @@ public class Espacio extends Observable {
         FlotaEnemigos.getFlotaEnemigos().inicializar(anchura);
     }
 
-    private Naves naveJugador() {
+    private Naves getNaveJugador() {
         return JugadorBueno.getJugadorBueno().getNave();
     }
 
@@ -59,7 +59,7 @@ public class Espacio extends Observable {
 
     // Derrota: jugador muerto, algún enemigo llegó al límite inferior, o colisión jugador-enemigo
     public boolean isGameOver() {
-        Naves j = naveJugador();
+        Naves j = getNaveJugador();
         if (j == null || !j.isVivo()) return true;
         if (FlotaEnemigos.getFlotaEnemigos().algunoLlegoAbajo(altura)) return true;
         return hayColisionJugadorEnemigo();
@@ -67,24 +67,36 @@ public class Espacio extends Observable {
     
     // Verifica si el jugador ha colisionado directamente con algún enemigo
     private boolean hayColisionJugadorEnemigo() {
-        Naves j = naveJugador();
+        Naves j = getNaveJugador();
         if (j == null || !j.isVivo()) return false;
 
         // Obtener todos los píxeles de la nave del jugador
-        CompositeNave naveJugador = j.getCompositeNave();
-        if (naveJugador == null) return false;
+        ComponenteNave componenteNaveJugador = j.getComponenteNave();
+        if (componenteNaveJugador == null) return false;
         
         // Verificar colisión pixel a pixel
         for (Enemigo enemigo : FlotaEnemigos.getFlotaEnemigos().getEnemigos()) {
             if (!enemigo.isVivo()) continue;
             
             int[][] celdasEnemigo = enemigo.celdasOcupadas();
-            for (ComponenteNave c : naveJugador.getComponents()) {
-                int x = c.getRefX();
-                int y = c.getRefY();
+            if (componenteNaveJugador instanceof CompositeNave raiz) {
+                for (ComponenteNave c : raiz.getComponents()) {
+                    int x = c.getRefX();
+                    int y = c.getRefY();
+                    
+                    for (int[] celdaEnemigo : celdasEnemigo) {
+                        if (x == celdaEnemigo[0] && y == celdaEnemigo[1]) {
+                            return true; // Hay colisión
+                        }
+                    }
+                }
+            }
+            else {
+                int x_pixel = componenteNaveJugador.getRefX();
+                int y_pixel = componenteNaveJugador.getRefY();
                 
-                for (int[] celdaEnemigo : celdasEnemigo) {
-                    if (x == celdaEnemigo[0] && y == celdaEnemigo[1]) {
+                for (int[] celdaEnemigo_ : celdasEnemigo) {
+                    if (x_pixel == celdaEnemigo_[0] && y_pixel == celdaEnemigo_[1]) {
                         return true; // Hay colisión
                     }
                 }
@@ -112,7 +124,7 @@ public class Espacio extends Observable {
     }
 
     public void cambiarTipoDisparo() {
-        Naves j = naveJugador();
+        Naves j = getNaveJugador();
         if (j != null && j.isVivo()) {
             j.cambiarTipoDisparo();
         }
@@ -132,9 +144,9 @@ public class Espacio extends Observable {
      * 5. Si hay colisión con enemigo, notifica con {@link #notificarColision(int, int, Enemigo)}
      */
     public void actualizarDisparo() {
-        if (naveJugador() == null) return;
+        if (getNaveJugador() == null) return;
 
-        ArrayList<Disparo> disparos = naveJugador().getDisparos();
+        ArrayList<Disparo> disparos = getNaveJugador().getDisparos();
         ArrayList<Disparo> disparosParaMantener = new ArrayList<>();
 
         for (Disparo d : disparos) {
@@ -162,7 +174,7 @@ public class Espacio extends Observable {
                 }
             }
         }
-        naveJugador().getDisparos().retainAll(disparosParaMantener);
+        getNaveJugador().getDisparos().retainAll(disparosParaMantener);
     }
 
     // ─── Actualización de enemigos ────────────────────────────────────────────
@@ -175,11 +187,14 @@ public class Espacio extends Observable {
             if (e.isVivo()) {
                 // Guardar posiciones antiguas de todos los píxeles
                 ArrayList<int[]> oldPixels = new ArrayList<>();
-                CompositeNave naveEnemigo = e.getCompositeNave();
-                if (naveEnemigo != null) {
-                    for (ComponenteNave c : naveEnemigo.getComponents()) {
+                ComponenteNave naveEnemigo = e.getComponenteNave();
+                if (naveEnemigo instanceof CompositeNave raiz) {
+                    for (ComponenteNave c : raiz.getComponents()) {
                         oldPixels.add(new int[] { c.getRefX(), c.getRefY() });
                     }
+                }
+                else {
+                    oldPixels.add(new int[] { naveEnemigo.getRefX(), naveEnemigo.getRefY() });
                 }
                 
                 // Mover el enemigo
@@ -187,10 +202,13 @@ public class Espacio extends Observable {
                 
                 // Guardar posiciones nuevas
                 ArrayList<int[]> newPixels = new ArrayList<>();
-                if (naveEnemigo != null) {
-                    for (ComponenteNave c : naveEnemigo.getComponents()) {
+                if (naveEnemigo instanceof CompositeNave raiz) {
+                    for (ComponenteNave c : raiz.getComponents()) {
                         newPixels.add(new int[] { c.getRefX(), c.getRefY() });
                     }
+                }
+                else {
+                    newPixels.add(new int[] { naveEnemigo.getRefX(), naveEnemigo.getRefY() });
                 }
                 
                 // Notificar movimiento de todos los píxeles
@@ -211,13 +229,13 @@ public class Espacio extends Observable {
     }
 
     private void notificarInicializacion() {
-        Naves n = naveJugador();
+        Naves n = getNaveJugador();
         if (n == null) return;
         
         // Pintar la nave del jugador usando los componentes directamente
-        CompositeNave naveComposite = n.getCompositeNave();
-        if (naveComposite != null) {
-            for (ComponenteNave c : naveComposite.getComponents()) {
+        ComponenteNave naveComposite = n.getComponenteNave();
+        if (naveComposite instanceof CompositeNave raiz) {
+            for (ComponenteNave c : raiz.getComponents()) {
                 setChanged();
                 notifyObservers(new int[] {13, c.getRefX(), c.getRefY()});
             }
@@ -227,12 +245,16 @@ public class Espacio extends Observable {
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
-                CompositeNave naveEnemigo = e.getCompositeNave();
-                if (naveEnemigo != null) {
-                    for (ComponenteNave c : naveEnemigo.getComponents()) {
+                ComponenteNave componenteNaveEnemigo = e.getComponenteNave();
+                if (componenteNaveEnemigo instanceof CompositeNave raiz) {
+                    for (ComponenteNave c : raiz.getComponents()) {
                         setChanged();
                         notifyObservers(new int[] {14, c.getRefX(), c.getRefY()});
                     }
+                }
+                else {
+                    setChanged();
+                    notifyObservers(new int[] {14, componenteNaveEnemigo.getRefX(), componenteNaveEnemigo.getRefY()});
                 }
             }
         }

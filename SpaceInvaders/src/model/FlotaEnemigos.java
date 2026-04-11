@@ -39,15 +39,21 @@ public class FlotaEnemigos {
         // Crear 4-8 enemigos en posiciones aleatorias, sin que se toquen
         int intentos = 0;
         while (enemigos.size() < n_enemigos && intentos < 100) {
-            int ex = rand.nextInt(anchura-4);
+            // Enemigo ocupa columnas ex..ex+4; ex en [0, anchura-5] (mismo bound que con forma más estrecha)
+            int ex = rand.nextInt(anchura - 4);
             int ey = rand.nextInt(4);
-            
-            // Verificar que la posición X no está ocupada (para evitar que se toquen horizontalmente)
-            if (!xOcupadas.contains(ex) && !xOcupadas.contains(ex+1) && !xOcupadas.contains(ex+2)) {
-                enemigos.add(new Enemigo(ex, ey));
-                xOcupadas.add(ex);
-                xOcupadas.add(ex+1);
-                xOcupadas.add(ex+2);
+
+            boolean huecoLibre = true;
+            for (int dx = 0; dx <= 4 && huecoLibre; dx++) {
+                if (xOcupadas.contains(ex + dx)) {
+                    huecoLibre = false;
+                }
+            }
+            if (huecoLibre) {
+                enemigos.add(new Enemigo(ex, ey, 1));
+                for (int dx = 0; dx <= 4; dx++) {
+                    xOcupadas.add(ex + dx);
+                }
             }
             intentos++;
         }

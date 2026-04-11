@@ -23,16 +23,17 @@ public class NaveFactory {
 	public Naves generate(String pNave) {
 		int x = 50;
 		int y = 55;
+		int velocidad = 1;
 		if (pNave == null) {
-			return new Nave1(x, y);
+			return new Nave1(x, y, velocidad);
 		}
 		switch (pNave) {
 			case "Nave1":
-				return new Nave1(x, y);
+				return new Nave1(x, y, velocidad);
 			case "Nave2":
-				return new Nave2(x, y);
+				return new Nave2(x, y, velocidad);
 			case "Nave3":
-				return new Nave3(x, y);
+				return new Nave3(x, y, velocidad);
 			default:
 				return null;
 		}
