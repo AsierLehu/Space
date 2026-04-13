@@ -53,16 +53,14 @@ public class JugadorBueno {
 		if (nave != null && nave.isVivo() ) {
 			nave.mover(dx, dy);
 		}
-		Espacio.getEspacio().trasIntentoMoverJugador();
 	}
 	
 	/**
-	 * Disparo del jugador: valida, delega en la nave; el proyectil notifica al crearse y al moverse.
+	 * Disparo del jugador: dispara siempre que la nave exista y esté viva.
+	 * La notificación a observers se valida en Espacio.
 	 */
 	public void disparar() {
-		Espacio espacio = Espacio.getEspacio();
-		if (nave != null && nave.isVivo()
-				&& !espacio.isGameOver() && !espacio.isGameWon()) {
+		if (nave != null && nave.isVivo()) {
 			nave.disparar();
 		}
 	}

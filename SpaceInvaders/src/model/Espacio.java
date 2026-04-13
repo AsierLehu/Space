@@ -114,10 +114,6 @@ public class Espacio extends Observable {
 
     public void moverJugador(int dx, int dy) {
         JugadorBueno.getJugadorBueno().mover(dx, dy);
-    }
-
-    /** Tras un intento de movimiento del jugador: notifica derrota si corresponde. */
-    void trasIntentoMoverJugador() {
         if (isGameOver()) {
             notificarGameOver();
         }
@@ -290,14 +286,18 @@ public class Espacio extends Observable {
 
     /** Invocado cuando se crea un proyectil en pantalla. */
     public void notificarDisparoNuevo(int x, int y) {
-        setChanged();
-        notifyObservers(new int[] {1, x, y});
+        if (!isGameOver() && !isGameWon()) {
+            setChanged();
+            notifyObservers(new int[] {1, x, y});
+        }
     }
 
     /** Invocado cuando el proyectil se mueve. */
     public void notificarMovimientoDisparo(int oldX, int oldY, int newX, int newY) {
-        setChanged();
-        notifyObservers(new int[] {2, oldX, oldY, newX, newY});
+        if (!isGameOver() && !isGameWon()) {
+            setChanged();
+            notifyObservers(new int[] {2, oldX, oldY, newX, newY});
+        }
     }
 
     /** Cuando el disparo sale del tablero (durante actualizarDisparo). */
