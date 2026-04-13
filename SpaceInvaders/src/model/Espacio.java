@@ -269,14 +269,16 @@ public class Espacio extends Observable {
 
     public void notificarMovimientoJugadorCompleto(int[] oldX, int[] oldY, java.util.List<Component> componentes) {
         // Primero borra todas las celdas antiguas
+        if (!this.isGameOver() && !this.isGameWon()) {
         for (int i = 0; i < oldX.length; i++) {
-            setChanged();
-            notifyObservers(new int[] {10, oldX[i], oldY[i]});
-        }
-        // Luego pinta todas las celdas nuevas
-        for (Component c : componentes) {
-            setChanged();
-            notifyObservers(new int[] {11, c.getRefX(), c.getRefY()});
+                setChanged();
+                notifyObservers(new int[] {10, oldX[i], oldY[i]});
+            }
+            // Luego pinta todas las celdas nuevas
+            for (Component c : componentes) {
+                setChanged();
+                notifyObservers(new int[] {11, c.getRefX(), c.getRefY()});
+            }
         }
     }
 

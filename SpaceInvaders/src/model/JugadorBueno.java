@@ -50,11 +50,10 @@ public class JugadorBueno {
 
 	/** Pide el movimiento a la nave almacenada en nave. */
 	public void mover(int dx, int dy) {
-		Espacio espacio = Espacio.getEspacio();
-		if (nave != null && nave.isVivo() && !espacio.isGameOver() && !espacio.isGameWon()) {
+		if (nave != null && nave.isVivo() ) {
 			nave.mover(dx, dy);
 		}
-		espacio.trasIntentoMoverJugador();
+		Espacio.getEspacio().trasIntentoMoverJugador();
 	}
 	
 	/**
