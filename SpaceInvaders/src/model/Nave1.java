@@ -2,16 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
-/**
- * Nave en forma de T invertida (tetromino): 4 celdas según diseño,
- * <p>
- * Coordenadas relativas al ancla (x,y) (esquina superior izquierda del
- * rectángulo que envuelve la figura, s = 1 celda):
- * <ul>
- *   <li>Fila superior: un píxel en (x+1, y)</li>
- *   <li>Fila inferior: tres píxel en (x, y+1), (x+1, y+1), (x+2, y+1)</li>
- * </ul>
- */
+
 public class Nave1 extends Naves {
 
 	private DisparoPixel estrategiaPixel = new DisparoPixel();

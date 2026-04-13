@@ -9,7 +9,7 @@ public abstract class Naves {
 	protected int velocidad;
 	protected boolean vivo;
 
-	protected Component nave;
+	protected Component ComponenteNave;
 	protected ArrayList<Disparo> disparos;
 	private int indiceEstrategia = 0;
 
@@ -51,15 +51,15 @@ public abstract class Naves {
 	}
 
 	protected void inicializarNaveJugador() {
-		this.nave = new Composite();
+		this.ComponenteNave = new Composite();
 		construir();
-		this.x = nave.getRefX();
-		this.y = nave.getRefY();
+		this.x = ComponenteNave.getRefX();
+		this.y = ComponenteNave.getRefY();
 		this.disparos = new ArrayList<>();
 	}
 
 	protected void anadirComponente(Component componente) {
-		if (nave instanceof Composite raiz) {
+		if (ComponenteNave instanceof Composite raiz) {
 			raiz.addComponent(componente);
 		}
 	}
@@ -98,16 +98,16 @@ public abstract class Naves {
 	}
 
 	public Component getComponente() {
-		return nave;
+		return ComponenteNave;
 	}
 
 	public void mover(int dx, int dy) {
 		int edx = dx * velocidad;
 		int edy = dy * velocidad;
-		if (nave != null) {
-			nave.mover(edx, edy);
-			x = nave.getRefX();
-			y = nave.getRefY();
+		if (ComponenteNave != null) {
+			ComponenteNave.mover(edx, edy);
+			x = ComponenteNave.getRefX();
+			y = ComponenteNave.getRefY();
 		} else {
 			x += edx;
 			y += edy;
