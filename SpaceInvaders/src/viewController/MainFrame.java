@@ -17,6 +17,7 @@ public class MainFrame extends JFrame implements Observer {
     private static final Color COLOR_JUGADOR = Color.MAGENTA;
     private static final Color COLOR_ENEMIGO = Color.RED;
     private static final Color COLOR_DISPARO = Color.YELLOW;
+    private static final Color COLOR_GAME_OVER = new Color(255, 102, 102);
 
     private JLabel[][] celdas;
     private JLabel mensajeFin;
@@ -169,67 +170,63 @@ public class MainFrame extends JFrame implements Observer {
 
 private void mostrarGameOver() {
         // --- PALABRA: GAME ---
-
 // Letra G
-celdas[30][25].setBackground(Color.RED); celdas[31][25].setBackground(Color.RED); celdas[32][25].setBackground(Color.RED);
-celdas[30][26].setBackground(Color.RED);
-celdas[30][27].setBackground(Color.RED); celdas[32][27].setBackground(Color.RED);
-celdas[30][28].setBackground(Color.RED); celdas[32][28].setBackground(Color.RED);
-celdas[30][29].setBackground(Color.RED); celdas[31][29].setBackground(Color.RED); celdas[32][29].setBackground(Color.RED);
+celdas[30][25].setBackground(COLOR_GAME_OVER); celdas[31][25].setBackground(COLOR_GAME_OVER); celdas[32][25].setBackground(COLOR_GAME_OVER);
+celdas[30][26].setBackground(COLOR_GAME_OVER);
+celdas[30][27].setBackground(COLOR_GAME_OVER); celdas[32][27].setBackground(COLOR_GAME_OVER);
+celdas[30][28].setBackground(COLOR_GAME_OVER); celdas[32][28].setBackground(COLOR_GAME_OVER);
+celdas[30][29].setBackground(COLOR_GAME_OVER); celdas[31][29].setBackground(COLOR_GAME_OVER); celdas[32][29].setBackground(COLOR_GAME_OVER);
 
 // Letra A
-celdas[35][25].setBackground(Color.RED); celdas[36][25].setBackground(Color.RED); celdas[37][25].setBackground(Color.RED);
-celdas[35][26].setBackground(Color.RED); celdas[37][26].setBackground(Color.RED);
-celdas[35][27].setBackground(Color.RED); celdas[36][27].setBackground(Color.RED); celdas[37][27].setBackground(Color.RED);
-celdas[35][28].setBackground(Color.RED); celdas[37][28].setBackground(Color.RED);
-celdas[35][29].setBackground(Color.RED); celdas[37][29].setBackground(Color.RED);
+celdas[35][25].setBackground(COLOR_GAME_OVER); celdas[36][25].setBackground(COLOR_GAME_OVER); celdas[37][25].setBackground(COLOR_GAME_OVER);
+celdas[35][26].setBackground(COLOR_GAME_OVER); celdas[37][26].setBackground(COLOR_GAME_OVER);
+celdas[35][27].setBackground(COLOR_GAME_OVER); celdas[36][27].setBackground(COLOR_GAME_OVER); celdas[37][27].setBackground(COLOR_GAME_OVER);
+celdas[35][28].setBackground(COLOR_GAME_OVER); celdas[37][28].setBackground(COLOR_GAME_OVER);
+celdas[35][29].setBackground(COLOR_GAME_OVER); celdas[37][29].setBackground(COLOR_GAME_OVER);
 
 // Letra M
-celdas[40][25].setBackground(Color.RED); celdas[44][25].setBackground(Color.RED);
-celdas[40][26].setBackground(Color.RED); celdas[41][26].setBackground(Color.RED); celdas[43][26].setBackground(Color.RED); celdas[44][26].setBackground(Color.RED);
-celdas[40][27].setBackground(Color.RED); celdas[42][27].setBackground(Color.RED); celdas[44][27].setBackground(Color.RED);
-celdas[40][28].setBackground(Color.RED); celdas[44][28].setBackground(Color.RED);
-celdas[40][29].setBackground(Color.RED); celdas[44][29].setBackground(Color.RED);
+celdas[40][25].setBackground(COLOR_GAME_OVER); celdas[44][25].setBackground(COLOR_GAME_OVER);
+celdas[40][26].setBackground(COLOR_GAME_OVER); celdas[41][26].setBackground(COLOR_GAME_OVER); celdas[43][26].setBackground(COLOR_GAME_OVER); celdas[44][26].setBackground(COLOR_GAME_OVER);
+celdas[40][27].setBackground(COLOR_GAME_OVER); celdas[42][27].setBackground(COLOR_GAME_OVER); celdas[44][27].setBackground(COLOR_GAME_OVER);
+celdas[40][28].setBackground(COLOR_GAME_OVER); celdas[44][28].setBackground(COLOR_GAME_OVER);
+celdas[40][29].setBackground(COLOR_GAME_OVER); celdas[44][29].setBackground(COLOR_GAME_OVER);
 
 // Letra E
-celdas[47][25].setBackground(Color.RED); celdas[48][25].setBackground(Color.RED); celdas[49][25].setBackground(Color.RED);
-celdas[47][26].setBackground(Color.RED);
-celdas[47][27].setBackground(Color.RED); celdas[48][27].setBackground(Color.RED);
-celdas[47][28].setBackground(Color.RED);
-celdas[47][29].setBackground(Color.RED); celdas[48][29].setBackground(Color.RED); celdas[49][29].setBackground(Color.RED);
+celdas[47][25].setBackground(COLOR_GAME_OVER); celdas[48][25].setBackground(COLOR_GAME_OVER); celdas[49][25].setBackground(COLOR_GAME_OVER);
+celdas[47][26].setBackground(COLOR_GAME_OVER);
+celdas[47][27].setBackground(COLOR_GAME_OVER); celdas[48][27].setBackground(COLOR_GAME_OVER);
+celdas[47][28].setBackground(COLOR_GAME_OVER);
+celdas[47][29].setBackground(COLOR_GAME_OVER); celdas[48][29].setBackground(COLOR_GAME_OVER); celdas[49][29].setBackground(COLOR_GAME_OVER);
 
 // --- PALABRA: OVER ---
 
 // Letra O
-celdas[55][25].setBackground(Color.RED); celdas[56][25].setBackground(Color.RED); celdas[57][25].setBackground(Color.RED);
-celdas[55][26].setBackground(Color.RED); celdas[57][26].setBackground(Color.RED);
-celdas[55][27].setBackground(Color.RED); celdas[57][27].setBackground(Color.RED);
-celdas[55][28].setBackground(Color.RED); celdas[57][28].setBackground(Color.RED);
-celdas[55][29].setBackground(Color.RED); celdas[56][29].setBackground(Color.RED); celdas[57][29].setBackground(Color.RED);
+celdas[55][25].setBackground(COLOR_GAME_OVER); celdas[56][25].setBackground(COLOR_GAME_OVER); celdas[57][25].setBackground(COLOR_GAME_OVER);
+celdas[55][26].setBackground(COLOR_GAME_OVER); celdas[57][26].setBackground(COLOR_GAME_OVER);
+celdas[55][27].setBackground(COLOR_GAME_OVER); celdas[57][27].setBackground(COLOR_GAME_OVER);
+celdas[55][28].setBackground(COLOR_GAME_OVER); celdas[57][28].setBackground(COLOR_GAME_OVER);
+celdas[55][29].setBackground(COLOR_GAME_OVER); celdas[56][29].setBackground(COLOR_GAME_OVER); celdas[57][29].setBackground(COLOR_GAME_OVER);
 
 // Letra V
-celdas[60][25].setBackground(Color.RED); celdas[62][25].setBackground(Color.RED);
-celdas[60][26].setBackground(Color.RED); celdas[62][26].setBackground(Color.RED);
-celdas[60][27].setBackground(Color.RED); celdas[62][27].setBackground(Color.RED);
-celdas[60][28].setBackground(Color.RED); celdas[62][28].setBackground(Color.RED);
-celdas[61][29].setBackground(Color.RED);
+celdas[60][25].setBackground(COLOR_GAME_OVER); celdas[62][25].setBackground(COLOR_GAME_OVER);
+celdas[60][26].setBackground(COLOR_GAME_OVER); celdas[62][26].setBackground(COLOR_GAME_OVER);
+celdas[60][27].setBackground(COLOR_GAME_OVER); celdas[62][27].setBackground(COLOR_GAME_OVER);
+celdas[60][28].setBackground(COLOR_GAME_OVER); celdas[62][28].setBackground(COLOR_GAME_OVER);
+celdas[61][29].setBackground(COLOR_GAME_OVER);
 
 // Letra E
-celdas[65][25].setBackground(Color.RED); celdas[66][25].setBackground(Color.RED); celdas[67][25].setBackground(Color.RED);
-celdas[65][26].setBackground(Color.RED);
-celdas[65][27].setBackground(Color.RED); celdas[66][27].setBackground(Color.RED);
-celdas[65][28].setBackground(Color.RED);
-celdas[65][29].setBackground(Color.RED); celdas[66][29].setBackground(Color.RED); celdas[67][29].setBackground(Color.RED);
+celdas[65][25].setBackground(COLOR_GAME_OVER); celdas[66][25].setBackground(COLOR_GAME_OVER); celdas[67][25].setBackground(COLOR_GAME_OVER);
+celdas[65][26].setBackground(COLOR_GAME_OVER);
+celdas[65][27].setBackground(COLOR_GAME_OVER); celdas[66][27].setBackground(COLOR_GAME_OVER);
+celdas[65][28].setBackground(COLOR_GAME_OVER);
+celdas[65][29].setBackground(COLOR_GAME_OVER); celdas[66][29].setBackground(COLOR_GAME_OVER); celdas[67][29].setBackground(COLOR_GAME_OVER);
 
 // Letra R
-celdas[70][25].setBackground(Color.RED); celdas[71][25].setBackground(Color.RED);
-celdas[70][26].setBackground(Color.RED); celdas[72][26].setBackground(Color.RED);
-celdas[70][27].setBackground(Color.RED); celdas[71][27].setBackground(Color.RED);
-celdas[70][28].setBackground(Color.RED); celdas[72][28].setBackground(Color.RED);
-celdas[70][29].setBackground(Color.RED); celdas[72][29].setBackground(Color.RED);
-        
-        
-        
+celdas[70][25].setBackground(COLOR_GAME_OVER); celdas[71][25].setBackground(COLOR_GAME_OVER);
+celdas[70][26].setBackground(COLOR_GAME_OVER); celdas[72][26].setBackground(COLOR_GAME_OVER);
+celdas[70][27].setBackground(COLOR_GAME_OVER); celdas[71][27].setBackground(COLOR_GAME_OVER);
+celdas[70][28].setBackground(COLOR_GAME_OVER); celdas[72][28].setBackground(COLOR_GAME_OVER);
+celdas[70][29].setBackground(COLOR_GAME_OVER); celdas[72][29].setBackground(COLOR_GAME_OVER);
         }
 private void mostrarGameWon() {
     // --- PALABRA: GAME ---
