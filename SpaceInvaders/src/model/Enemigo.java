@@ -42,5 +42,9 @@ public class Enemigo extends Naves {
 			{ x + 2, y + 2 }
 		};
 	}
+	@Override
+	public int getTipoNave() {
+		return 0;
+	}
 
 }

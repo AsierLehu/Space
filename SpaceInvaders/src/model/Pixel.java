@@ -23,7 +23,7 @@ public class Pixel implements Component {
 	}
 
 	@Override
-	public void mover(int dx, int dy) {
+	public void mover(int dx, int dy, int tipoNave) {
 		if (proyectil) {
 			if (!activo) {
 				return;

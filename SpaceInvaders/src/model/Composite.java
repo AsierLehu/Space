@@ -49,10 +49,10 @@ public class Composite implements Component {
 	}
 
 	@Override
-	public void mover(int dx, int dy) {
+	public void mover(int dx, int dy, int tipoNave) {
 		if (proyectil) {
 			for (Component c : components) {
-				c.mover(dx, dy);
+				c.mover(dx, dy, 0); // Disparos no tienen tipo de nave
 			}
 			return;
 		}
@@ -73,11 +73,11 @@ public class Composite implements Component {
 		}
 
 		for (Component c : components) {
-			c.mover(dx, dy);
+			c.mover(dx, dy, tipoNave); // Propaga el tipo de nave
 		}
 
 		Espacio espacio = Espacio.getEspacio();
-		espacio.notificarMovimientoJugadorCompleto(oldPositionsX, oldPositionsY, components);
+		espacio.notificarMovimientoJugadorCompleto(oldPositionsX, oldPositionsY, components, tipoNave);
 	}
 
 	@Override

@@ -68,6 +68,8 @@ public abstract class Naves {
 
 	public abstract int[][] celdasOcupadas();
 
+	public abstract int getTipoNave();
+
 	protected int origenDisparoX() {
 		return x;
 	}
@@ -118,11 +120,11 @@ public abstract class Naves {
 		return ComponenteNave;
 	}
 
-	public void mover(int dx, int dy) {
+	public void mover(int dx, int dy, int tipoNave) {
 		int edx = dx * velocidad;
 		int edy = dy * velocidad;
 		if (ComponenteNave != null) {
-			ComponenteNave.mover(edx, edy);
+			ComponenteNave.mover(edx, edy, tipoNave);
 			x = ComponenteNave.getRefX();
 			y = ComponenteNave.getRefY();
 		} else {

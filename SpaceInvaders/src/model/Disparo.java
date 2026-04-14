@@ -65,7 +65,7 @@ public class Disparo {
 	public void actualizarDisparos() {
 		for (int i = disparosActivos.size() - 1; i >= 0; i--) {
 			Component disparo = disparosActivos.get(i);
-			disparo.mover(0, -1);
+			disparo.mover(0, -1, 0);
 			if (!disparo.isActivo()) {
 				disparosActivos.remove(i);
 			}

@@ -6,7 +6,7 @@ package model;
  */
 public interface Component {
 
-	void mover(int dx, int dy);
+	void mover(int dx, int dy, int tipoNave);
 
 	int getRefX();
 

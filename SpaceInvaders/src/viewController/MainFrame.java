@@ -16,8 +16,13 @@ public class MainFrame extends JFrame implements Observer {
     private static final Color COLOR_FONDO   = new Color(20, 20, 20);
     private static final Color COLOR_JUGADOR = Color.MAGENTA;
     private static final Color COLOR_ENEMIGO = Color.RED;
-    private static final Color COLOR_DISPARO = Color.YELLOW;
+    private static final Color COLOR_DISPARO = Color.WHITE;
     private static final Color COLOR_GAME_OVER = new Color(255, 102, 102);
+    
+    // Colores específicos por tipo de nave
+    private static final Color COLOR_NAVE1_VERDE = Color.GREEN;
+    private static final Color COLOR_NAVE2_AZUL = Color.BLUE;
+    private static final Color COLOR_NAVE3_MORADO = Color.MAGENTA; // Morado para Nave3
 
     private JLabel[][] celdas;
     private JLabel mensajeFin;
@@ -137,8 +142,16 @@ public class MainFrame extends JFrame implements Observer {
     			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
     			break;
     		
-    		case 11: // pintar celda de jugador - [tipo, x, y]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR);
+    		case 15: // pintar nave verde (Nave1) - [tipo, x, y]
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_NAVE1_VERDE);
+    			break;
+    		
+    		case 16: // pintar nave azul (Nave2) - [tipo, x, y]
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_NAVE2_AZUL);
+    			break;
+    		
+    		case 17: // pintar nave morada (Nave3) - [tipo, x, y]
+    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_NAVE3_MORADO);
     			break;
     	}
     }

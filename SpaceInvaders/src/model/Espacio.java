@@ -155,7 +155,7 @@ public class Espacio extends Observable {
                 continue;
             }
 
-            d.mover(0, -1);
+            d.mover(0, -1, 0);
 
             if (!d.isActivo()) {
                 int[][] celdasDisparo = getCeldasOcupadas(d);
@@ -210,7 +210,7 @@ public class Espacio extends Observable {
                 }
                 
                 // Mover el enemigo
-                e.mover(0, 1);
+                e.mover(0, 1, 0);
                 
                 // Guardar posiciones nuevas
                 ArrayList<int[]> newPixels = new ArrayList<>();
@@ -240,16 +240,25 @@ public class Espacio extends Observable {
         notifyObservers(new int[] {9});
     }
 
-    private void notificarInicializacion() {
+    private void notificarInicializacion() { // FUTURO: esto se le debería llamar desde la inicializacion
         Naves n = getNaveJugador();
         if (n == null) return;
+        
+        // Obtener tipo de nave para usar el color correcto
+        int tipoMensaje = 15; // Por defecto
+        int tipoNave = n.getTipoNave();
+        switch (tipoNave) {
+            case 1: tipoMensaje = 15; break; // Verde (Nave1)
+            case 2: tipoMensaje = 16; break; // Azul (Nave2)
+            case 3: tipoMensaje = 17; break; // Morado (Nave3)
+        }
         
         // Pintar la nave del jugador usando los componentes directamente
         Component naveJugadorComp = n.getComponente();
         if (naveJugadorComp instanceof Composite raiz) {
             for (Component c : raiz.getComponents()) {
                 setChanged();
-                notifyObservers(new int[] {13, c.getRefX(), c.getRefY()});
+                notifyObservers(new int[] {tipoMensaje, c.getRefX(), c.getRefY()});
             }
         }
         
@@ -273,16 +282,30 @@ public class Espacio extends Observable {
     }
 
     public void notificarMovimientoJugadorCompleto(int[] oldX, int[] oldY, java.util.List<Component> componentes) {
+        // Método de compatibilidad - obtiene el tipo de nave consultando a JugadorBueno
+        Naves naveJugador = JugadorBueno.getJugadorBueno().getNave();
+        int tipoNave = (naveJugador != null) ? naveJugador.getTipoNave() : 0;
+        notificarMovimientoJugadorCompleto(oldX, oldY, componentes, tipoNave);
+    }
+    
+    public void notificarMovimientoJugadorCompleto(int[] oldX, int[] oldY, java.util.List<Component> componentes, int tipoNave) {
         // Primero borra todas las celdas antiguas
         if (!this.isGameOver() && !this.isGameWon()) {
-        for (int i = 0; i < oldX.length; i++) {
+            for (int i = 0; i < oldX.length; i++) {
                 setChanged();
                 notifyObservers(new int[] {10, oldX[i], oldY[i]});
             }
-            // Luego pinta todas las celdas nuevas
+            // Determinar tipo de mensaje según el tipo de nave recibido
+            int tipoMensaje = 15; // Por defecto verde (Nave1) para casos inesperados
+            switch (tipoNave) {
+                case 1: tipoMensaje = 15; break; // Verde (Nave1)
+                case 2: tipoMensaje = 16; break; // Azul (Nave2)
+                case 3: tipoMensaje = 17; break; // Morado (Nave3)
+            }
+            // Luego pinta todas las celdas nuevas con el color correcto
             for (Component c : componentes) {
                 setChanged();
-                notifyObservers(new int[] {11, c.getRefX(), c.getRefY()});
+                notifyObservers(new int[] {tipoMensaje, c.getRefX(), c.getRefY()});
             }
         }
     }

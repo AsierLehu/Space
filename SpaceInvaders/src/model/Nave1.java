@@ -56,4 +56,9 @@ public class Nave1 extends Naves {
 		};
 	}
 
+	@Override
+	public int getTipoNave() {
+		return 1; // Verde
+	}
+
 }

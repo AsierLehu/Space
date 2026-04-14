@@ -51,7 +51,7 @@ public class JugadorBueno {
 	/** Pide el movimiento a la nave almacenada en nave. */
 	public void mover(int dx, int dy) {
 		if (nave != null && nave.isVivo() ) {
-			nave.mover(dx, dy);
+			nave.mover(dx, dy, nave.getTipoNave());
 		}
 	}
 	
