@@ -112,12 +112,6 @@ public class Espacio extends Observable {
 
     // ─── Acciones del jugador ─────────────────────────────────────────────────
 
-    public void moverJugador(int dx, int dy) {
-        JugadorBueno.getJugadorBueno().mover(dx, dy);
-        if (isGameOver()) {
-            notificarGameOver();
-        }
-    }
 
     public void cambiarTipoDisparo() {
         Naves j = getNaveJugador();
