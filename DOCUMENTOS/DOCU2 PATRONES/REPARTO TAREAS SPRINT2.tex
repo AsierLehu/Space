@@ -1,0 +1,274 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+\geometry{margin=2.5cm}
+
+\definecolor{cabecera}{RGB}{30, 90, 160}
+
+\titleformat{\section}{\large\bfseries\color{cabecera}}{}{0em}{}[\titlerule]
+
+% --------------------------------------------------
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{Reparto de Tareas}}\\[0.4em]
+    {\large \textit{Space Invaders — Implementación de Patrones de Diseño}}\\[0.3em]
+    {\small \textit{Equipo: Cachopín}}\\[0.2em]
+    {\small Fecha: \today}
+\end{center}
+
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Miembros del equipo}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Miembro 1:} Unai Urrutia
+    \item \textbf{Miembro 2:} Ekain Ortega
+    \item \textbf{Miembro 3:} Eder Lorenzo
+    \item \textbf{Miembro 4:} Asier López
+\end{itemize}
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Planificación inicial}
+
+\textit{Tareas previstas para la implementación de patrones de diseño y su tiempo estimado:}
+
+\begin{enumerate}[leftmargin=2em]
+    \item Implementar patrón Factory para creación de naves — [X] horas
+    \item Implementar patrón Strategy para tipos de disparo — [X] horas
+    \item Implementar patrón Composite para estructura jerárquica de píxeles — [X] horas
+    \item Actualizar diagrama de clases UML — [X] horas
+    \item Crear 3 tipos de naves diferentes (Nave1, Nave2, Nave3) — [X] horas
+    \item Implementar naves multipixel con geometría variable — [X] horas
+    \item Implementar enemigos multipixel con estructura Composite — [X] horas
+    \item Implementar tipos de disparo (Pixel, Flecha, Rombo) — [X] horas
+    \item Documentar patrones Factory, Strategy y Composite — [X] horas
+\end{enumerate}
+
+\textbf{Tiempo total estimado:} [X] horas.
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Resumen de tareas realizadas}
+
+\textit{Tareas efectivamente completadas y su tiempo real:}
+
+\begin{enumerate}[leftmargin=2em]
+    \item Implementar patrón Factory para creación de naves — [X] horas
+    \item Implementar patrón Strategy para tipos de disparo — [X] horas
+    \item Implementar patrón Composite para estructura jerárquica de píxeles — [X] horas
+    \item Actualizar diagrama de clases UML — [X] horas
+    \item Crear 3 tipos de naves diferentes (Nave1, Nave2, Nave3) — [X] horas
+    \item Implementar naves multipixel con geometría variable — [X] horas
+    \item Implementar enemigos multipixel con estructura Composite — [X] horas
+    \item Implementar tipos de disparo (Pixel, Flecha, Rombo) — [X] horas
+    \item Documentar patrones Factory, Strategy y Composite — [X] horas
+\end{enumerate}
+
+\textbf{Tiempo total real:} [X] horas.
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Detalle de tareas}
+
+% ---- Tarea 1 ----
+\subsection*{Tarea 1 — Implementar patrón Factory para creación de naves}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Desarrollo de la clase \texttt{NaveFactory} como punto único de creación de naves jugables. Implementación del patrón Singleton para garantizar una única instancia. El método \texttt{generate(String)} recibe un identificador y retorna la nave correspondiente con parámetros predefinidos.
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 2 ----
+\subsection*{Tarea 2 — Implementar patrón Strategy para tipos de disparo}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Creación de la interfaz \texttt{StrategyDisparo} con métodos: \texttt{getTipo()}, \texttt{getMunicion()}, \texttt{gastar()}, \texttt{tieneMunicion()} y \texttt{crearDisparo()}. Implementación de tres estrategias concretas: \texttt{DisparoPixel} (munición infinita), \texttt{DisparoFlecha} (30 unidades) y \texttt{DisparoRombo} (20 unidades).
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 3 ----
+\subsection*{Tarea 3 — Implementar patrón Composite para estructura jerárquica de píxeles}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Desarrollo de la interfaz \texttt{Component} que define el contrato común. Implementación de \texttt{Pixel} como hoja del Composite y \texttt{Composite} como contenedor de componentes. Diferenciación entre píxeles de nave (proyectil=false) y píxeles de disparo (proyectil=true) con comportamientos distintos. Implementación de métodos de movimiento validado, notificación de eventos y gestión de ciclo de vida.
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 4 ----
+\subsection*{Tarea 4 — Actualizar diagrama de clases UML}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Elaboración del diagrama UML de clases que muestre las relaciones entre \texttt{NaveFactory}, \texttt{Naves} (clase abstracta), \texttt{Nave1}, \texttt{Nave2}, \texttt{Nave3}, \texttt{StrategyDisparo} y sus implementaciones, \texttt{Component}, \texttt{Pixel}, \texttt{Composite}, \texttt{Disparo}, \texttt{Espacio} y otros elementos del modelo. Se debe reflejar la jerarquía de herencia, las relaciones de composición y la implementación de interfaces.
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 5 ----
+\subsection*{Tarea 5 — Crear 3 tipos de naves diferentes (Nave1, Nave2, Nave3)}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Desarrollo de las clases \texttt{Nave1}, \texttt{Nave2} y \texttt{Nave3} que extienden \texttt{Naves}. Cada nave tiene una combinación diferente de estrategias de disparo permitidas: Nave1 (Pixel y Flecha), Nave2 (Pixel y Rombo), Nave3 (Pixel, Flecha y Rombo). Cada nave tiene geometría única y origen de disparo específico.
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 6 ----
+\subsection*{Tarea 6 — Implementar naves multipixel con geometría variable}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Implementación del método \texttt{construir()} en cada nave específica. Cada nave está compuesta por un \texttt{Composite} raíz que contiene múltiples \texttt{Pixel} en posiciones específicas formando formas geométricas distintas. Nave1 forma una T invertida, Nave2 un rectángulo, Nave3 una T normal. Implementación de métodos como \texttt{celdasOcupadas()} para retornar la geometría de cada nave.
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 7 ----
+\subsection*{Tarea 7 — Implementar enemigos multipixel con estructura Composite}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Desarrollo de la clase \texttt{Enemigo} usando el patrón Composite para crear enemigos compuestos por múltiples píxeles. Los enemigos tienen geometría multipixel similar a las naves. Implementación de métodos de movimiento, rotación y comportamiento táctico en flota. Integración con \texttt{FlotaEnemigos} para manejo coordinado de múltiples enemigos.
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 8 ----
+\subsection*{Tarea 8 — Implementar tipos de disparo (Pixel, Flecha, Rombo)}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Implementación del método \texttt{crearDisparo()} en cada estrategia concreta. DisparoPixel crea un Pixel simple (1 celda). DisparoFlecha crea un Composite con 3 píxeles en forma de V invertida. DisparoRombo crea un Composite con 5 píxeles en forma de rombo. Cada disparo es un \texttt{Component} que se comporta como proyectil (notifica movimiento, se desactiva al salir del tablero).
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 9 ----
+\subsection*{Tarea 9 — Documentar patrones Factory, Strategy y Composite}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Redacción de documentación completa en formato LaTeX describiendo la implementación de los tres patrones de diseño. Se incluye: descripción general de cada patrón, problema que resuelve, implementación en el proyecto, interfaces y clases concretas, diagramas de secuencia, flujos de ejecución, ventajas, y cómo trabajan juntos los patrones. Elaboración de diagramas conceptuales para ilustrar las relaciones entre componentes.
+    \item[\textbf{Tiempo estimado:}] [X] horas.
+    \item[\textbf{Tiempo real:}] [X] horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — [X] horas
+            \item Ekain Ortega — [X] horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — [X] horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% --------------------------------------------------
+\section{Notas y observaciones}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Desviaciones significativas:} [Explica si el tiempo real fue muy diferente del estimado y por qué]
+    \item \textbf{Problemas encontrados:} [Enumera los principales problemas y cómo se resolvieron]
+    \item \textbf{Lecciones aprendidas:} [Qué aprendió el equipo durante la implementación de patrones]
+    \item \textbf{Sugerencias para futuros proyectos:} [Mejoras propuestas sobre el uso de patrones]
+\end{itemize}
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Resumen estadístico}
+
+\begin{center}
+    \begin{tabular}{|l|r|r|}
+        \hline
+        \textbf{Miembro} & \textbf{Horas estimadas} & \textbf{Horas reales} \\
+        \hline
+        Unai Urrutia & [X] & [X] \\
+        \hline
+        Ekain Ortega & [X] & [X] \\
+        \hline
+        Eder Lorenzo & 0 & 0 \\
+        \hline
+        Asier López & [X] & [X] \\
+        \hline
+        \textbf{TOTAL} & \textbf{[X]} & \textbf{[X]} \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\end{document}
