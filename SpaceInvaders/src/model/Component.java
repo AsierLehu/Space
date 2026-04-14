@@ -16,21 +16,21 @@ public interface Component {
 
 	void setActivo(boolean b);
 
-	public void notificarMovimientoJugador(int oldX, int oldY, int newX, int newY) {
+	default void notificarMovimientoJugador(int oldX, int oldY, int newX, int newY) {
 		Espacio.getEspacio().notificarMovimientoJugador(oldX, oldY, newX, newY);
 	}
 
-	public void notificarMovimientoDisparo(int oldX, int oldY, int newX, int newY) {
+	default void notificarMovimientoDisparo(int oldX, int oldY, int newX, int newY) {
 		Espacio.getEspacio().notificarMovimientoDisparo(oldX, oldY, newX, newY);
 	}
 
-	public void notificarMuerteJugador() {
+	default void notificarMuerteJugador() {
 		Espacio.getEspacio().notificarMuerteJugador(new int[][] {
 			{ getRefX(), getRefY() }
 		});
 	}
 
 	/** Vacío por defecto; Pixel y Composite en modo proyectil lo sustituyen. */
-	public void notificarDisparoNuevo() {
+	default void notificarDisparoNuevo() {
 	}
 }
