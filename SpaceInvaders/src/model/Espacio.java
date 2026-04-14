@@ -140,13 +140,13 @@ public class Espacio extends Observable {
     public void actualizarDisparo() {
         if (getNaveJugador() == null) return;
 
-        ArrayList<Disparo> disparos = getNaveJugador().getDisparos();
-        ArrayList<Disparo> disparosParaMantener = new ArrayList<>();
+        ArrayList<Component> disparos = getNaveJugador().getDisparos();
+        ArrayList<Component> disparosParaMantener = new ArrayList<>();
 
-        for (Disparo d : disparos) {
+        for (Component d : disparos) {
             Enemigo golpeado = FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
             if (golpeado != null) {
-                int[][] celdasDisparoEnColision = d.celdasOcupadas();
+                int[][] celdasDisparoEnColision = getCeldasOcupadas(d);
                 d.setActivo(false);
                 notificarColision(celdasDisparoEnColision, golpeado);
                 if (isGameWon()) {
@@ -155,10 +155,10 @@ public class Espacio extends Observable {
                 continue;
             }
 
-            d.subir();
+            d.mover(0, -1);
 
             if (!d.isActivo()) {
-                int[][] celdasDisparo = d.celdasOcupadas();
+                int[][] celdasDisparo = getCeldasOcupadas(d);
                 for (int[] celda : celdasDisparo) {
                     setChanged();
                     notifyObservers(new int[] {3, celda[0], celda[1]});
@@ -166,7 +166,7 @@ public class Espacio extends Observable {
             } else {
                 golpeado = FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
                 if (golpeado != null) {
-                    int[][] celdasDisparoEnColision = d.celdasOcupadas();
+                    int[][] celdasDisparoEnColision = getCeldasOcupadas(d);
                     d.setActivo(false);
                     notificarColision(celdasDisparoEnColision, golpeado);
                     if (isGameWon()) {
@@ -178,6 +178,15 @@ public class Espacio extends Observable {
             }
         }
         getNaveJugador().getDisparos().retainAll(disparosParaMantener);
+    }
+
+    // Método auxiliar para obtener celdas ocupadas por un Component
+    private int[][] getCeldasOcupadas(Component disparo) {
+        if (disparo instanceof Composite comp) {
+            java.util.List<int[]> lista = comp.celdasOcupadasActivas();
+            return lista.toArray(new int[0][]);
+        }
+        return new int[][] { { disparo.getRefX(), disparo.getRefY() } };
     }
 
     // ─── Actualización de enemigos ────────────────────────────────────────────

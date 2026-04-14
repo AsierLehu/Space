@@ -96,6 +96,23 @@ public class FlotaEnemigos {
     // Comprueba colisión del disparo con la flota. Devuelve el enemigo golpeado o null
     public Enemigo comprobarColision(Disparo d) {
         int[][] celdasDisparo = d.celdasOcupadas();
+        return comprobarColisionConCeldas(celdasDisparo);
+    }
+
+    // Comprueba colisión de un Component (disparo individual) con la flota
+    public Enemigo comprobarColision(Component disparo) {
+        int[][] celdasDisparo;
+        if (disparo instanceof Composite comp) {
+            java.util.List<int[]> lista = comp.celdasOcupadasActivas();
+            celdasDisparo = lista.toArray(new int[0][]);
+        } else {
+            celdasDisparo = new int[][] { { disparo.getRefX(), disparo.getRefY() } };
+        }
+        return comprobarColisionConCeldas(celdasDisparo);
+    }
+
+    // Método auxiliar para evitar duplicar la lógica de colisión
+    private Enemigo comprobarColisionConCeldas(int[][] celdasDisparo) {
         for (Enemigo e : enemigos) {
         	if (!e.isVivo()) continue;
         	for (int[] celdaDisparo : celdasDisparo) {

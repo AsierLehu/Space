@@ -10,10 +10,7 @@ public abstract class Naves {
 	protected boolean vivo;
 
 	protected Component ComponenteNave;
-	protected ArrayList<Disparo> disparos;
-	
-	protected ArrayList<StrategyDisparo> estrategiasPermitidas;
-	private int indiceTipoDisparo = 0;
+	protected Disparo gestorDisparos;
 
 	public Naves(int x, int y, int velocidad) {
 		this.x = x;
@@ -49,7 +46,24 @@ public abstract class Naves {
 	public abstract void construir();
 
 	public ArrayList<StrategyDisparo> getEstrategiasPermitidas() {
-		return estrategiasPermitidas;
+		if (gestorDisparos != null) {
+			return gestorDisparos.getEstrategias();
+		}
+		return new ArrayList<>();
+	}
+
+	public String getTipoDisparoActual() {
+		if (gestorDisparos != null) {
+			return gestorDisparos.getTipoActual();
+		}
+		return "ninguno";
+	}
+
+	public int getMunicionDisparoActual() {
+		if (gestorDisparos != null) {
+			return gestorDisparos.getMunicionActual();
+		}
+		return 0;
 	}
 
 	public abstract int[][] celdasOcupadas();
@@ -67,7 +81,6 @@ public abstract class Naves {
 		construir();
 		this.x = ComponenteNave.getRefX();
 		this.y = ComponenteNave.getRefY();
-		this.disparos = new ArrayList<>();
 	}
 
 	protected void anadirComponente(Component componente) {
@@ -77,38 +90,28 @@ public abstract class Naves {
 	}
 
 	public boolean disparar() {
-		ArrayList<StrategyDisparo> estrategias = estrategiasPermitidas;
+		if (gestorDisparos == null) return false;
 		
-		StrategyDisparo estrategiaActual = estrategias.get(indiceTipoDisparo);
-		if (estrategiaActual.tieneMunicion()) {
-			Disparo nuevoDisparo = new Disparo(estrategiaActual);
-			if (nuevoDisparo.activar(origenDisparoX(), origenDisparoY())) {
-				disparos.add(nuevoDisparo);
-				return true;
-			}
-		}
-		return false;
+		return gestorDisparos.disparar(origenDisparoX(), origenDisparoY());
 	}
 
 	/** Pasa al siguiente tipo permitido; si el actual no tiene munición, sigue hasta dar la vuelta o encontrar una con munición. */
 	public void cambiarTipoDisparo() {
-		if (estrategiasPermitidas == null || estrategiasPermitidas.isEmpty()) {
-			return;
-		}
-		int n = estrategiasPermitidas.size();
-		for (int i = 0; i < n; i++) {
-			indiceTipoDisparo = indiceTipoDisparo + 1;
-			if (indiceTipoDisparo >= n) {
-				indiceTipoDisparo = 0;
-			}
-			if (estrategiasPermitidas.get(indiceTipoDisparo).tieneMunicion()) {
-				break;
-			}
+		if (gestorDisparos != null) {
+			gestorDisparos.cambiarTipoDisparo();
 		}
 	}
 
-	public ArrayList<Disparo> getDisparos() {
-		return disparos;
+	public ArrayList<Component> getDisparos() {
+		if (gestorDisparos != null) {
+			return gestorDisparos.getDisparosActivos();
+		}
+		return new ArrayList<>();
+	}
+
+	/** Actualiza todos los disparos de la nave (movimiento y eliminación de inactivos) */
+	public void actualizarDisparos() {
+		gestorDisparos.actualizarDisparos();
 	}
 
 	public Component getComponente() {

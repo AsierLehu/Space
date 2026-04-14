@@ -6,10 +6,11 @@ public class Nave3 extends Naves {
 
 	public Nave3(int x, int y, int velocidad) {
 		super(x, y, velocidad);
-		estrategiasPermitidas = new ArrayList<StrategyDisparo>();
-		estrategiasPermitidas.add(new DisparoPixel());
-		estrategiasPermitidas.add(new DisparoFlecha());
-		estrategiasPermitidas.add(new DisparoRombo());
+		ArrayList<StrategyDisparo> estrategias = new ArrayList<>();
+		estrategias.add(new DisparoPixel());
+		estrategias.add(new DisparoFlecha());
+		estrategias.add(new DisparoRombo());
+		gestorDisparos = new Disparo(estrategias);
 		inicializarNaveJugador();
 	}
 

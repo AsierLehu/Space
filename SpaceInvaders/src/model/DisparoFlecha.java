@@ -29,11 +29,14 @@ public class DisparoFlecha implements StrategyDisparo {
 	}
 
 	@Override
-	public Component construirCuerpo(int x, int y) {
-		Composite comp = new Composite(true);
-		comp.addComponent(new Pixel(x, y, true));
-		comp.addComponent(new Pixel(x - 1, y + 1, true));
-		comp.addComponent(new Pixel(x + 1, y + 1, true));
-		return comp;
+	public Component crearDisparo(int x, int y) {
+		if (gastar()) {
+			Composite comp = new Composite(true);
+			comp.addComponent(new Pixel(x, y, true));
+			comp.addComponent(new Pixel(x - 1, y + 1, true));
+			comp.addComponent(new Pixel(x + 1, y + 1, true));
+			return comp;
+		}
+		return null;
 	}
 }

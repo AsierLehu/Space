@@ -23,7 +23,10 @@ public class DisparoPixel implements StrategyDisparo {
 	}
 
 	@Override
-	public Component construirCuerpo(int x, int y) {
-		return new Pixel(x, y, true);
+	public Component crearDisparo(int x, int y) {
+		if (gastar()) {
+			return new Pixel(x, y, true);
+		}
+		return null;
 	}
 }
