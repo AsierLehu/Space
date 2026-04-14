@@ -27,7 +27,9 @@ public class JugadorBueno {
 
 	/** Uno de: "Nave1", "Nave2", "Nave3". */
 	public void setTipoNaveElegido(String tipo) {
+			Espacio.getEspacio().cambiarAMain();
 			this.tipoNaveElegido = tipo;
+			
 	}
 
 	public boolean haElegidoNave() {

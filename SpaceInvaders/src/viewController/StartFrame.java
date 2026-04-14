@@ -45,7 +45,7 @@ public class StartFrame extends JFrame implements Observer {
         panel.add(titulo, gbc);
 
         // Subt�tulo
-        JLabel subtitulo = new JLabel("Sprint 1");
+        JLabel subtitulo = new JLabel("Sprint 2");
         subtitulo.setForeground(Color.GRAY);
         subtitulo.setFont(new Font("Monospaced", Font.PLAIN, 14));
         gbc.gridy = 1;
@@ -130,7 +130,6 @@ public class StartFrame extends JFrame implements Observer {
             }
             if (k == KeyEvent.VK_SPACE) {
                 JugadorBueno.getJugadorBueno().setTipoNaveElegido(tipoNavePendiente);
-                Espacio.getEspacio().cambiarAMain();
             }
         }
 
