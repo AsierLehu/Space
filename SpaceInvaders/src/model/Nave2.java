@@ -3,11 +3,12 @@ package model;
 import java.util.ArrayList;
 
 public class Nave2 extends Naves {
-	private DisparoPixel estrategiaPixel = new DisparoPixel();
-	private DisparoRombo estrategiaRombo = new DisparoRombo();
-	
+
 	public Nave2(int x, int y, int velocidad) {
 		super(x, y, velocidad);
+		estrategiasPermitidas = new ArrayList<StrategyDisparo>();
+		estrategiasPermitidas.add(new DisparoPixel());
+		estrategiasPermitidas.add(new DisparoRombo());
 		inicializarNaveJugador();
 	}
 
@@ -49,11 +50,4 @@ public class Nave2 extends Naves {
 		};
 	}
 
-	@Override
-	public ArrayList<StrategyDisparo> getEstrategiasPermitidas() {
-		ArrayList<StrategyDisparo> estrategias = new ArrayList<StrategyDisparo>();
-		estrategias.add(estrategiaPixel);
-		estrategias.add(estrategiaRombo);
-		return estrategias;
-	}
 }

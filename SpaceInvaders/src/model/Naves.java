@@ -11,7 +11,9 @@ public abstract class Naves {
 
 	protected Component ComponenteNave;
 	protected ArrayList<Disparo> disparos;
-	private int indiceEstrategia = 0;
+	
+	protected ArrayList<StrategyDisparo> estrategiasPermitidas;
+	private int indiceTipoDisparo = 0;
 
 	public Naves(int x, int y, int velocidad) {
 		this.x = x;
@@ -38,7 +40,9 @@ public abstract class Naves {
 
 	public abstract void construir();
 
-	public abstract ArrayList<StrategyDisparo> getEstrategiasPermitidas();
+	public ArrayList<StrategyDisparo> getEstrategiasPermitidas() {
+		return estrategiasPermitidas;
+	}
 
 	public abstract int[][] celdasOcupadas();
 
@@ -65,13 +69,11 @@ public abstract class Naves {
 	}
 
 	public boolean disparar() {
-		ArrayList<StrategyDisparo> estrategias = getEstrategiasPermitidas();
-		if (estrategias == null || estrategias.isEmpty()) {
-			return false;
-		}
-		StrategyDisparo estrategiaActual = estrategias.get(indiceEstrategia);
+		ArrayList<StrategyDisparo> estrategias = estrategiasPermitidas;
+		
+		StrategyDisparo estrategiaActual = estrategias.get(indiceTipoDisparo);
 		if (estrategiaActual.tieneMunicion()) {
-			Disparo nuevoDisparo = new Disparo(origenDisparoX(), origenDisparoY(), estrategiaActual);
+			Disparo nuevoDisparo = new Disparo(estrategiaActual);
 			if (nuevoDisparo.activar(origenDisparoX(), origenDisparoY())) {
 				disparos.add(nuevoDisparo);
 				return true;
@@ -80,17 +82,21 @@ public abstract class Naves {
 		return false;
 	}
 
+	/** Pasa al siguiente tipo permitido; si el actual no tiene munición, sigue hasta dar la vuelta o encontrar una con munición. */
 	public void cambiarTipoDisparo() {
-		ArrayList<StrategyDisparo> estrategias = getEstrategiasPermitidas();
-		if (estrategias == null) {
+		if (estrategiasPermitidas == null || estrategiasPermitidas.isEmpty()) {
 			return;
 		}
-		int intentos = 0;
-		do {
-			indiceEstrategia = (indiceEstrategia + 1) % estrategias.size();
-			intentos++;
-		} while (!estrategias.get(indiceEstrategia).tieneMunicion()
-				&& intentos < estrategias.size());
+		int n = estrategiasPermitidas.size();
+		for (int i = 0; i < n; i++) {
+			indiceTipoDisparo = indiceTipoDisparo + 1;
+			if (indiceTipoDisparo >= n) {
+				indiceTipoDisparo = 0;
+			}
+			if (estrategiasPermitidas.get(indiceTipoDisparo).tieneMunicion()) {
+				break;
+			}
+		}
 	}
 
 	public ArrayList<Disparo> getDisparos() {

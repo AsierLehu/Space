@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 public class Nave1 extends Naves {
 
-	private DisparoPixel estrategiaPixel = new DisparoPixel();
-	private DisparoFlecha estrategiaFlecha = new DisparoFlecha();
-	
 	public Nave1(int x, int y, int velocidad) {
 		super(x, y, velocidad);
+		estrategiasPermitidas = new ArrayList<StrategyDisparo>();
+		estrategiasPermitidas.add(new DisparoPixel());
+		estrategiasPermitidas.add(new DisparoFlecha());
 		inicializarNaveJugador();
 	}
 
@@ -55,11 +55,4 @@ public class Nave1 extends Naves {
 		};
 	}
 
-	@Override
-	public ArrayList<StrategyDisparo> getEstrategiasPermitidas() {
-		ArrayList<StrategyDisparo> estrategias = new ArrayList<StrategyDisparo>();
-		estrategias.add(estrategiaPixel);
-		estrategias.add(estrategiaFlecha);
-		return estrategias;
-	}
 }

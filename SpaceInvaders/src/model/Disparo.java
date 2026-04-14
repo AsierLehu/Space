@@ -2,6 +2,7 @@ package model;
 
 /**
  * Gestor del disparo del jugador: estrategia y cuerpo como Component (Composite o Pixel proyectil).
+ * Context del patrón Strategy: referencia a {@link StrategyDisparo} y cambio de estrategia.
  */
 public class Disparo {
 
@@ -9,33 +10,13 @@ public class Disparo {
 	private boolean activo;
 	private StrategyDisparo estrategia;
 
-	public Disparo(int x, int y, StrategyDisparo estrategia) {
-		this.cuerpo = construirCuerpo(x, y, estrategia.getTipo());
-		this.activo = false;
+	/**
+	 * Crea el proyectil sin cuerpo en tablero hasta {@link #activar(int, int)}: así solo se construye la
+	 * geometría una vez, al disparar (munición y posición de salida).
+	 */
+	public Disparo(StrategyDisparo estrategia) {
 		this.estrategia = estrategia;
-	}
-
-	private Component construirCuerpo(int x, int y, String tipo) {
-		switch (tipo) {
-		case "flecha": {
-			Composite comp = new Composite(true);
-			comp.addComponent(new Pixel(x, y, true));
-			comp.addComponent(new Pixel(x - 1, y + 1, true));
-			comp.addComponent(new Pixel(x + 1, y + 1, true));
-			return comp;
-		}
-		case "rombo": {
-			Composite comp = new Composite(true);
-			comp.addComponent(new Pixel(x, y, true));
-			comp.addComponent(new Pixel(x - 1, y + 1, true));
-			comp.addComponent(new Pixel(x, y + 1, true));
-			comp.addComponent(new Pixel(x + 1, y + 1, true));
-			comp.addComponent(new Pixel(x, y + 2, true));
-			return comp;
-		}
-		default:
-			return new Pixel(x, y, true);
-		}
+		this.activo = false;
 	}
 
 	public String getTipoActual() {
@@ -53,7 +34,7 @@ public class Disparo {
 	public boolean activar(int origenX, int origenY) {
 		if (estrategia.tieneMunicion()) {
 			estrategia.gastar();
-			cuerpo = construirCuerpo(origenX, origenY, estrategia.getTipo());
+			cuerpo = estrategia.construirCuerpo(origenX, origenY);
 			this.activo = true;
 			cuerpo.notificarDisparoNuevo();
 			return true;
@@ -84,7 +65,9 @@ public class Disparo {
 
 	public void setActivo(boolean b) {
 		this.activo = b;
-		cuerpo.setActivo(b);
+		if (cuerpo != null) {
+			cuerpo.setActivo(b);
+		}
 	}
 
 	public int[][] celdasOcupadas() {
