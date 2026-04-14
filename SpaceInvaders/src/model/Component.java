@@ -24,6 +24,12 @@ public interface Component {
 		Espacio.getEspacio().notificarMovimientoDisparo(oldX, oldY, newX, newY);
 	}
 
+	default void notificarMuerteJugador() {
+		Espacio.getEspacio().notificarMuerteJugador(new int[][] {
+			{ getRefX(), getRefY() }
+		});
+	}
+
 	/** Vacío por defecto; Pixel y Composite en modo proyectil lo sustituyen. */
 	default void notificarDisparoNuevo() {
 	}

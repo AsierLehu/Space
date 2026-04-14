@@ -38,6 +38,14 @@ public abstract class Naves {
 		this.vivo = b;
 	}
 
+	public void morirComoJugador() {
+		if (!vivo) {
+			return;
+		}
+		vivo = false;
+		ComponenteNave.notificarMuerteJugador();
+	}
+
 	public abstract void construir();
 
 	public ArrayList<StrategyDisparo> getEstrategiasPermitidas() {

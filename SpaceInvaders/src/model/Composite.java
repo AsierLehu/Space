@@ -128,4 +128,15 @@ public class Composite implements Component {
 			}
 		}
 	}
+
+	@Override
+	public void notificarMuerteJugador() {
+		int[][] posiciones = new int[components.size()][2];
+		for (int i = 0; i < components.size(); i++) {
+			Component componente = components.get(i);
+			posiciones[i][0] = componente.getRefX();
+			posiciones[i][1] = componente.getRefY();
+		}
+		Espacio.getEspacio().notificarMuerteJugador(posiciones);
+	}
 }

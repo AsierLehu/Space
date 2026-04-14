@@ -20,6 +20,7 @@ public class Espacio extends Observable {
     // Timer del juego
     private Timer gameTimer;
     private int frameCount;
+    private boolean gameOver;
 
     // ─── Constructor / Singleton ──────────────────────────────────────────────
 
@@ -43,6 +44,7 @@ public class Espacio extends Observable {
     }
 
     private void inicializar() {
+        gameOver = false;
         JugadorBueno.getJugadorBueno().crearNaveParaPartida();
         FlotaEnemigos.getFlotaEnemigos().inicializar(anchura);
     }
@@ -59,9 +61,11 @@ public class Espacio extends Observable {
 
     // Derrota: jugador muerto, algún enemigo llegó al límite inferior, o colisión jugador-enemigo
     public boolean isGameOver() {
-        Naves j = getNaveJugador();
-        if (j == null || !j.isVivo()) return true;
-        if (FlotaEnemigos.getFlotaEnemigos().algunoLlegoAbajo(altura)) return true;
+        if (gameOver) return true;
+        if (FlotaEnemigos.getFlotaEnemigos().algunoLlegoAbajo(altura)) {
+            gameOver = true;
+            return true;
+        }
         return hayColisionJugadorEnemigo();
     }
     
@@ -86,6 +90,7 @@ public class Espacio extends Observable {
                     
                     for (int[] celdaEnemigo : celdasEnemigo) {
                         if (x == celdaEnemigo[0] && y == celdaEnemigo[1]) {
+                            j.morirComoJugador();
                             return true; // Hay colisión
                         }
                     }
@@ -97,6 +102,7 @@ public class Espacio extends Observable {
                 
                 for (int[] celdaEnemigo_ : celdasEnemigo) {
                     if (x_pixel == celdaEnemigo_[0] && y_pixel == celdaEnemigo_[1]) {
+                        j.morirComoJugador();
                         return true; // Hay colisión
                     }
                 }
@@ -270,6 +276,17 @@ public class Espacio extends Observable {
                 notifyObservers(new int[] {11, c.getRefX(), c.getRefY()});
             }
         }
+    }
+
+    public void notificarMuerteJugador(int[][] posiciones) {
+        if (gameOver) return;
+
+        gameOver = true;
+        for (int[] posicion : posiciones) {
+            setChanged();
+            notifyObservers(new int[] {10, posicion[0], posicion[1]});
+        }
+        notificarGameOver();
     }
 
     /** Invocado desde el modelo al cambiar de celda del jugador; dispara el Observer de la vista. */
