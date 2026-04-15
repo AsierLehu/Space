@@ -82,20 +82,22 @@ public class Composite implements Component {
 
 	@Override
 	public int getRefX() {
-		int min = Integer.MAX_VALUE;
+		if (components.isEmpty()) return 0;
+		int min = components.get(0).getRefX();
 		for (Component c : components) {
 			min = Math.min(min, c.getRefX());
 		}
-		return min == Integer.MAX_VALUE ? 0 : min;
+		return min;
 	}
 
 	@Override
 	public int getRefY() {
-		int min = Integer.MAX_VALUE;
+		if (components.isEmpty()) return 0;
+		int min = components.get(0).getRefY();
 		for (Component c : components) {
 			min = Math.min(min, c.getRefY());
 		}
-		return min == Integer.MAX_VALUE ? 0 : min;
+		return min;
 	}
 
 	@Override

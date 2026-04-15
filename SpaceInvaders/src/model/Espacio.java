@@ -119,12 +119,7 @@ public class Espacio extends Observable {
     // ─── Acciones del jugador ─────────────────────────────────────────────────
 
 
-    public void cambiarTipoDisparo() {
-        Naves j = getNaveJugador();
-        if (j != null && j.isVivo()) {
-            j.cambiarTipoDisparo();
-        }
-    }
+ 
 
     // ─── Actualización del disparo ────────────────────────────────────────────
 
