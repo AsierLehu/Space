@@ -150,8 +150,15 @@ public class StartFrame extends JFrame implements Observer {
         control3.setForeground(new Color(150, 150, 255));
         control3.setFont(new Font("Monospaced", Font.PLAIN, 16));
         gbc.gridy = 8;
-        gbc.insets = new Insets(10, 20, 20, 20);
+        gbc.insets = new Insets(10, 20, 10, 20);
         panel.add(control3, gbc);
+
+        JLabel control4 = new JLabel("M  ==  Cambiar tipo de disparo");
+        control4.setForeground(new Color(150, 150, 255));
+        control4.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        gbc.gridy = 9;
+        gbc.insets = new Insets(10, 20, 20, 20);
+        panel.add(control4, gbc);
 
         add(panel); // Añadir el panel principal al frame
         pack(); // Ajustar el tamaño del frame al contenido
