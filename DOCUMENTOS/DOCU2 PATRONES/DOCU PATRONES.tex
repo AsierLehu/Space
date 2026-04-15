@@ -1,6 +1,8 @@
 \documentclass[12pt]{article}
 \usepackage[margin=0.8in]{geometry}
-\usepackage[spanish]{babel}
+\usepackage[english]{babel}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
 \usepackage[utf8]{inputenc}
 \usepackage{setspace}
 \usepackage{graphicx}
@@ -8,7 +10,7 @@
 \usepackage{xcolor}
 \usepackage{fancyhdr}
 
-% Configuración de código
+% Configuracion de codigo
 \lstset{
     language=Java,
     basicstyle=\ttfamily\small,
@@ -24,8 +26,8 @@
     backgroundcolor=\color{white}
 }
 
-\title{\textbf{Patrones de Diseño en Space Invaders} \\
-\large{Análisis detallado de Factory, Strategy y Composite}}
+\title{\textbf{Patrones de Diseno en Space Invaders} \\
+\large{Analisis detallado de Factory, Strategy y Composite}}
 \author{}
 \date{}
 
@@ -37,25 +39,25 @@
 \tableofcontents
 \newpage
 
-\section{Introducción}
+\section{Introduccion}
 
-En el desarrollo del proyecto \textit{Space Invaders} se han aplicado varios patrones de diseño fundamentales de la programación orientada a objetos. Estos patrones permiten estructurar el código de forma más clara, mantenible y extensible, siguiendo principios como SOLID (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion).
+En el desarrollo del proyecto \textit{Space Invaders} se han aplicado varios patrones de diseno fundamentales de la programacion orientada a objetos. Estos patrones permiten estructurar el codigo de forma mas clara, mantenible y extensible, siguiendo principios como SOLID (Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion).
 
-\subsection{¿Por qué utilizar patrones de diseño?}
+\subsection{¿Por que utilizar patrones de diseno?}
 
-Los patrones de diseño son soluciones probadas a problemas comunes en programación. En este proyecto, abordan tres desafíos principales:
+Los patrones de diseno son soluciones probadas a problemas comunes en programacion. En este proyecto, abordan tres desafios principales:
 
 \begin{enumerate}
-    \item \textbf{Creación de objetos:} ¿Cómo generar múltiples tipos de naves de forma controlada y centralizada?
-    \item \textbf{Variación de comportamientos:} ¿Cómo permitir que el jugador cambie entre diferentes tipos de disparos dinámicamente?
-    \item \textbf{Composición de estructuras:} ¿Cómo representar de forma uniforme naves y disparos como colecciones de píxeles?
+    \item \textbf{Creación de objetos:} ¿Como generar multiples tipos de naves de forma controlada y centralizada?
+    \item \textbf{Variacion de comportamientos:} ¿Como permitir que el jugador cambie entre diferentes tipos de disparos dinamicamente?
+    \item \textbf{Composicion de estructuras:} ¿Como representar de forma uniforme naves y disparos como colecciones de pixeles?
 \end{enumerate}
 
-En particular, se han utilizado tres patrones principales: \textbf{Factory}, \textbf{Strategy} y \textbf{Composite}, cada uno resolviendo un problema específico dentro del sistema.
+En particular, se han utilizado tres patrones principales: \textbf{Factory}, \textbf{Strategy} y \textbf{Composite}, cada uno resolviendo un problema especifico dentro del sistema.
 
-\subsection{Relación entre patrones}
+\subsection{Relacion entre patrones}
 
-Los patrones no existen de forma aislada sino que interactúan entre sí:
+Los patrones no existen de forma aislada sino que interactuan entre sí:
 
 \begin{itemize}
     \item \textbf{Factory} crea instancias de \texttt{Naves} que contienen \textbf{Composites} internamente.
@@ -64,27 +66,27 @@ Los patrones no existen de forma aislada sino que interactúan entre sí:
 \end{itemize}
 
 \newpage
-\section{Patrón Factory: Creación Centralizada de Naves}
+\section{Patron Factory: Creación Centralizada de Naves}
 
-\subsection{Descripción General}
+\subsection{Descripcion General}
 
-El patrón \textbf{Factory} es un patrón de creación cuyo objetivo principal es delegar la responsabilidad de instanciar objetos a una clase especializada. En lugar de crear objetos directamente mediante el operador \texttt{new}, el cliente solicita dichos objetos a una fábrica, que encapsula toda la lógica de instanciación.
+El patron \textbf{Factory} es un patron de creacion cuyo objetivo principal es delegar la responsabilidad de instanciar objetos a una clase especializada. En lugar de crear objetos directamente mediante el operador \texttt{new}, el cliente solicita dichos objetos a una fabrica, que encapsula toda la logica de crear instancias.
 
 \textbf{Problema que resuelve:}
 \begin{itemize}
-    \item Eliminación del acoplamiento entre el cliente y las clases concretas
-    \item Centralización de parámetros de inicialización
-    \item Facilidad para extender el sistema sin modificar código existente
-    \item Control único sobre la creación de objetos
+    \item Eliminacion del acoplamiento entre el cliente y las clases concretas
+    \item Centralizacion de parametros de inicializacion
+    \item Facilidad para extender el sistema sin modificar codigo existente
+    \item Control único sobre la creacion de objetos
 \end{itemize}
 
-\subsection{Implementación en el Proyecto}
+\subsection{Implementacion en el Proyecto}
 
-En \textit{Space Invaders}, el patrón Factory se implementa a través de la clase \texttt{NaveFactory}, que centraliza la creación de todas las naves jugables (\texttt{Nave1}, \texttt{Nave2}, \texttt{Nave3}).
+En \textit{Space Invaders}, el patron Factory se implementa a traves de la clase \texttt{NaveFactory}, que centraliza la creacion de todas las naves jugables (\texttt{Nave1}, \texttt{Nave2}, \texttt{Nave3}).
 
-Además, la clase implementa el patrón \textbf{Singleton}, garantizando que exista una única instancia de la fábrica durante toda la ejecución del programa.
+Ademas, la clase implementa el patron \textbf{Singleton}, garantizando que exista una unica instancia de la fabrica durante toda la ejecucion del programa.
 
-\subsection{Estructura del Código}
+\subsection{Estructura del Codigo}
 
 \begin{lstlisting}
 public class NaveFactory {
@@ -100,8 +102,8 @@ public class NaveFactory {
     }
     
     public Naves generate(String pNave) {
-        int x = 50;           // Posición inicial X
-        int y = 55;           // Posición inicial Y
+        int x = 50;           // Posicion inicial X
+        int y = 55;           // Posicion inicial Y
         int velocidad = 1;    // Velocidad de movimiento
         
         if (pNave == null) {
@@ -122,21 +124,21 @@ public class NaveFactory {
 }
 \end{lstlisting}
 
-\subsubsection{Explicación de los componentes}
+\subsubsection{Explicacion de los componentes}
 
 \begin{description}
-    \item[\texttt{myFactory}] Variable estática que almacena la única instancia de la fábrica.
+    \item[\texttt{myFactory}] Variable estatica que almacena la unica instancia de la fabrica.
     
-    \item[\textit{Constructor privado}] Impide que el cliente instancie directamente \texttt{NaveFactory}. Solo se puede crear a través de \texttt{getNaveFactory()}.
+    \item[\textit{Constructor privado}] Impide que el cliente instancie directamente \texttt{NaveFactory}. Solo se puede crear a traves de \texttt{getNaveFactory()}.
     
-    \item[\texttt{getNaveFactory()}] Implementa el patrón Singleton. Verifica si la instancia existe; si no, la crea. En llamadas posteriores, retorna la instancia existente.
+    \item[\texttt{getNaveFactory()}] Implementa el patron Singleton. Verifica si la instancia existe; si no, la crea. En llamadas posteriores, retorna la instancia existente.
     
-    \item[\texttt{generate(String)}] Método factory que recibe un identificador de tipo de nave y retorna la nave correspondiente. Todos los parámetros de inicialización (\texttt{x}, \texttt{y}, \texttt{velocidad}) se definen aquí de forma centralizada.
+    \item[\texttt{generate(String)}] Metodo factory que recibe un identificador de tipo de nave y retorna la nave correspondiente. Todos los parametros de inicializacion (\texttt{x}, \texttt{y}, \texttt{velocidad}) se definen aqui de forma centralizada.
 \end{description}
 
-\subsection{Flujo de Ejecución}
+\subsection{Flujo de Ejecucion}
 
-El flujo de creación de una nave sigue estos pasos:
+El flujo de creacion de una nave sigue estos pasos:
 
 \begin{enumerate}
     \item \textbf{Cliente solicita nave:}
@@ -145,61 +147,61 @@ NaveFactory fabrica = NaveFactory.getNaveFactory();
 Naves nave = fabrica.generate("Nave1");
     \end{lstlisting}
     
-    \item \textbf{Verificación Singleton:} \texttt{getNaveFactory()} comprueba si \texttt{myFactory} es nulo. La primera vez lo crea; después devuelve la existente.
+    \item \textbf{Verificacion Singleton:} \texttt{getNaveFactory()} comprueba si \texttt{myFactory} es nulo. La primera vez lo crea; despues devuelve la existente.
     
-    \item \textbf{Identificación de tipo:} El método \texttt{generate()} recibe el string de tipo de nave.
+    \item \textbf{Identificacion de tipo:} El metodo \texttt{generate()} recibe el string de tipo de nave.
     
-    \item \textbf{Inicialización de parámetros:} Se asignan valores predeterminados: posición (50, 55) y velocidad 1.
+    \item \textbf{Inicializacion de parametros:} Se asignan valores predeterminados: posición (50, 55) y velocidad 1.
     
-    \item \textbf{Instanciación específica:} Se crea una nueva instancia del tipo correspondiente (Nave1, Nave2 o Nave3).
+    \item \textbf{Instanciacion especifica:} Se crea una nueva instancia del tipo correspondiente (Nave1, Nave2 o Nave3).
     
-    \item \textbf{Retorno polimórfico:} Se devuelve como tipo \texttt{Naves} (clase abstracta padre), permitiendo polimorfismo.
+    \item \textbf{Retorno polimorfico:} Se devuelve como tipo \texttt{Naves} (clase abstracta padre), permitiendo polimorfismo.
     
-    \item \textbf{Inicialización de estructura:} El constructor de cada nave específica:
+    \item \textbf{Inicializacion de estructura:} El constructor de cada nave especifica:
     \begin{enumerate}
         \item Crea un ArrayList con sus estrategias de disparo permitidas
         \item Envuelve esas estrategias en un objeto \texttt{Disparo}
-        \item Llama a \texttt{inicializarNaveJugador()} que crea el Composite raíz
+        \item Llama a \texttt{inicializarNaveJugador()} que crea el Composite raiz
         \item Llama a \texttt{construir()} que puebla el Composite con Pixels
     \end{enumerate}
 \end{enumerate}
 
-\subsection{Ventajas del Patrón Factory}
+\subsection{Ventajas del Patron Factory}
 
 \begin{enumerate}
-    \item \textbf{Encapsulación:} La lógica de creación queda centralizada. Cambios en parámetros iniciales se hacen en un único lugar.
+    \item \textbf{Encapsulacion:} La logica de creacion queda centralizada. Cambios en parametros iniciales se hacen en un único lugar.
     
     \item \textbf{Bajo acoplamiento:} El cliente solo depende de la interfaz \texttt{Naves}, no de las clases concretas.
     
-    \item \textbf{Extensibilidad:} Agregar una nueva nave (\texttt{Nave4}) requiere solo dos líneas:
+    \item \textbf{Extensibilidad:} Agregar una nueva nave (\texttt{Nave4}) requiere solo dos lineas:
     \begin{lstlisting}
 case "Nave4":
     return new Nave4(x, y, velocidad);
     \end{lstlisting}
     
-    \item \textbf{Singleton integrado:} Garantiza una única instancia de fábrica durante toda la ejecución.
+    \item \textbf{Singleton integrado:} Garantiza una unica instancia de fabrica durante toda la ejecucion.
     
     \item \textbf{Control global:} Parámetros dinámicos (velocidad según dificultad, etc.) se modifican en un único lugar.
 \end{enumerate}
 
 \newpage
-\section{Patrón Strategy: Comportamiento de Disparos Intercambiable}
+\section{Patron Strategy: Comportamiento de Disparos Intercambiable}
 
-\subsection{Descripción General}
+\subsection{Descripcion General}
 
-El patrón \textbf{Strategy} es un patrón de comportamiento que permite definir una familia de algoritmos, encapsularlos en clases independientes y hacerlos intercambiables en tiempo de ejecución. El cliente puede cambiar de estrategia sin conocer los detalles de implementación.
+El patron \textbf{Strategy} es un patron de comportamiento que permite definir una familia de algoritmos, encapsularlos en clases independientes y hacerlos intercambiables en tiempo de ejecucion. El cliente puede cambiar de estrategia sin conocer los detalles de implementación.
 
 \textbf{Problema que resuelve:}
 \begin{itemize}
     \item Múltiples formas de realizar la misma tarea (diferentes tipos de disparos)
-    \item Necesidad de cambiar comportamiento dinámicamente sin recompilar
-    \item Eliminar código condicional complejo (múltiples \texttt{if-else})
-    \item Gestión independiente del estado de cada estrategia (munición disponible)
+    \item Necesidad de cambiar comportamiento dinamicamente sin recompilar
+    \item Eliminar codigo condicional complejo (multiples \texttt{if-else})
+    \item Gestión independiente del estado de cada estrategia (municion disponible)
 \end{itemize}
 
-\subsection{Implementación en el Proyecto}
+\subsection{Implementacion en el Proyecto}
 
-En \textit{Space Invaders}, el patrón Strategy se emplea para gestionar los distintos tipos de disparo disponibles. Se define una interfaz común \texttt{StrategyDisparo} que todas las estrategias deben implementar, incluida la creación del disparo con su forma correspondiente.
+En \textit{Space Invaders}, el patron Strategy se emplea para gestionar los distintos tipos de disparo disponibles. Se define una interfaz común \texttt{StrategyDisparo} que todas las estrategias deben implementar, incluida la creacion del disparo con su forma correspondiente.
 
 \subsection{Interfaz StrategyDisparo}
 
@@ -208,25 +210,25 @@ public interface StrategyDisparo {
     // Obtiene identificador del tipo de disparo
     String getTipo();
     
-    // Obtiene munición disponible (-1 = infinita)
+    // Obtiene municion disponible (-1 = infinita)
     int getMunicion();
     
-    // Consume una unidad de munición
+    // Consume una unidad de municion
     // Retorna false si no queda
     boolean gastar();
     
-    // Verifica si hay munición disponible
+    // Verifica si hay municion disponible
     boolean tieneMunicion();
     
-    // Crea un disparo (Component) en la posición indicada
-    // Retorna null si no hay munición disponible
+    // Crea un disparo (Component) en la posicion indicada
+    // Retorna null si no hay municion disponible
     Component crearDisparo(int x, int y);
 }
 \end{lstlisting}
 
 \subsection{Implementaciones Concretas}
 
-\subsubsection{DisparoPixel - Munición Infinita}
+\subsubsection{DisparoPixel - Municion Infinita}
 
 \begin{lstlisting}
 public class DisparoPixel implements StrategyDisparo {
@@ -260,16 +262,16 @@ public class DisparoPixel implements StrategyDisparo {
 }
 \end{lstlisting}
 
-\textbf{Características:}
+\textbf{Caracteristicas:}
 \begin{itemize}
     \item Tipo: \texttt{"pixel"}
-    \item Munición: Infinita (-1)
-    \item Forma: Un único píxel
+    \item Municion: Infinita (-1)
+    \item Forma: Un unico pixel
     \item Disponibilidad: Siempre puede disparar
     \item Uso: Disparo base predeterminado
 \end{itemize}
 
-\subsubsection{DisparoFlecha - Munición Limitada (30 unidades)}
+\subsubsection{DisparoFlecha - Municion Limitada (30 unidades)}
 
 \begin{lstlisting}
 public class DisparoFlecha implements StrategyDisparo {
@@ -313,16 +315,16 @@ public class DisparoFlecha implements StrategyDisparo {
 }
 \end{lstlisting}
 
-\textbf{Características:}
+\textbf{Caracteristicas:}
 \begin{itemize}
     \item Tipo: \texttt{"flecha"}
-    \item Munición inicial: 30 unidades
-    \item Forma: 3 píxeles en forma de V invertida
-    \item Comportamiento: Decrementa munición cada vez que se dispara
-    \item Disponibilidad: Solo mientras haya munición
+    \item Municion inicial: 30 unidades
+    \item Forma: 3 pixeles en forma de V invertida
+    \item Comportamiento: Decrementa municion cada vez que se dispara
+    \item Disponibilidad: Solo mientras haya municion
 \end{itemize}
 
-\subsubsection{DisparoRombo - Munición Limitada (20 unidades)}
+\subsubsection{DisparoRombo - Municion Limitada (20 unidades)}
 
 \begin{lstlisting}
 public class DisparoRombo implements StrategyDisparo {
@@ -368,18 +370,18 @@ public class DisparoRombo implements StrategyDisparo {
 }
 \end{lstlisting}
 
-\textbf{Características:}
+\textbf{Caracteristicas:}
 \begin{itemize}
     \item Tipo: \texttt{"rombo"}
-    \item Munición inicial: 20 unidades
-    \item Forma: 5 píxeles en forma de rombo
-    \item Comportamiento: Similar a flecha pero con recursos más limitados
+    \item Municion inicial: 20 unidades
+    \item Forma: 5 pixeles en forma de rombo
+    \item Comportamiento: Similar a flecha pero con recursos mas limitados
     \item Disponibilidad: Limitada a 20 disparos
 \end{itemize}
 
-\subsection{Integración con Context: Clase Disparo}
+\subsection{Integracion con Context: Clase Disparo}
 
-El patrón Strategy usa la clase \texttt{Disparo} como Context que gestiona las estrategias:
+El patron Strategy usa la clase \texttt{Disparo} como Context que gestiona las estrategias:
 
 \begin{lstlisting}
 public class Disparo {
@@ -409,7 +411,7 @@ public class Disparo {
         return estrategias;
     }
     
-    // Cambia al siguiente tipo permitido con munición
+    // Cambia al siguiente tipo permitido con municion
     public void cambiarTipoDisparo() {
         if (estrategias.isEmpty()) return;
         int n = estrategias.size();
@@ -444,7 +446,7 @@ public class Disparo {
 
 \subsection{Uso en cada Nave}
 
-Cada nave específica define sus estrategias de disparo permitidas en su constructor:
+Cada nave especifica define sus estrategias de disparo permitidas en su constructor:
 
 \begin{lstlisting}
 // Nave1: Pixel y Flecha
@@ -482,9 +484,9 @@ public Nave3(int x, int y, int velocidad) {
 }
 \end{lstlisting}
 
-\subsection{Flujo de Ejecución: Disparar con Strategy}
+\subsection{Flujo de Ejecucion: Disparar con Strategy}
 
-El proceso de disparar utiliza completamente el patrón Strategy:
+El proceso de disparar utiliza completamente el patron Strategy:
 
 \begin{enumerate}
     \item \textbf{Sistema verifica estrategia actual:}
@@ -499,7 +501,7 @@ int municionActual =
 StrategyDisparo estrategia = 
     estrategias.get(indiceEstrategiaActual);
 if (!estrategia.tieneMunicion()) {
-    // Sin munición, no disparar
+    // Sin municion, no disparar
     return false;
 }
     \end{lstlisting}
@@ -512,12 +514,12 @@ Component nuevoDisparo =
     
     \item \textbf{Estrategia crea la forma correspondiente:}
     \begin{lstlisting}
-// DisparoPixel -> 1 píxel
-// DisparoFlecha -> 3 píxeles en V
-// DisparoRombo -> 5 píxeles en rombo
+// DisparoPixel -> 1 pixel
+// DisparoFlecha -> 3 pixeles en V
+// DisparoRombo -> 5 pixeles en rombo
     \end{lstlisting}
     
-    \item \textbf{Disparo se añade a lista activa:}
+    \item \textbf{Disparo se anade a lista activa:}
     \begin{lstlisting}
 disparosActivos.add(nuevoDisparo);
     \end{lstlisting}
@@ -527,52 +529,52 @@ disparosActivos.add(nuevoDisparo);
 for (Component disparo : disparosActivos) {
     disparo.mover(0, -1);  // Sube
     if (!disparo.isActivo()) {
-        // Eliminar si está fuera
+        // Eliminar si esta fuera
     }
 }
     \end{lstlisting}
 \end{enumerate}
 
-\subsection{Ventajas del Patrón Strategy}
+\subsection{Ventajas del Patron Strategy}
 
 \begin{enumerate}
-    \item \textbf{Intercambiabilidad en tiempo de ejecución:} El jugador puede cambiar entre disparos dinámicamente.
+    \item \textbf{Intercambiabilidad en tiempo de ejecucion:} El jugador puede cambiar entre disparos dinamicamente.
     
-    \item \textbf{Encapsulación de comportamientos:} Cada estrategia gestiona su munición y crea su forma específica.
+    \item \textbf{Encapsulacion de comportamientos:} Cada estrategia gestiona su municion y crea su forma especifica.
     
-    \item \textbf{Eliminación de condicionales complejos:} Sin Strategy habría complejos \texttt{if-else} esparcidos por el código.
+    \item \textbf{Eliminacion de condicionales complejos:} Sin Strategy habría complejos \texttt{if-else} esparcidos por el codigo.
     
-    \item \textbf{Extensibilidad:} Nueva estrategia (ej. \texttt{DisparoLáser}) solo requiere implementar la interfaz.
+    \item \textbf{Extensibilidad:} Nueva estrategia (ej. \texttt{DisparoLaser}) solo requiere implementar la interfaz.
     
     \item \textbf{Testabilidad:} Cada estrategia se prueba independientemente.
 \end{enumerate}
 
 \newpage
-\section{Patrón Composite: Estructura Jerárquica de Píxeles}
+\section{Patron Composite: Estructura Jerárquica de Pixeles}
 
-\subsection{Descripción General}
+\subsection{Descripcion General}
 
-El patrón \textbf{Composite} es un patrón estructural que permite componer objetos en estructuras jerárquicas en forma de árbol. Su principal ventaja es tratar de forma uniforme tanto objetos individuales como composiciones complejas.
+El patron \textbf{Composite} es un patron estructural que permite componer objetos en estructuras jerárquicas en forma de árbol. Su principal ventaja es tratar de forma uniforme tanto objetos individuales como composiciones complejas.
 
 \textbf{Problema que resuelve:}
 \begin{itemize}
     \item Representación de estructuras jerárquicas (naves, disparos complejos)
     \item Operaciones uniformes sin distinción entre elemento simple y compuesto
-    \item Movimiento coordinado de múltiples píxeles
+    \item Movimiento coordinado de multiples pixeles
     \item Detección de colisiones centralizada
     \item Flexibilidad geométrica para crear formas variadas
 \end{itemize}
 
-\subsection{Implementación en el Proyecto}
+\subsection{Implementacion en el Proyecto}
 
-El patrón Composite se utiliza para representar la estructura de naves y disparos como árboles de píxeles. Se define una interfaz común \texttt{Component} implementada por píxeles individuales (\texttt{Pixel}) y agrupaciones (\texttt{Composite}).
+El patron Composite se utiliza para representar la estructura de naves y disparos como árboles de pixeles. Se define una interfaz común \texttt{Component} implementada por pixeles individuales (\texttt{Pixel}) y agrupaciones (\texttt{Composite}).
 
 \subsection{Interfaz Component}
 
 \begin{lstlisting}
 public interface Component {
-    // Desplaza el componente dx píxeles en X, 
-    // dy píxeles en Y. tipoNave se propaga 
+    // Desplaza el componente dx pixeles en X, 
+    // dy pixeles en Y. tipoNave se propaga 
     // para contexto de notificación
     void mover(int dx, int dy, int tipoNave);
     
@@ -582,14 +584,14 @@ public interface Component {
     // Obtiene coordenada Y de referencia del componente
     int getRefY();
     
-    // Verifica si el componente está activo
+    // Verifica si el componente esta activo
     // (inactivo = fuera del tablero o destruido)
     boolean isActivo();
     
     // Activar/desactivar componente
     void setActivo(boolean b);
     
-    // Métodos default que notifican eventos al tablero
+    // Metodos default que notifican eventos al tablero
     default void notificarMovimientoJugador(
         int oldX, int oldY, int newX, int newY) {
         Espacio.getEspacio().notificarMovimientoJugador(
@@ -622,7 +624,7 @@ public class Pixel implements Component {
     private boolean activo = true;
     private final boolean proyectil;
     
-    // Constructor para píxeles de nave
+    // Constructor para pixeles de nave
     public Pixel(int x, int y) {
         this(x, y, false);
     }
@@ -649,7 +651,7 @@ public class Pixel implements Component {
             // Notificar movimiento para detección colisiones
             notificarMovimientoDisparo(oldX, oldY, x, y);
         } else {
-            // Píxel de nave: solo actualizar posición
+            // Pixel de nave: solo actualizar posición
             x += dx;
             y += dy;
         }
@@ -680,17 +682,17 @@ public class Pixel implements Component {
 }
 \end{lstlisting}
 
-\textbf{Características:}
+\textbf{Caracteristicas:}
 \begin{itemize}
-    \item \textbf{Bandera \texttt{proyectil}:} Distingue píxeles de nave vs disparo (comportamientos diferentes).
-    \item \textbf{Píxeles de nave:} Solo actualizan posición, notificaciones se manejan a nivel Composite.
-    \item \textbf{Píxeles de disparo:} Notifican cada movimiento al tablero para detección de colisiones.
-    \item \textbf{Desactivación automática:} Píxeles de disparo se desactivan al superar el límite superior (y < 0).
+    \item \textbf{Bandera \texttt{proyectil}:} Distingue pixeles de nave vs disparo (comportamientos diferentes).
+    \item \textbf{Pixeles de nave:} Solo actualizan posición, notificaciones se manejan a nivel Composite.
+    \item \textbf{Pixeles de disparo:} Notifican cada movimiento al tablero para detección de colisiones.
+    \item \textbf{Desactivación automática:} Pixeles de disparo se desactivan al superar el límite superior (y < 0).
 \end{itemize}
 
 \subsection{Clase Compuesta: Composite}
 
-\texttt{Composite} agrupa múltiples \texttt{Components} en estructura jerárquica:
+\texttt{Composite} agrupa multiples \texttt{Components} en estructura jerárquica:
 
 \begin{lstlisting}
 public class Composite implements Component {
@@ -698,7 +700,7 @@ public class Composite implements Component {
         new ArrayList<>();
     private final boolean proyectil;
     
-    // Constructor para Composite de nave (raíz)
+    // Constructor para Composite de nave (raiz)
     public Composite() {
         this(false);
     }
@@ -721,7 +723,7 @@ public class Composite implements Component {
     }
     
     // Retorna todas las celdas ocupadas por 
-    // píxeles activos (recursivo)
+    // pixeles activos (recursivo)
     public List<int[]> celdasOcupadasActivas() {
         List<int[]> celdas = new ArrayList<>();
         for (Component c : components) {
@@ -827,7 +829,7 @@ public class Composite implements Component {
                 c.setActivo(b);
             }
         }
-        // Naves: no hace nada aquí
+        // Naves: no hace nada aqui
     }
     
     @Override
@@ -841,7 +843,7 @@ public class Composite implements Component {
     
     @Override
     public void notificarMuerteJugador() {
-        // Recopila todas las posiciones de píxeles
+        // Recopila todas las posiciones de pixeles
         int[][] posiciones = 
             new int[components.size()][2];
         for (int i = 0; i < components.size(); i++) {
@@ -855,32 +857,32 @@ public class Composite implements Component {
 }
 \end{lstlisting}
 
-\textbf{Características principales:}
+\textbf{Caracteristicas principales:}
 
 \begin{itemize}
     \item \textbf{Dos modos operacionales:} \texttt{proyectil=false} para naves, \texttt{proyectil=true} para disparos.
     
-    \item \textbf{Movimiento recursivo:} El método \texttt{mover()} delega a todos sus componentes, formando cascada automática.
+    \item \textbf{Movimiento recursivo:} El metodo \texttt{mover()} delega a todos sus componentes, formando cascada automática.
     
-    \item \textbf{Validación inteligente (naves):} Verifica que todos los píxeles quepan dentro del tablero (0-99 en X, 0-59 en Y) antes de permitir movimiento.
+    \item \textbf{Validación inteligente (naves):} Verifica que todos los pixeles quepan dentro del tablero (0-99 en X, 0-59 en Y) antes de permitir movimiento.
     
-    \item \textbf{Movimiento sin restricción (disparos):} Los disparos se mueven libremente en vertical; se desactivan automáticamente en píxeles.
+    \item \textbf{Movimiento sin restricción (disparos):} Los disparos se mueven libremente en vertical; se desactivan automáticamente en pixeles.
     
     \item \textbf{Notificación en bloque:} Naves notifican el movimiento de toda la estructura juntos para eficiencia en detección de colisiones.
     
     \item \textbf{Estado diferenciado:} \texttt{isActivo()} y \texttt{setActivo()} funcionan diferente según tipo.
     
-    \item \textbf{Responsabilidad de notificación:} Métodos de notificación están distribuidos entre píxeles y composites según contexto.
+    \item \textbf{Responsabilidad de notificación:} Metodos de notificación estan distribuidos entre pixeles y composites según contexto.
 \end{itemize}
 
 \subsection{Construcción de Estructuras}
 
 \subsubsection{Construcción de Naves}
 
-Las naves utilizan un \texttt{Composite} como contenedor raíz para su geometría:
+Las naves utilizan un \texttt{Composite} como contenedor raiz para su geometría:
 
 \begin{lstlisting}
-// Nave1: Forma de T invertida (10 píxeles)
+// Nave1: Forma de T invertida (10 pixeles)
 @Override
 public void construir() {
     int bx = x;
@@ -899,7 +901,7 @@ public void construir() {
     anadirComponente(new Pixel(bx + 3, by + 2));
 }
 
-// Nave2: Forma de rectángulo (8 píxeles)
+// Nave2: Forma de rectángulo (8 pixeles)
 @Override
 public void construir() {
     int bx = x;
@@ -916,7 +918,7 @@ public void construir() {
     anadirComponente(new Pixel(bx + 2, by + 2));
 }
 
-// Nave3: Forma de T (4 píxeles)
+// Nave3: Forma de T (4 pixeles)
 @Override
 public void construir() {
     int bx = x;
@@ -931,7 +933,7 @@ public void construir() {
 
 \subsubsection{Construcción de Disparos}
 
-Los disparos son creados por las estrategias con formas específicas:
+Los disparos son creados por las estrategias con formas especificas:
 
 \begin{lstlisting}
 // Pixel simple (1 celda)
@@ -969,7 +971,7 @@ public Component crearDisparo(int x, int y) {
 }
 \end{lstlisting}
 
-\subsection{Flujo de Ejecución: Movimiento de Nave}
+\subsection{Flujo de Ejecucion: Movimiento de Nave}
 
 El proceso de mover una nave demuestra la elegancia del Composite:
 
@@ -981,7 +983,7 @@ El proceso de mover una nave demuestra la elegancia del Composite:
 nave.mover(-1, 0);  // Izquierda
     \end{lstlisting}
     
-    \item \textbf{Nave (Composite raíz) valida límites:}
+    \item \textbf{Nave (Composite raiz) valida límites:}
     \begin{lstlisting}
 for (Component c : components) {
     if (newX < 0 || newX >= 100 || 
@@ -1005,9 +1007,9 @@ for (Component c : components) {
     \item \textbf{Siguiente frame:} Detección de colisiones en nuevas posiciones
 \end{enumerate}
 
-\subsection{Flujo de Ejecución: Disparos}
+\subsection{Flujo de Ejecucion: Disparos}
 
-El flujo de un disparo completo desde creación hasta colisión:
+El flujo de un disparo completo desde creacion hasta colisión:
 
 \begin{enumerate}
     \item \textbf{Estrategia crea disparo:}
@@ -1016,7 +1018,7 @@ DisparoFlecha.crearDisparo(origenX, origenY)
 // Retorna Composite con 3 Pixels
     \end{lstlisting}
     
-    \item \textbf{Disparo se añade a lista:}
+    \item \textbf{Disparo se anade a lista:}
     \begin{lstlisting}
 disparosActivos.add(nuevoDisparo);
     \end{lstlisting}
@@ -1029,43 +1031,43 @@ disparo.mover(0, -1, 0);  // Sube Y
     \item \textbf{Composite de disparo propaga movimiento:}
     \begin{lstlisting}
 for (Component c : components) {
-    c.mover(0, -1, 0);  // Cada píxel notifica
+    c.mover(0, -1, 0);  // Cada pixel notifica
 }
     \end{lstlisting}
     
-    \item \textbf{Píxeles notifican movimiento:}
+    \item \textbf{Pixeles notifican movimiento:}
     \begin{lstlisting}
 notificarMovimientoDisparo(oldX, oldY, x, y);
     \end{lstlisting}
     
-    \item \textbf{Píxel se desactiva si sale:}
+    \item \textbf{Pixel se desactiva si sale:}
     \begin{lstlisting}
 if (y < 0) activo = false;
     \end{lstlisting}
     
-    \item \textbf{Disparo es eliminado:} Cuando todos sus píxeles están inactivos
+    \item \textbf{Disparo es eliminado:} Cuando todos sus pixeles estan inactivos
 \end{enumerate}
 
-\subsection{Ventajas del Patrón Composite}
+\subsection{Ventajas del Patron Composite}
 
 \begin{enumerate}
-    \item \textbf{Uniformidad extrema:} Píxeles individuales y estructuras complejas usan la misma interfaz.
+    \item \textbf{Uniformidad extrema:} Pixeles individuales y estructuras complejas usan la misma interfaz.
     
-    \item \textbf{Operaciones transversales simples:} Mover una nave mueve automáticamente todos sus píxeles.
+    \item \textbf{Operaciones transversales simples:} Mover una nave mueve automáticamente todos sus pixeles.
     
     \item \textbf{Detección de colisiones unificada:} \texttt{celdasOcupadasActivas()} funciona para cualquier estructura.
     
     \item \textbf{Flexibilidad geométrica:} Crear nuevas formas solo requiere construir diferentes Composites.
     
-    \item \textbf{Eficiencia en notificaciones:} Naves notifican bloques, no píxeles individuales.
+    \item \textbf{Eficiencia en notificaciones:} Naves notifican bloques, no pixeles individuales.
     
-    \item \textbf{Gestión de ciclo de vida:} Píxeles de disparo se desactivan automáticamente al salir.
+    \item \textbf{Gestión de ciclo de vida:} Pixeles de disparo se desactivan automáticamente al salir.
     
-    \item \textbf{Reutilización masiva:} El patrón sirve para naves, disparos complejos y futuros elementos.
+    \item \textbf{Reutilización masiva:} El patron sirve para naves, disparos complejos y futuros elementos.
 \end{enumerate}
 
 \newpage
-\section{Integración: Cómo Trabajan Juntos los Patrones}
+\section{Integracion: Cómo Trabajan Juntos los Patrones}
 
 \subsection{Flujo Completo del Sistema}
 
@@ -1075,7 +1077,7 @@ Los tres patrones trabajan de forma coordinada:
     \item \textbf{Inicio del juego:}
     \begin{enumerate}
         \item \textbf{Factory} crea la nave seleccionada: \texttt{NaveFactory.generate("Nave1")}
-        \item La nave crea su \textbf{Composite} raíz y sus \textbf{Strategies}
+        \item La nave crea su \textbf{Composite} raiz y sus \textbf{Strategies}
         \item El jugador accede a disparos según la nave elegida
     \end{enumerate}
     
@@ -1083,13 +1085,13 @@ Los tres patrones trabajan de forma coordinada:
     \begin{enumerate}
         \item Usuario presiona tecla
         \item Nave (Composite) invoca \texttt{mover(dx, 0)}
-        \item Todos los píxeles se desplazan coordinadamente
+        \item Todos los pixeles se desplazan coordinadamente
     \end{enumerate}
     
     \item \textbf{Durante el juego - Disparo:}
     \begin{enumerate}
         \item Usuario selecciona tipo de disparo
-        \item Sistema verifica munición en la Strategy
+        \item Sistema verifica municion en la Strategy
         \item Crea Disparo (Composite) con forma según la Strategy
         \item Disparo sube usando movimiento Composite
     \end{enumerate}
@@ -1105,19 +1107,19 @@ Los tres patrones trabajan de forma coordinada:
 \subsection{Principios SOLID Aplicados}
 
 \begin{itemize}
-    \item \textbf{Single Responsibility:} Cada clase tiene responsabilidad única y clara.
+    \item \textbf{Single Responsibility:} Cada clase tiene responsabilidad unica y clara.
     \item \textbf{Open/Closed:} Abierto para extensión (nuevas estrategias/naves), cerrado para modificación.
     \item \textbf{Liskov Substitution:} Las implementaciones son intercambiables sin quebrantar el contrato.
-    \item \textbf{Interface Segregation:} Las interfaces son específicas y no fuerzan métodos innecesarios.
-    \item \textbf{Dependency Inversion:} El código depende de abstracciones (interfaces), no de implementaciones concretas.
+    \item \textbf{Interface Segregation:} Las interfaces son especificas y no fuerzan metodos innecesarios.
+    \item \textbf{Dependency Inversion:} El codigo depende de abstracciones (interfaces), no de implementaciones concretas.
 \end{itemize}
 
 \subsection{Beneficios Finales}
 
 \begin{itemize}
     \item \textbf{Mantenibilidad:} Cambios localizados, bajo acoplamiento entre componentes.
-    \item \textbf{Extensibilidad:} Nuevas naves, estrategias o formas sin afectar código existente.
-    \item \textbf{Claridad:} Código autoexplicativo usando patrones reconocibles.
+    \item \textbf{Extensibilidad:} Nuevas naves, estrategias o formas sin afectar codigo existente.
+    \item \textbf{Claridad:} Codigo autoexplicativo usando patrones reconocibles.
     \item \textbf{Robustez:} Estructura clara reduce errores y facilita debugging.
     \item \textbf{Testabilidad:} Componentes aislados, fáciles de probar independientemente.
 \end{itemize}
