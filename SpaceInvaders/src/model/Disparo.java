@@ -78,13 +78,12 @@ public class Disparo {
 	}
 
 	/** Devuelve todas las celdas ocupadas por todos los disparos activos */
-	public java.util.List<int[][]> getCeldasOcupadasTodosDisparos() {
-		java.util.List<int[][]> todasLasCeldas = new ArrayList<>();
+	public ArrayList<int[][]> getCeldasOcupadasTodosDisparos() {
+		ArrayList<int[][]> todasLasCeldas = new ArrayList<>();
 		
 		for (Component disparo : disparosActivos) {
 			if (disparo instanceof Composite comp) {
-				java.util.List<int[]> lista = comp.celdasOcupadasActivas();
-				todasLasCeldas.add(lista.toArray(new int[0][]));
+				todasLasCeldas.add(comp.celdasOcupadasActivas().toArray(new int[0][]));
 			} else {
 				todasLasCeldas.add(new int[][] { { disparo.getRefX(), disparo.getRefY() } });
 			}
@@ -101,12 +100,11 @@ public class Disparo {
 	}
 
 	public int[][] celdasOcupadas() {
-		java.util.List<int[]> todasLasCeldas = new ArrayList<>();
+		ArrayList<int[]> todasLasCeldas = new ArrayList<>();
 		
 		for (Component disparo : disparosActivos) {
 			if (disparo instanceof Composite comp) {
-				java.util.List<int[]> lista = comp.celdasOcupadasActivas();
-				todasLasCeldas.addAll(lista);
+				todasLasCeldas.addAll(comp.celdasOcupadasActivas());
 			} else {
 				todasLasCeldas.add(new int[] { disparo.getRefX(), disparo.getRefY() });
 			}

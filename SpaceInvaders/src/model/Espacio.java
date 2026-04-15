@@ -119,12 +119,7 @@ public class Espacio extends Observable {
     // ─── Acciones del jugador ─────────────────────────────────────────────────
 
 
-    public void cambiarTipoDisparo() {
-        Naves j = getNaveJugador();
-        if (j != null && j.isVivo()) {
-            j.cambiarTipoDisparo();
-        }
-    }
+ 
 
     // ─── Actualización del disparo ────────────────────────────────────────────
 
@@ -136,6 +131,10 @@ public class Espacio extends Observable {
      *    proyectil pasa a y=-1, se desactiva y nunca se comprueba contra el enemigo).
      * 2. Si sigue activo, Disparo.subir(); si sale del tablero, borrar celdas.
      * 3. Si tras subir sigue activo, volver a comprobar colisión (entrada en celda del enemigo).
+     * 4. Al final, {@code retainAll(disparosParaMantener)} sobre la lista de disparos del jugador:
+     *    deja solo los elementos presentes también en esa lista auxiliar (intersección). Los
+     *    proyectiles impactados o que salieron del tablero no se añadieron ahí, así que se
+     *    eliminan de la lista y no quedan referencias huérfanas.
      */
     public void actualizarDisparo() {
         if (getNaveJugador() == null) return;
@@ -177,7 +176,7 @@ public class Espacio extends Observable {
                 }
             }
         }
-        getNaveJugador().getDisparos().retainAll(disparosParaMantener);
+        getNaveJugador().getDisparos().retainAll(disparosParaMantener); // Después de retainAll, la lista de disparos contiene únicamente los proyectiles que siguen “en juego” (activos y sin haber sido eliminados por colisión en ese paso)
     }
 
     // Método auxiliar para obtener celdas ocupadas por un Component
