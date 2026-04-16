@@ -77,20 +77,6 @@ public class Disparo {
 		return disparosActivos;
 	}
 
-	/** Devuelve todas las celdas ocupadas por todos los disparos activos */
-	public ArrayList<int[][]> getCeldasOcupadasTodosDisparos() {
-		ArrayList<int[][]> todasLasCeldas = new ArrayList<>();
-		
-		for (Component disparo : disparosActivos) {
-			if (disparo instanceof Composite comp) {
-				todasLasCeldas.add(comp.celdasOcupadasActivas().toArray(new int[0][]));
-			} else {
-				todasLasCeldas.add(new int[][] { { disparo.getRefX(), disparo.getRefY() } });
-			}
-		}
-		return todasLasCeldas;
-	}
-
 	/** Desactiva todos los disparos */
 	public void desactivarTodosLosDisparos() {
 		for (Component disparo : disparosActivos) {

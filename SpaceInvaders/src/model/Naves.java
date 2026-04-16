@@ -49,27 +49,6 @@ public abstract class Naves {
 
 	public abstract void construir();
 
-	public ArrayList<StrategyDisparo> getEstrategiasPermitidas() {
-		if (gestorDisparos != null) {
-			return gestorDisparos.getEstrategias();
-		}
-		return new ArrayList<>();
-	}
-
-	public String getTipoDisparoActual() {
-		if (gestorDisparos != null) {
-			return gestorDisparos.getTipoActual();
-		}
-		return "ninguno";
-	}
-
-	public int getMunicionDisparoActual() {
-		if (gestorDisparos != null) {
-			return gestorDisparos.getMunicionActual();
-		}
-		return 0;
-	}
-
 	public abstract int[][] celdasOcupadas();
 
 	public abstract int getTipoNave();
