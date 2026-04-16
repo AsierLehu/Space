@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public abstract class Naves {
 
-	protected int x;
-	protected int y;
-	protected int velocidad;
-	protected boolean vivo;
+	private int x;
+	private int y;
+	private int velocidad;
+	private boolean vivo;
 
-	protected Component ComponenteNave;
-	protected Disparo gestorDisparos;
+	private Component ComponenteNave;
+	private Disparo gestorDisparos;
 
 	public Naves(int x, int y, int velocidad) {
 		this.x = x;
@@ -33,6 +33,10 @@ public abstract class Naves {
 
 	public void setVivo(boolean b) {
 		this.vivo = b;
+	}
+
+	public void setGestorDisparos(Disparo gestor) {
+		this.gestorDisparos = gestor;
 	}
 
 	public void morirComoJugador() {

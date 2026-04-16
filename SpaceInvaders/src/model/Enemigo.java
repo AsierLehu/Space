@@ -14,8 +14,8 @@ public class Enemigo extends Naves {
 
 	@Override
 	public void construir() {
-		int bx = x;
-		int by = y;
+		int bx = getX();
+		int by = getY();
 
 		anadirComponente(new Pixel(bx, by));
 		anadirComponente(new Pixel(bx + 1, by));
@@ -32,14 +32,14 @@ public class Enemigo extends Naves {
 	@Override
 	public int[][] celdasOcupadas() {
 		return new int[][] {
-			{ x, y },
-			{ x + 1, y },
-			{ x + 3, y },
-			{ x + 4, y },
-			{ x + 1, y + 1 },
-			{ x + 2, y + 1 },
-			{ x + 3, y + 1 },
-			{ x + 2, y + 2 }
+			{ getX(), getY() },
+			{ getX() + 1, getY() },
+			{ getX() + 3, getY() },
+			{ getX() + 4, getY() },
+			{ getX() + 1, getY() + 1 },
+			{ getX() + 2, getY() + 1 },
+			{ getX() + 3, getY() + 1 },
+			{ getX() + 2, getY() + 2 }
 		};
 	}
 	@Override

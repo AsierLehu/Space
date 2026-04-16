@@ -10,14 +10,14 @@ public class Nave3 extends Naves {
 		estrategias.add(new DisparoPixel());
 		estrategias.add(new DisparoFlecha());
 		estrategias.add(new DisparoRombo());
-		gestorDisparos = new Disparo(estrategias);
+		setGestorDisparos(new Disparo(estrategias));
 		inicializarNaveJugador();
 	}
 
 	@Override
 	public void construir() {
-		int bx = x;
-		int by = y;
+		int bx = getX();
+		int by = getY();
 		anadirComponente(new Pixel(bx + 1, by));
 		anadirComponente(new Pixel(bx, by + 1));
 		anadirComponente(new Pixel(bx + 1, by + 1));
@@ -26,21 +26,21 @@ public class Nave3 extends Naves {
 
 	@Override
 	protected int origenDisparoX() {
-		return x + 1;
+		return getX() + 1;
 	}
 
 	@Override
 	protected int origenDisparoY() {
-		return y - 3;
+		return getY() - 3;
 	}
 
 	@Override
 	public int[][] celdasOcupadas() {
 		return new int[][] {
-			{ x + 1, y },
-			{ x, y + 1 },
-			{ x + 1, y + 1 },
-			{ x + 2, y + 1 }
+			{ getX() + 1, getY() },
+			{ getX(), getY() + 1 },
+			{ getX() + 1, getY() + 1 },
+			{ getX() + 2, getY() + 1 }
 		};
 	}
 
