@@ -9,7 +9,7 @@ import javax.swing.Timer;
 @SuppressWarnings("deprecation")
 public class Espacio extends Observable {
 
-    /** Espejo del tablero (no usado para lógica ni pintado). Una celda, un valor; último cambio gana. */
+    /** Espejo del tablero (pintado vía notificaciones). Lectura para depuración de colisión disparo-enemigo. Una celda, un valor; último cambio gana. */
     public static final int CELDA_VACIO = 0;
     public static final int CELDA_DISPARO = 1;
     public static final int CELDA_ENEMIGO = 2;
@@ -32,6 +32,10 @@ public class Espacio extends Observable {
     private Timer gameTimer;
     private int frameCount;
     private boolean gameOver;
+
+    /** Evita varios System.out por el mismo impacto (disparo compuesto o varios píxeles). */
+    private boolean colisionMatrizMensajeYaEnEstePasoDisparo;
+    private boolean colisionMatrizMensajeYaEnEstePasoEnemigo;
 
     // ─── Constructor / Singleton ──────────────────────────────────────────────
 
@@ -194,6 +198,9 @@ public class Espacio extends Observable {
         ArrayList<Component> disparosParaMantener = new ArrayList<>();
 
         for (Component d : disparos) {
+            colisionMatrizMensajeYaEnEstePasoDisparo = false;
+            registrarColisionMatrizDisparoEnemigoSuperposicion(d);
+
             Enemigo golpeado = FlotaEnemigos.getFlotaEnemigos().comprobarColision(d);
             if (golpeado != null) {
                 int[][] celdasDisparoEnColision = getCeldasOcupadas(d);
@@ -231,6 +238,22 @@ public class Espacio extends Observable {
         getNaveJugador().getDisparos().retainAll(disparosParaMantener); // Después de retainAll, la lista de disparos contiene únicamente los proyectiles que siguen “en juego” (activos y sin haber sido eliminados por colisión en ese paso)
     }
 
+    /**
+     * Si alguna celda del disparo coincide con {@link #CELDA_ENEMIGO} en el espejo (antes de mover),
+     * un mensaje por colisión. No sustituye a {@link FlotaEnemigos#comprobarColision(Component)}.
+     */
+    private void registrarColisionMatrizDisparoEnemigoSuperposicion(Component d) {
+        for (int[] celda : getCeldasOcupadas(d)) {
+            if (getCelda(celda[0], celda[1]) == CELDA_ENEMIGO) {
+                if (!colisionMatrizMensajeYaEnEstePasoDisparo) {
+                    System.out.println("[matriz] colisión disparo-enemigo (superposición)");
+                    colisionMatrizMensajeYaEnEstePasoDisparo = true;
+                }
+                return;
+            }
+        }
+    }
+
     // Método auxiliar para obtener celdas ocupadas por un Component
     private int[][] getCeldasOcupadas(Component disparo) {
         if (disparo instanceof Composite comp) {
@@ -259,7 +282,9 @@ public class Espacio extends Observable {
                 else {
                     oldPixels.add(new int[] { naveEnemigo.getRefX(), naveEnemigo.getRefY() });
                 }
-                
+
+                colisionMatrizMensajeYaEnEstePasoEnemigo = false;
+
                 // Mover el enemigo
                 e.mover(0, 1, 0);
                 
@@ -404,6 +429,12 @@ public class Espacio extends Observable {
         if (!isGameOver() && !isGameWon()) {
             setCeldaEspejo(oldX, oldY, CELDA_VACIO);
             if (esValidoCelda(newX, newY)) {
+                if (getCelda(newX, newY) == CELDA_ENEMIGO) {
+                    if (!colisionMatrizMensajeYaEnEstePasoDisparo) {
+                        System.out.println("[matriz] colisión disparo-enemigo (disparo sube)");
+                        colisionMatrizMensajeYaEnEstePasoDisparo = true;
+                    }
+                }
                 setCeldaEspejo(newX, newY, CELDA_DISPARO);
             }
             setChanged();
@@ -428,6 +459,12 @@ public class Espacio extends Observable {
         }
         // Pintar píxeles nuevos
         for (int[] pixel : newPixels) {
+            if (getCelda(pixel[0], pixel[1]) == CELDA_DISPARO) {
+                if (!colisionMatrizMensajeYaEnEstePasoEnemigo) {
+                    System.out.println("[matriz] colisión disparo-enemigo (enemigo baja)");
+                    colisionMatrizMensajeYaEnEstePasoEnemigo = true;
+                }
+            }
             setCeldaEspejo(pixel[0], pixel[1], CELDA_ENEMIGO);
             setChanged();
             notifyObservers(new int[] {14, pixel[0], pixel[1]});  // tipo 14: pintar enemigo
