@@ -153,6 +153,9 @@ public class MainFrame extends JFrame implements Observer {
     		case 17: // pintar nave morada (Nave3) - [tipo, x, y]
     			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_NAVE3_MORADO);
     			break;
+
+            case 18: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12
+                break;
     	}
     }
     

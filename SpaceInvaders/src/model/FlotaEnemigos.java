@@ -1,17 +1,17 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
 /**
  * Gestiona la flota de enemigos del juego.
- * Se encarga de: crear, mover, y consultar el estado de los enemigos,
- * así como de comprobar colisiones con un disparo dado.
- *
- * Esta clase es un módulo independiente del modelo: no conoce ni a Espacio
- * ni a la vista, lo que permite que el código sea más descentralizado.
+ * Observa a {@link Espacio}: ante un impacto disparo-enemigo (detección por matriz en Espacio),
+ * elimina de la lista al enemigo afectado.
  */
-public class FlotaEnemigos {
+@SuppressWarnings("deprecation")
+public class FlotaEnemigos implements Observer {
 
     private static FlotaEnemigos miFlotaEnemigos;
     private ArrayList<Enemigo> enemigos;
@@ -27,19 +27,43 @@ public class FlotaEnemigos {
         return miFlotaEnemigos;
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        
+        if (datos[0] != Espacio.MSG_ELIMINAR_ENEMIGO) {
+            return;
+        }
+        eliminarEnemigoQueContieneCelda(datos[1], datos[2]);
+    }
+
+    /** Quita de la lista al enemigo vivo que ocupa la celda (x,y), si existe. */
+    public void eliminarEnemigoQueContieneCelda(int x, int y) {
+        enemigos.removeIf(e -> {
+            if (!e.isVivo()) {
+                return false;
+            }
+            for (int[] c : e.celdasOcupadas()) {
+                if (c[0] == x && c[1] == y) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    
+
     // ─── Inicialización ───────────────────────────────────────────────────────
 
     // Limpia la flota y añade 4-8 enemigos en posiciones aleatorias de la fila superior sin tocarse
     public void inicializar(int anchura) {
         enemigos.clear();
         Random rand = new Random();
-        int n_enemigos = rand.nextInt(5)+4;
+        int n_enemigos = rand.nextInt(5) + 4;
         ArrayList<Integer> xOcupadas = new ArrayList<>();
-        
-        // Crear 4-8 enemigos en posiciones aleatorias, sin que se toquen
+
         int intentos = 0;
         while (enemigos.size() < n_enemigos && intentos < 100) {
-            // Enemigo ocupa columnas ex..ex+4; ex en [0, anchura-5] (mismo bound que con forma más estrecha)
             int ex = rand.nextInt(anchura - 4);
             int ey = rand.nextInt(4);
 
@@ -61,16 +85,13 @@ public class FlotaEnemigos {
 
     // ─── Consultas de estado ──────────────────────────────────────────────────
 
-    // Devuelve la lista completa de enemigos (vivos y muertos)
     public ArrayList<Enemigo> getEnemigos() {
         return enemigos;
     }
 
-    // Devuelve true si algún enemigo vivo llegó al límite inferior del tablero
     public boolean algunoLlegoAbajo(int altura) {
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
-                // Verificar todos los píxeles del enemigo, no solo la referencia
                 int[][] celdas = e.celdasOcupadas();
                 for (int[] celda : celdas) {
                     if (celda[1] >= altura - 1) {
@@ -82,49 +103,16 @@ public class FlotaEnemigos {
         return false;
     }
 
-    // Devuelve true si la flota no está vacía y todos los enemigos están muertos (victoria)
+    /** Victoria: flota vacía (todos eliminados) o todos los restantes están muertos. */
     public boolean todosDestruidos() {
-        if (enemigos.isEmpty()) return false;
+        if (enemigos.isEmpty()) {
+            return true;
+        }
         for (Enemigo e : enemigos) {
-            if (e.isVivo()) return false;
+            if (e.isVivo()) {
+                return false;
+            }
         }
         return true;
-    }
-
-    // ─── Colisiones ───────────────────────────────────────────────────────────
-
-    // Comprueba colisión del disparo con la flota. Devuelve el enemigo golpeado o null
-    public Enemigo comprobarColision(Disparo d) {
-        int[][] celdasDisparo = d.celdasOcupadas();
-        return comprobarColisionConCeldas(celdasDisparo);
-    }
-
-    // Comprueba colisión de un Component (disparo individual) con la flota
-    public Enemigo comprobarColision(Component disparo) {
-        int[][] celdasDisparo;
-        if (disparo instanceof Composite comp) {
-            java.util.List<int[]> lista = comp.celdasOcupadasActivas();
-            celdasDisparo = lista.toArray(new int[0][]);
-        } else {
-            celdasDisparo = new int[][] { { disparo.getRefX(), disparo.getRefY() } };
-        }
-        return comprobarColisionConCeldas(celdasDisparo);
-    }
-
-    // Método auxiliar para evitar duplicar la lógica de colisión
-    private Enemigo comprobarColisionConCeldas(int[][] celdasDisparo) {
-        for (Enemigo e : enemigos) {
-        	if (!e.isVivo()) continue;
-        	for (int[] celdaDisparo : celdasDisparo) {
-        		for (int[] celdaEnemigo : e.celdasOcupadas()) {
-        			if (celdaDisparo[0] == celdaEnemigo[0]
-        					&& celdaDisparo[1] == celdaEnemigo[1]) {
-        				e.setVivo(false);
-        				return e;
-        			}
-        		}
-        	}
-        }
-        return null;
     }
 }
