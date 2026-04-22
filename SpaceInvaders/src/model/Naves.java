@@ -12,7 +12,7 @@ public abstract class Naves {
 	private Component ComponenteNave;
 	private Disparo gestorDisparos;
 
-	public Naves(int x, int y, int velocidad) {
+	protected Naves(int x, int y, int velocidad) {
 		this.x = x;
 		this.y = y;
 		this.velocidad = velocidad;
