@@ -131,10 +131,10 @@ public class MainFrame extends JFrame implements Observer {
     			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_ENEMIGO);
     			break;
     			
-    		case 7: //mostrarMensajeFin("GAME OVER",   Color.RED);   break;
+    		case 7: 
             mostrarGameOver();
                 break;
-    		case 8: //mostrarMensajeFin("HAS GANADO!", Color.GREEN); break;
+    		case 8: 
             mostrarGameWon();
                 break;
     		

@@ -38,9 +38,7 @@ public class FlotaEnemigos implements Observer {
         
         
         if (datos.length >= 2) {
-            // Nuevo formato: [MSG_ELIMINAR_ENEMIGO, enemigoId, ...]
             int enemigoId = datos[1];
-            // Solo eliminar el enemigo de la lista, NO hacer notificaciones visuales
             eliminarEnemigoPorId(enemigoId);
         }
     }
@@ -143,5 +141,26 @@ public class FlotaEnemigos implements Observer {
             }
         }
         return true;
+    }
+    
+    /**
+     * Método llamado por TimerEnemigo para mover todos los enemigos.
+     * Cada enemigo llama a su método mover() que notificará a Espacio.
+     */
+    public void moverEnemigos() {
+        // Crear una copia para evitar problemas de concurrencia durante eliminaciones
+        ArrayList<Enemigo> enemigosCopia = new ArrayList<>(enemigos);
+        
+        for (Enemigo enemigo : enemigosCopia) {
+            if (enemigo.isVivo()) {
+                // Cada enemigo se mueve y notifica a Espacio a través del Component interface
+                enemigo.mover(0, 1, 0);
+                
+                // Si el juego terminó durante el movimiento, salir del bucle
+                if (Espacio.getEspacio().isGameOver() || Espacio.getEspacio().isGameWon()) {
+                    break;
+                }
+            }
+        }
     }
 }

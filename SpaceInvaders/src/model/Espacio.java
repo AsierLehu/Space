@@ -42,7 +42,6 @@ public class Espacio extends Observable {
 
     // Timer del juego
     private Timer gameTimer;
-    private int frameCount;
     private boolean gameOver;
 
     private boolean colisionDetectadaEnDisparoSubir;
@@ -74,6 +73,9 @@ public class Espacio extends Observable {
         iniciarJuegoLoop();
         notificarCambioPantalla();
         notificarInicializacion();
+        
+        // Iniciar el timer de enemigos DESPUÉS de que todo esté inicializado
+        TimerEnemigo.getInstancia().iniciar();
     }
 
     private void inicializar() {
@@ -106,6 +108,33 @@ public class Espacio extends Observable {
                 tablero[x][y] = CELDA_VACIO;
             }
         }
+        
+        // Inicializar enemigos en la matriz después de crearla
+        inicializarEnemigosEnMatriz();
+    }
+    
+    /** Pinta todos los enemigos creados por FlotaEnemigos en la matriz. */
+    private void inicializarEnemigosEnMatriz() {
+        System.out.println("=== INICIALIZANDO ENEMIGOS EN MATRIZ ===");
+        // Crear una copia para evitar ConcurrentModificationException
+        ArrayList<Enemigo> enemigos = new ArrayList<>(FlotaEnemigos.getFlotaEnemigos().getEnemigos());
+        
+        for (Enemigo enemigo : enemigos) {
+            if (enemigo.isVivo()) {
+                int enemigoId = enemigo.getId();
+                int[][] celdas = enemigo.celdasOcupadas();
+                System.out.println("Inicializando enemigo ID " + enemigoId + " con " + celdas.length + " píxeles");
+                
+                // Pintar cada píxel del enemigo en la matriz con su ID
+                for (int[] celda : celdas) {
+                    setCeldaMatriz(celda[0], celda[1], enemigoId);
+                    // Notificar a la vista para pintar el píxel del enemigo
+                    setChanged();
+                    notifyObservers(new int[]{12, celda[0], celda[1]});
+                }
+            }
+        }
+        System.out.println("=== FIN INICIALIZACIÓN ENEMIGOS ===");
     }
 
     /** Lectura del espejo; fuera de rango o antes de la primera partida devuelve {@link #CELDA_VACIO}. */
@@ -444,71 +473,6 @@ public class Espacio extends Observable {
     // ═══════════════════════════════════════════════════════════════════════════════
 
     // Llamado cada 200 ms: baja los enemigos 1 píxel
-    public void actualizarEnemigos() {
-        // Crear una copia de la lista para evitar problemas con eliminaciones durante la iteración
-        ArrayList<Enemigo> enemigos = new ArrayList<>(FlotaEnemigos.getFlotaEnemigos().getEnemigos());
-        
-        // Procesar cada enemigo - ahora es seguro iterar normalmente
-        for (Enemigo enemigo : enemigos) {
-            // Solo verificar que está vivo (ya no importa si fue eliminado de la lista original)
-            if (!enemigo.isVivo()) {
-                continue;
-            }
-            
-            int enemigoId = enemigo.getId();
-            int[][] celdasActuales = enemigo.celdasOcupadas();
-            
-            // Calcular nuevas posiciones (mover hacia abajo)
-            ArrayList<int[]> nuevasPosiciones = new ArrayList<>();
-            boolean llegaAlFondo = false;
-            
-            for (int[] celda : celdasActuales) {
-                int nuevaY = celda[1] + 1;
-                if (nuevaY >= altura) {
-                    llegaAlFondo = true;
-                    break; // No necesitamos calcular más si ya llega al fondo
-                }
-                nuevasPosiciones.add(new int[]{celda[0], nuevaY});
-            }
-            
-            if (llegaAlFondo) {
-                // Si el enemigo llega al fondo, game over
-                gameOver = true;
-                break; // Salir inmediatamente del bucle
-            }
-            
-            // Verificar colisiones con disparos en las nuevas posiciones
-            ArrayList<int[]> colisionesConDisparos = new ArrayList<>();
-            for (int[] nuevaPos : nuevasPosiciones) {
-                if (getCelda(nuevaPos[0], nuevaPos[1]) == CELDA_DISPARO) {
-                    colisionesConDisparos.add(nuevaPos);
-                }
-            }
-            
-            if (!colisionesConDisparos.isEmpty()) {
-                // Hay colisión con disparo - eliminar enemigo
-                ArrayList<int[]> celdasActualesList = new ArrayList<>();
-                for (int[] celda : celdasActuales) {
-                    celdasActualesList.add(celda);
-                }
-                enemigoEliminarPorColisionEnMovimiento(enemigoId, celdasActualesList, colisionesConDisparos);
-            } else {
-                // Mover enemigo físicamente (actualiza su posición interna)
-                enemigo.mover(0, 1, 0); // Mover 1 píxel hacia abajo
-                
-                // Actualizar matriz visual
-                ArrayList<int[]> celdasActualesList = new ArrayList<>();
-                for (int[] celda : celdasActuales) {
-                    celdasActualesList.add(celda);
-                }
-                enemigoMoverEnMatriz(enemigoId, celdasActualesList, nuevasPosiciones);
-            }
-        }
-
-        if (isGameOver()) {
-            notificarGameOver();
-        }
-    }
     
     /** Elimina un enemigo que colisiona con disparo durante su movimiento. */
     private void enemigoEliminarPorColisionEnMovimiento(int enemigoId, ArrayList<int[]> celdasActuales, ArrayList<int[]> colisionesConDisparos) {
@@ -519,7 +483,7 @@ public class Espacio extends Observable {
             notifyObservers(new int[]{12, celda[0], celda[1]}); // borrar enemigo
         }
         
-        // Limpiar disparos que colisionaron
+        // Limpiar disparos que colisionaron - TODO: RESOLVER EL HECHO DE QUE SOLO SE BORRAN LOS PIXELES DEL DISPARO QUE COLISIONAN
         for (int[] colision : colisionesConDisparos) {
             setCeldaMatriz(colision[0], colision[1], CELDA_VACIO);
             setChanged();
@@ -605,16 +569,62 @@ public class Espacio extends Observable {
         }
     }
 
-    public void notificarMovimientoJugadorCompleto(int[] oldX, int[] oldY, ArrayList<Component> componentes) {
-        // Método de compatibilidad - obtiene el tipo de nave consultando a JugadorBueno
-        Naves naveJugador = JugadorBueno.getJugadorBueno().getNave();
-        int tipoNave = (naveJugador != null) ? naveJugador.getTipoNave() : 0;
-        notificarMovimientoJugadorCompleto(oldX, oldY, componentes, tipoNave);
-    }
     
     public void notificarMovimientoJugadorCompleto(int[] oldX, int[] oldY, ArrayList<Component> componentes, int tipoNave) {
-        // Primero borra todas las celdas antiguas
-        if (!this.isGameOver() && !this.isGameWon()) {
+        if (this.isGameOver() || this.isGameWon()) {
+            return;
+        }
+        
+        // Si tipoNave es 0, es un enemigo - usar nuevo flujo de colisiones
+        if (tipoNave == 0) {
+            
+            // 1. Obtener ID del enemigo desde la matriz (posición anterior)
+            int enemigoId = -1;
+            if (oldX.length > 0 && oldY.length > 0) {
+                int valorCelda = getCelda(oldX[0], oldY[0]);
+                if (esEnemigoId(valorCelda)) {
+                    enemigoId = valorCelda;
+                }
+            }
+            
+            if (enemigoId == -1) {
+                System.out.println("ERROR: No se pudo identificar el enemigo en la matriz");
+                return; // No se pudo identificar el enemigo en la matriz
+            }
+            
+            // 2. PRIMERO verificar colisiones en las nuevas posiciones (antes de actualizar matriz)
+            if (verificarColisionEnemigoDespuesMovimiento(enemigoId, componentes)) {
+                // Hay colisión - eliminar enemigo y disparos
+                // Primero limpiar posiciones anteriores del enemigo
+                for (int i = 0; i < oldX.length; i++) {
+                    setCeldaMatriz(oldX[i], oldY[i], CELDA_VACIO);
+                }
+                eliminarEnemigoYDisparo(enemigoId, componentes);
+            } else {
+                // Sin colisión - actualizar matriz normalmente
+                // Limpiar posiciones anteriores
+                for (int i = 0; i < oldX.length; i++) {
+                    setCeldaMatriz(oldX[i], oldY[i], CELDA_VACIO);
+                }
+                
+                // Establecer nuevas posiciones con el ID del enemigo
+                for (Component c : componentes) {
+                    setCeldaMatriz(c.getRefX(), c.getRefY(), enemigoId);
+                }
+                
+                // Notificar MainFrame para actualizar visualización
+                for (int i = 0; i < oldX.length; i++) {
+                    setChanged();
+                    notifyObservers(new int[] {10, oldX[i], oldY[i]}); // borrar píxel anterior
+                }
+                
+                for (Component c : componentes) {
+                    setChanged();
+                    notifyObservers(new int[] {14, c.getRefX(), c.getRefY()}); // pintar píxel nuevo
+                }
+            }
+        } else {
+            // Lógica original para el jugador
             int celdaJugador = tipoNaveACeldaJugador(tipoNave);
             for (int i = 0; i < oldX.length; i++) {
                 setCeldaMatriz(oldX[i], oldY[i], CELDA_VACIO);
@@ -704,21 +714,62 @@ public class Espacio extends Observable {
     // ║ BUCLE PRINCIPAL DE JUEGO
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    // Tick cada 50 ms para disparos, cada 200 ms (4 ticks) para enemigos
+    // Tick cada 50 ms solo para disparos (enemigos manejados por TimerEnemigo)
     public void iniciarJuegoLoop() {
-        frameCount = 0;
         gameTimer = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!isGameOver() && !isGameWon()) {
                     actualizarDisparos();
-                    frameCount++;
-                    if (frameCount % 4 == 0) {
-                        actualizarEnemigos();
-                    }
                 }
             }
         });
         gameTimer.start();
     }
+    private boolean verificarColisionEnemigoDespuesMovimiento(int enemigoId, ArrayList<Component> componentes) {
+        // Verificar si algún píxel del enemigo coincide con un disparo
+        for (Component c : componentes) {
+            int valorCelda = getCelda(c.getRefX(), c.getRefY());
+            if (valorCelda == CELDA_DISPARO) {
+                System.out.println("¡COLISIÓN DETECTADA!");
+                return true; // Colisión detectada
+            }
+        }
+        return false; // No hay colisión
+    }
+    
+   
+    private void eliminarEnemigoYDisparo(int enemigoId, ArrayList<Component> componentes) {
+        // Encontrar todas las posiciones de disparos que colisionaron
+        ArrayList<int[]> disparosColisionados = new ArrayList<>();
+        
+        for (Component c : componentes) {
+            if (getCelda(c.getRefX(), c.getRefY()) == CELDA_DISPARO) {
+                disparosColisionados.add(new int[]{c.getRefX(), c.getRefY()});
+            }
+        }
+        
+        // 1. Limpiar píxeles de disparos de la matriz (las posiciones del enemigo ya se limpiaron antes)
+        for (int[] disparo : disparosColisionados) {
+            setCeldaMatriz(disparo[0], disparo[1], CELDA_VACIO);
+        }
+        
+        // 2. Notificar MainFrame primero (borrado visual)
+        // Borrar enemigo visualmente
+        for (Component c : componentes) {
+            setChanged();
+            notifyObservers(new int[]{12, c.getRefX(), c.getRefY()}); // borrar píxel enemigo
+        }
+        
+        // Borrar disparos visualmente
+        for (int[] disparo : disparosColisionados) {
+            setChanged();
+            notifyObservers(new int[]{3, disparo[0], disparo[1]}); // borrar píxel disparo
+        }
+        
+        // 3. Notificar FlotaEnemigos segundo (eliminar de lista)
+        setChanged();
+        notifyObservers(new int[]{MSG_ELIMINAR_ENEMIGO, enemigoId}); // MSG_ELIMINAR_ENEMIGO
+    }
+    
 }
