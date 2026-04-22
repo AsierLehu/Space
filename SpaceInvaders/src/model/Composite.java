@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Compuesto del patrón Composite: agrupa Component (normalmente Pixel).
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public class Composite implements Component {
 
-	private final List<Component> components = new ArrayList<>();
+	private final ArrayList<Component> components = new ArrayList<>();
 	private final boolean proyectil;
 
 	public Composite() {
@@ -29,15 +28,15 @@ public class Composite implements Component {
 		components.remove(c);
 	}
 
-	public List<Component> getComponents() {
+	public ArrayList<Component> getComponents() {
 		return components;
 	}
 
 	/**
 	 * Celdas ocupadas por píxeles activos (disparos); recursivo por si hubiera anidación.
 	 */
-	public List<int[]> celdasOcupadasActivas() {
-		List<int[]> celdas = new ArrayList<>();
+	public ArrayList<int[]> celdasOcupadasActivas() {
+		ArrayList<int[]> celdas = new ArrayList<>();
 		for (Component c : components) {
 			if (c instanceof Composite comp) {
 				celdas.addAll(comp.celdasOcupadasActivas());

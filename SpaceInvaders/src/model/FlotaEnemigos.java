@@ -47,17 +47,18 @@ public class FlotaEnemigos implements Observer {
 
     /** Quita de la lista al enemigo vivo que ocupa la celda (x,y), si existe. */
     public void eliminarEnemigoQueContieneCelda(int x, int y) {
-        enemigos.removeIf(e -> {
-            if (!e.isVivo()) {
-                return false;
-            }
-            for (int[] c : e.celdasOcupadas()) {
-                if (c[0] == x && c[1] == y) {
-                    return true;
+        for (int i = 0; i < enemigos.size(); i++) {
+            Enemigo enemigo = enemigos.get(i);
+            if (enemigo.isVivo()) {
+                int[][] celdas = enemigo.celdasOcupadas();
+                for (int[] celda : celdas) {
+                    if (celda[0] == x && celda[1] == y) {
+                        enemigos.remove(i);
+                        return; // Solo eliminar el primero que coincida
+                    }
                 }
             }
-            return false;
-        });
+        }
     }
 
     /** Encuentra un enemigo por su ID. */
