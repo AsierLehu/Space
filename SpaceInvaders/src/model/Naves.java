@@ -61,7 +61,7 @@ public abstract class Naves {
 		return y - 3;
 	}
 
-	private void inicializarNaveJugador() {
+	public void inicializarNaveJugador() {
 		this.ComponenteNave = new Composite();
 		construir();
 		this.x = ComponenteNave.getRefX();
