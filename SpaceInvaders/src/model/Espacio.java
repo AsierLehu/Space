@@ -687,38 +687,7 @@ public class Espacio extends Observable {
         }
     }
 
-    private void notificarDisparoFueraDeTablero(int oldX, int oldY) {
-        setCeldaMatriz(oldX, oldY, CELDA_VACIO);
-        setChanged();
-        notifyObservers(new int[] {3, oldX, oldY});
-    }
 
-    /** Cuando un enemigo se mueve: borra píxeles viejos; si el nuevo trazo choca con disparo en el espejo, impacto. */
-    private void notificarMovimientoEnemigo(Enemigo e, ArrayList<int[]> oldPixels, ArrayList<int[]> newPixels) {
-        for (int[] pixel : oldPixels) {
-            setCeldaMatriz(pixel[0], pixel[1], CELDA_VACIO);
-            setChanged();
-            notifyObservers(new int[] {12, pixel[0], pixel[1]});
-        }
-        ArrayList<int[]> celdasDisparoImpactadas = new ArrayList<>();
-        for (int[] np : newPixels) {
-            if (getCelda(np[0], np[1]) == CELDA_DISPARO) {
-                celdasDisparoImpactadas.add(np);
-            }
-        }
-        if (!celdasDisparoImpactadas.isEmpty()) {
-            resolverImpactoEnemigoConDisparo(celdasDisparoImpactadas);
-            if (isGameWon()) {
-                notificarVictoria();
-            }
-            return;
-        }
-        for (int[] pixel : newPixels) {
-            setCeldaMatriz(pixel[0], pixel[1], e.getId());
-            setChanged();
-            notifyObservers(new int[] {14, pixel[0], pixel[1]});
-        }
-    }
 
 
     private void notificarGameOver() {
