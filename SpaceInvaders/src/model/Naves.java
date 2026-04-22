@@ -53,15 +53,15 @@ public abstract class Naves {
 
 	public abstract int getTipoNave();
 
-	protected int origenDisparoX() {
+	public int origenDisparoX() {
 		return x;
 	}
 
-	protected int origenDisparoY() {
+	public int origenDisparoY() {
 		return y - 3;
 	}
 
-	protected void inicializarNaveJugador() {
+	private void inicializarNaveJugador() {
 		this.ComponenteNave = new Composite();
 		construir();
 		this.x = ComponenteNave.getRefX();

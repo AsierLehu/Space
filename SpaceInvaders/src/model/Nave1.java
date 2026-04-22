@@ -31,12 +31,12 @@ public class Nave1 extends Naves {
 	}
 
 	@Override
-	protected int origenDisparoX() {
+	public int origenDisparoX() {
 		return getX() + 2;
 	}
 
 	@Override
-	protected int origenDisparoY() {
+	public int origenDisparoY() {
 		return getY() - 3;
 	}
 
