@@ -41,6 +41,9 @@ public class Espacio extends Observable {
      * (disparo sube hacia enemigo). Se consume en {@link #actualizarDisparo()}.
      */
     private boolean colisionDetectadaEnDisparoSubir;
+    
+    /** ID del enemigo detectado durante la colisión en movimiento de disparo. */
+    private int enemigoIdColision;
 
     // ─── Constructor / Singleton ──────────────────────────────────────────────
 
@@ -101,6 +104,22 @@ public class Espacio extends Observable {
 
     private boolean esValidoCelda(int x, int y) {
         return x >= 0 && x < getAnchura() && y >= 0 && y < getAltura();
+    }
+
+    /** Verifica si un valor representa un ID de enemigo (>= 11). */
+    private boolean esEnemigoId(int valor) {
+        return valor >= 11;
+    }
+
+    /** Método público para que FlotaEnemigos pueda limpiar celdas. */
+    public void limpiarCelda(int x, int y) {
+        setCeldaEspejo(x, y, CELDA_VACIO);
+    }
+
+    /** Método público para que FlotaEnemigos pueda hacer notificaciones. */
+    public void notificarCambio(int[] mensaje) {
+        setChanged();
+        notifyObservers(mensaje);
     }
 
     private void setCeldaEspejo(int x, int y, int tipo) {
@@ -195,6 +214,7 @@ public class Espacio extends Observable {
 
         for (Component d : disparos) {
             colisionDetectadaEnDisparoSubir = false;
+            enemigoIdColision = 0;
 
             if (detectarColisionMatrizAntesMover(d)) {
                 resolverImpactoDisparoConEnemigoSuperposicion(d);
@@ -231,7 +251,7 @@ public class Espacio extends Observable {
     /** Superposición en el espejo: alguna celda del disparo coincide con {@link #CELDA_ENEMIGO}. */
     private boolean detectarColisionMatrizAntesMover(Component d) {
         for (int[] celda : getCeldasOcupadas(d)) {
-            if (getCelda(celda[0], celda[1]) == CELDA_ENEMIGO) {
+            if (esEnemigoId(getCelda(celda[0], celda[1]))) {
                 return true;
             }
         }
@@ -243,12 +263,13 @@ public class Espacio extends Observable {
         d.setActivo(false);
         // Borrar visual del disparo y notificar eliminación de enemigos en cada celda con colisión
         for (int[] celda : celdasDisparo) {
-            if (getCelda(celda[0], celda[1]) == CELDA_ENEMIGO) {
+            if (esEnemigoId(getCelda(celda[0], celda[1]))) {
+                // Primero notificar eliminación del enemigo (antes de limpiar la celda)
+                notificarFlotaEliminarEnemigo(celda[0], celda[1]);
+                // Luego limpiar el disparo
                 setCeldaEspejo(celda[0], celda[1], CELDA_VACIO);
                 setChanged();
-                notifyObservers(new int[] {3, celda[0], celda[1]});  // borrar disparo --- DIRIA QUE ESTAS 2 HACEN LO MISMO
-                notifyObservers(new int[] {12, celda[0], celda[1]}); // borrar enemigo
-                notificarFlotaEliminarEnemigo(celda[0], celda[1]);
+                notifyObservers(new int[] {3, celda[0], celda[1]});  // borrar disparo
             } else {
                 setCeldaEspejo(celda[0], celda[1], CELDA_VACIO);
                 setChanged();
@@ -260,20 +281,70 @@ public class Espacio extends Observable {
     private void resolverImpactoDisparoConEnemigoMovimiento(Component d) {
         int[][] celdasDisparo = getCeldasOcupadas(d);
         d.setActivo(false);
-        // Borrar visual del disparo y notificar eliminación por cada celda que tenía enemigo
+        
+        // Usar el ID del enemigo guardado durante la detección de colisión
+        if (esEnemigoId(enemigoIdColision)) {
+            notificarFlotaEliminarEnemigoConId(enemigoIdColision);
+            enemigoIdColision = 0; // Resetear para evitar reutilización
+        }
+        
+        // Luego borrar visual del disparo
         for (int[] celda : celdasDisparo) {
             setCeldaEspejo(celda[0], celda[1], CELDA_VACIO);
             setChanged();
             notifyObservers(new int[] {3, celda[0], celda[1]});
         }
-        // Notificar eliminación de enemigos (la primera celda del disparo que causó la colisión)
-        notificarFlotaEliminarEnemigo(celdasDisparo[0][0], celdasDisparo[0][1]);
     }
 
-    /** Dispara {@link Observable#notifyObservers(Object)}; {@link FlotaEnemigos#update} recibe las coordenadas y borra el enemigo que las contenga. */
-    private void notificarFlotaEliminarEnemigo(int x, int y) {
+    /** Elimina un enemigo usando directamente su ID. */
+    private void notificarFlotaEliminarEnemigoConId(int enemigoId) {
+        // Buscar todas las celdas en la matriz que tengan este mismo ID
+        java.util.List<int[]> celdasDelEnemigo = new java.util.ArrayList<>();
+        for (int i = 0; i < getAnchura(); i++) {
+            for (int j = 0; j < getAltura(); j++) {
+                if (getCelda(i, j) == enemigoId) {
+                    celdasDelEnemigo.add(new int[]{i, j});
+                }
+            }
+        }
+        
+        // Notificar a FlotaEnemigos para que elimine el enemigo de su lista
         setChanged();
-        notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, x, y });
+        notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, enemigoId, -1, -1 });
+        
+        // Borrar visualmente todas las celdas del enemigo encontradas en la matriz
+        for (int[] celda : celdasDelEnemigo) {
+            setCeldaEspejo(celda[0], celda[1], CELDA_VACIO);
+            setChanged();
+            notifyObservers(new int[] {12, celda[0], celda[1]});
+        }
+    }
+    
+    /** Elimina un enemigo: busca todas las celdas con su ID en la matriz y las borra. */
+    private void notificarFlotaEliminarEnemigo(int x, int y) {
+        int enemigoId = getCelda(x, y); // Obtener el ID del enemigo desde la matriz
+        if (esEnemigoId(enemigoId)) {
+            // Buscar todas las celdas en la matriz que tengan este mismo ID
+            java.util.List<int[]> celdasDelEnemigo = new java.util.ArrayList<>();
+            for (int i = 0; i < getAnchura(); i++) {
+                for (int j = 0; j < getAltura(); j++) {
+                    if (getCelda(i, j) == enemigoId) {
+                        celdasDelEnemigo.add(new int[]{i, j});
+                    }
+                }
+            }
+            
+            // Notificar a FlotaEnemigos para que elimine el enemigo de su lista
+            setChanged();
+            notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, enemigoId, x, y });
+            
+            // Borrar visualmente todas las celdas del enemigo encontradas en la matriz
+            for (int[] celda : celdasDelEnemigo) {
+                setCeldaEspejo(celda[0], celda[1], CELDA_VACIO);
+                setChanged();
+                notifyObservers(new int[] {12, celda[0], celda[1]});
+            }
+        }
     }
 
     /**
@@ -308,12 +379,44 @@ public class Espacio extends Observable {
                 }
             }
         }
-        // Borrar visual del enemigo y notificar eliminación por cada celda con disparo
+        // Identificar enemigos únicos impactados
+        java.util.Set<Integer> enemigosImpactados = new java.util.HashSet<>();
+        for (int[] hit : celdasDisparoImpactadas) {
+            int enemigoId = getCelda(hit[0], hit[1]);
+            if (esEnemigoId(enemigoId)) {
+                enemigosImpactados.add(enemigoId);
+            }
+        }
+        
+        // Para cada enemigo impactado, buscar todas sus celdas en la matriz y eliminarlas
+        for (Integer enemigoId : enemigosImpactados) {
+            // Buscar todas las celdas en la matriz que tengan este mismo ID
+            java.util.List<int[]> celdasDelEnemigo = new java.util.ArrayList<>();
+            for (int i = 0; i < getAnchura(); i++) {
+                for (int j = 0; j < getAltura(); j++) {
+                    if (getCelda(i, j) == enemigoId) {
+                        celdasDelEnemigo.add(new int[]{i, j});
+                    }
+                }
+            }
+            
+            // Notificar a FlotaEnemigos para que elimine el enemigo de su lista
+            setChanged();
+            notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, enemigoId, -1, -1 });
+            
+            // Borrar visualmente todas las celdas del enemigo
+            for (int[] celda : celdasDelEnemigo) {
+                setCeldaEspejo(celda[0], celda[1], CELDA_VACIO);
+                setChanged();
+                notifyObservers(new int[] {12, celda[0], celda[1]});
+            }
+        }
+        
+        // Luego limpiar todas las celdas de disparo impactadas
         for (int[] hit : celdasDisparoImpactadas) {
             setCeldaEspejo(hit[0], hit[1], CELDA_VACIO);
             setChanged();
-            notifyObservers(new int[] {12, hit[0], hit[1]});
-            notificarFlotaEliminarEnemigo(hit[0], hit[1]);
+            notifyObservers(new int[] {3, hit[0], hit[1]}); // borrar disparo
         }
     }
 
@@ -331,36 +434,56 @@ public class Espacio extends Observable {
     // Llamado cada 200 ms: baja los enemigos 1 píxel
     public void actualizarEnemigos() {
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
-
-        for (Enemigo e : enemigos) {
-            if (e.isVivo()) {
-                // Guardar posiciones antiguas de todos los píxeles
-                ArrayList<int[]> oldPixels = new ArrayList<>();
-                Component naveEnemigo = e.getComponente();
-                if (naveEnemigo instanceof Composite raiz) {
-                    for (Component c : raiz.getComponents()) {
-                        oldPixels.add(new int[] { c.getRefX(), c.getRefY() });
-                    }
+        
+        // Procesar cada enemigo usando iteración por índice hacia atrás para eliminación segura
+        for (int i = enemigos.size() - 1; i >= 0; i--) {
+            // Verificar que el índice aún sea válido (por si se eliminó un enemigo)
+            if (i >= enemigos.size()) continue;
+            
+            Enemigo enemigo = enemigos.get(i);
+            if (!enemigo.isVivo()) continue;
+            
+            int enemigoId = enemigo.getId();
+            int[][] celdasActuales = enemigo.celdasOcupadas();
+            
+            // Calcular nuevas posiciones (mover hacia abajo)
+            java.util.List<int[]> nuevasPosiciones = new java.util.ArrayList<>();
+            boolean llegaAlFondo = false;
+            
+            for (int[] celda : celdasActuales) {
+                int nuevaY = celda[1] + 1;
+                if (nuevaY >= getAltura()) {
+                    llegaAlFondo = true;
+                    break; // No necesitamos calcular más si ya llega al fondo
                 }
-                else {
-                    oldPixels.add(new int[] { naveEnemigo.getRefX(), naveEnemigo.getRefY() });
+                nuevasPosiciones.add(new int[]{celda[0], nuevaY});
+            }
+            
+            if (llegaAlFondo) {
+                // Si el enemigo llega al fondo, game over
+                gameOver = true;
+                break; // Salir inmediatamente del bucle
+            }
+            
+            // Verificar colisiones con disparos en las nuevas posiciones
+            java.util.List<int[]> colisionesConDisparos = new java.util.ArrayList<>();
+            for (int[] nuevaPos : nuevasPosiciones) {
+                if (getCelda(nuevaPos[0], nuevaPos[1]) == CELDA_DISPARO) {
+                    colisionesConDisparos.add(nuevaPos);
                 }
-
-                // Mover el enemigo
-                e.mover(0, 1, 0);
+            }
+            
+            if (!colisionesConDisparos.isEmpty()) {
+                // Hay colisión con disparo - eliminar enemigo
+                java.util.List<int[]> celdasActualesList = java.util.Arrays.asList(celdasActuales);
+                eliminarEnemigoPorColisionEnMovimiento(enemigoId, celdasActualesList, colisionesConDisparos);
+            } else {
+                // Mover enemigo físicamente (actualiza su posición interna)
+                enemigo.mover(0, 1, 0); // Mover 1 píxel hacia abajo
                 
-                // Guardar posiciones nuevas
-                ArrayList<int[]> newPixels = new ArrayList<>();
-                if (naveEnemigo instanceof Composite raiz) {
-                    for (Component c : raiz.getComponents()) {
-                        newPixels.add(new int[] { c.getRefX(), c.getRefY() });
-                    }
-                }
-                else {
-                    newPixels.add(new int[] { naveEnemigo.getRefX(), naveEnemigo.getRefY() });
-                }
-                
-                notificarMovimientoEnemigo(e, oldPixels, newPixels);
+                // Actualizar matriz visual
+                java.util.List<int[]> celdasActualesList = java.util.Arrays.asList(celdasActuales);
+                moverEnemigoEnMatriz(enemigoId, celdasActualesList, nuevasPosiciones);
             }
         }
 
@@ -368,6 +491,45 @@ public class Espacio extends Observable {
             notificarGameOver();
         }
     }
+    
+    /** Elimina un enemigo que colisiona con disparo durante su movimiento. */
+    private void eliminarEnemigoPorColisionEnMovimiento(int enemigoId, java.util.List<int[]> celdasActuales, java.util.List<int[]> colisionesConDisparos) {
+        // Limpiar todas las celdas actuales del enemigo
+        for (int[] celda : celdasActuales) {
+            setCeldaEspejo(celda[0], celda[1], CELDA_VACIO);
+            setChanged();
+            notifyObservers(new int[]{12, celda[0], celda[1]}); // borrar enemigo
+        }
+        
+        // Limpiar disparos que colisionaron
+        for (int[] colision : colisionesConDisparos) {
+            setCeldaEspejo(colision[0], colision[1], CELDA_VACIO);
+            setChanged();
+            notifyObservers(new int[]{3, colision[0], colision[1]}); // borrar disparo
+        }
+        
+        // Notificar a FlotaEnemigos para eliminar de la lista
+        setChanged();
+        notifyObservers(new int[]{MSG_ELIMINAR_ENEMIGO, enemigoId, -1, -1});
+    }
+    
+    /** Mueve un enemigo en la matriz de una posición a otra. */
+    private void moverEnemigoEnMatriz(int enemigoId, java.util.List<int[]> celdasActuales, java.util.List<int[]> nuevasPosiciones) {
+        // Limpiar posiciones anteriores
+        for (int[] celda : celdasActuales) {
+            setCeldaEspejo(celda[0], celda[1], CELDA_VACIO);
+            setChanged();
+            notifyObservers(new int[]{12, celda[0], celda[1]}); // borrar píxel anterior
+        }
+        
+        // Establecer nuevas posiciones con el ID del enemigo
+        for (int[] nuevaPos : nuevasPosiciones) {
+            setCeldaEspejo(nuevaPos[0], nuevaPos[1], enemigoId);
+            setChanged();
+            notifyObservers(new int[]{14, nuevaPos[0], nuevaPos[1]}); // pintar enemigo
+        }
+    }
+    
 
     // ─── Notificaciones ───────────────────────────────────────────────────────
 
@@ -400,20 +562,23 @@ public class Espacio extends Observable {
             }
         }
         
-        // Pintar los enemigos - pintar TODOS los píxeles de cada enemigo
+        // Pintar los enemigos - pintar TODOS los píxeles de cada enemigo con su ID específico
         ArrayList<Enemigo> enemigos = FlotaEnemigos.getFlotaEnemigos().getEnemigos();
-        for (Enemigo e : enemigos) {
+        // Usar iteración por índice para evitar ConcurrentModificationException
+        for (int i = 0; i < enemigos.size(); i++) {
+            Enemigo e = enemigos.get(i);
             if (e.isVivo()) {
+                int enemigoId = e.getId();
                 Component componenteEnemigo = e.getComponente();
                 if (componenteEnemigo instanceof Composite raiz) {
                     for (Component c : raiz.getComponents()) {
-                        setCeldaEspejo(c.getRefX(), c.getRefY(), CELDA_ENEMIGO);
+                        setCeldaEspejo(c.getRefX(), c.getRefY(), enemigoId);
                         setChanged();
                         notifyObservers(new int[] {14, c.getRefX(), c.getRefY()});
                     }
                 }
                 else {
-                    setCeldaEspejo(componenteEnemigo.getRefX(), componenteEnemigo.getRefY(), CELDA_ENEMIGO);
+                    setCeldaEspejo(componenteEnemigo.getRefX(), componenteEnemigo.getRefY(), enemigoId);
                     setChanged();
                     notifyObservers(new int[] {14, componenteEnemigo.getRefX(), componenteEnemigo.getRefY()});
                 }
@@ -489,9 +654,11 @@ public class Espacio extends Observable {
         if (!isGameOver() && !isGameWon()) {
             setCeldaEspejo(oldX, oldY, CELDA_VACIO);
             if (esValidoCelda(newX, newY)) {
-                if (getCelda(newX, newY) == CELDA_ENEMIGO) {
+                int valorCelda = getCelda(newX, newY);
+                if (esEnemigoId(valorCelda)) {
                     if (!colisionDetectadaEnDisparoSubir) {
                         colisionDetectadaEnDisparoSubir = true;
+                        enemigoIdColision = valorCelda; // Guardar el ID antes de sobrescribir
                     }
                 }
                 setCeldaEspejo(newX, newY, CELDA_DISPARO);
@@ -529,7 +696,7 @@ public class Espacio extends Observable {
             return;
         }
         for (int[] pixel : newPixels) {
-            setCeldaEspejo(pixel[0], pixel[1], CELDA_ENEMIGO);
+            setCeldaEspejo(pixel[0], pixel[1], e.getId());
             setChanged();
             notifyObservers(new int[] {14, pixel[0], pixel[1]});
         }

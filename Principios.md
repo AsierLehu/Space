@@ -1,0 +1,3 @@
+-Atributos en privado
+-No usar protected
+-

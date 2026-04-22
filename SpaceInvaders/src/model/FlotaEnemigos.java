@@ -15,6 +15,7 @@ public class FlotaEnemigos implements Observer {
 
     private static FlotaEnemigos miFlotaEnemigos;
     private ArrayList<Enemigo> enemigos;
+    private static int siguienteId = 11;
 
     private FlotaEnemigos() {
         this.enemigos = new ArrayList<>();
@@ -29,11 +30,19 @@ public class FlotaEnemigos implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        
-        if (datos[0] != Espacio.MSG_ELIMINAR_ENEMIGO) {
+        if (arg == null || !(arg instanceof int[])) {
             return;
         }
-        eliminarEnemigoQueContieneCelda(datos[1], datos[2]);
+        
+        int[] datos = (int[]) arg;
+        
+        
+        if (datos.length >= 2) {
+            // Nuevo formato: [MSG_ELIMINAR_ENEMIGO, enemigoId, ...]
+            int enemigoId = datos[1];
+            // Solo eliminar el enemigo de la lista, NO hacer notificaciones visuales
+            eliminarEnemigoPorId(enemigoId);
+        }
     }
 
     /** Quita de la lista al enemigo vivo que ocupa la celda (x,y), si existe. */
@@ -51,6 +60,24 @@ public class FlotaEnemigos implements Observer {
         });
     }
 
+    /** Encuentra un enemigo por su ID. */
+    public Enemigo encontrarEnemigoPorId(int id) {
+        for (Enemigo e : enemigos) {
+            if (e.isVivo() && e.getId() == id) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    /** Elimina enemigo por ID de la lista. */
+    public void eliminarEnemigoPorId(int id) {
+        Enemigo enemigo = encontrarEnemigoPorId(id);
+        if (enemigo != null) {
+            enemigos.remove(enemigo);
+        }
+    }
+
     
 
     // ─── Inicialización ───────────────────────────────────────────────────────
@@ -58,6 +85,7 @@ public class FlotaEnemigos implements Observer {
     // Limpia la flota y añade 4-8 enemigos en posiciones aleatorias de la fila superior sin tocarse
     public void inicializar(int anchura) {
         enemigos.clear();
+        siguienteId = 11; // Reiniciar contador de IDs
         Random rand = new Random();
         int n_enemigos = rand.nextInt(5) + 4;
         ArrayList<Integer> xOcupadas = new ArrayList<>();
@@ -74,7 +102,7 @@ public class FlotaEnemigos implements Observer {
                 }
             }
             if (huecoLibre) {
-                enemigos.add(new Enemigo(ex, ey, 1));
+                enemigos.add(new Enemigo(ex, ey, 1, siguienteId++));
                 for (int dx = 0; dx <= 4; dx++) {
                     xOcupadas.add(ex + dx);
                 }

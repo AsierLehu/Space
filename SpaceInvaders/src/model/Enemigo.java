@@ -6,9 +6,12 @@ package model;
  */
 public class Enemigo extends Naves {
 	
+	private int id;
+	
 	//Posici�n aleatoria en la parte superior
-	public Enemigo(int x, int y, int velocidad) {
+	public Enemigo(int x, int y, int velocidad, int id) {
 		super(x, y, velocidad);
+		this.id = id;
 		inicializarNaveJugador();
 	}
 
@@ -45,6 +48,10 @@ public class Enemigo extends Naves {
 	@Override
 	public int getTipoNave() {
 		return 0;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }
