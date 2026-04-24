@@ -115,4 +115,11 @@ public abstract class Naves {
 			y += edy;
 		}
 	}
+
+	/** Inicia el juego delegando a Component */
+	public void inicializar() {
+		if (ComponenteNave != null) {
+			ComponenteNave.inicializar();
+		}
+	}
 }

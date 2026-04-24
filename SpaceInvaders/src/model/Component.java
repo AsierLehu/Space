@@ -33,4 +33,9 @@ public interface Component {
 	/** Vacío por defecto; Pixel y Composite en modo proyectil lo sustituyen. */
 	default void notificarDisparoNuevo() {
 	}
+
+	/** Inicia el juego llamando a cambiarAMain en Espacio */
+	default void inicializar() {
+		Espacio.getEspacio().cambiarAMain();
+	}
 }

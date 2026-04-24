@@ -21,15 +21,15 @@ public class JugadorBueno {
 	}
 
 	// Selecci�n de nave
-	public String getTipoNaveElegido() {
-		return tipoNaveElegido;
-	}
 
-	/** Uno de: "Nave1", "Nave2", "Nave3". */
-	public void setTipoNaveElegido(String tipo) {
-			this.tipoNaveElegido = tipo;
-			Espacio.getEspacio().cambiarAMain();
-			
+
+	/** Uno de: "Nave1", "Nave2", "Nave3". Inicializa el juego con la nave elegida. */
+	public void inicializar(String tipo) {
+		this.tipoNaveElegido = tipo;
+		crearNaveParaPartida();
+		if (nave != null) {
+			nave.inicializar();
+		}
 	}
 
 	public boolean haElegidoNave() {

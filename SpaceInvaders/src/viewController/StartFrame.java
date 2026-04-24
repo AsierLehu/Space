@@ -215,7 +215,7 @@ public class StartFrame extends JFrame implements Observer {
                 return;
             }
             if (k == KeyEvent.VK_SPACE) {
-                JugadorBueno.getJugadorBueno().setTipoNaveElegido(tipoNavePendiente);
+                JugadorBueno.getJugadorBueno().inicializar(tipoNavePendiente);
             }
         }
 
