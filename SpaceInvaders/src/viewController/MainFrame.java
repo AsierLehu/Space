@@ -132,10 +132,10 @@ public class MainFrame extends JFrame implements Observer {
     			break;
     			
     		case 7: 
-            mostrarGameOver();
+            abrirFinalFrame(false);
                 break;
     		case 8: 
-            mostrarGameWon();
+            abrirFinalFrame(true);
                 break;
     		
     		case 10: // borrar celda de jugador - [tipo, x, y]
@@ -161,6 +161,14 @@ public class MainFrame extends JFrame implements Observer {
     
     private boolean esValido(int x, int y) {
     	return x >= 0 && x < 100 && y >= 0 && y < 60;
+    }
+    
+    // ==================== TRANSICIÓN DE PANTALLA ====================
+    
+    private void abrirFinalFrame(boolean victoria) {
+        Espacio.getEspacio().deleteObserver(this);
+        this.setVisible(false);
+        new FinalFrame(victoria);
     }
     
     private class Controller implements KeyListener {
