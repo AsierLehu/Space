@@ -44,7 +44,6 @@ public class Nave3 extends Naves {
 		};
 	}
 
-	@Override
 	public int getTipoNave() {
 		return 3; // Morado
 	}

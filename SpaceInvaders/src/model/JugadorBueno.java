@@ -21,8 +21,6 @@ public class JugadorBueno {
 	}
 
 	// Selecci�n de nave
-
-
 	/** Uno de: "Nave1", "Nave2", "Nave3". Inicializa el juego con la nave elegida. */
 	public void inicializar(String tipo) {
 		this.tipoNaveElegido = tipo;
@@ -31,15 +29,7 @@ public class JugadorBueno {
 			nave.inicializar();
 		}
 	}
-
-	public boolean haElegidoNave() {
-		return tipoNaveElegido != null;
-	}
 	
-	public Naves getNave() {
-		return nave;
-	}
-
 	/**
 	 * Crea la nave jugable para la partida vía NaveFactory (Factory + Singleton),
 	 * usando tipoNaveElegido, y la guarda en nave.
@@ -71,5 +61,9 @@ public class JugadorBueno {
 		if (nave != null && nave.isVivo()) {
 			nave.cambiarTipoDisparo();
 		}
+	}
+	
+	public Naves getNave() {
+		return nave;
 	}
 }
