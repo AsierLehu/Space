@@ -37,8 +37,12 @@ public class Pixel implements Component {
 			}
 			notificarMovimientoDisparo(oldX, oldY, x, y);
 		} else {
-			x += dx;
-			y += dy;
+			int newX = x + dx;
+	        int newY = y + dy;
+	        if (newX >= 0 && newX < 100 && newY >= 0 && newY < 60) {
+	            x = newX;
+	            y = newY;
+	        }
 		}
 	}
 

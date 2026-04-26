@@ -55,12 +55,18 @@ public class Composite implements Component {
 			}
 			return;
 		}
-
-		for (Component c : components) {
-			int newX = c.getRefX() + dx;
-			int newY = c.getRefY() + dy;
-			if (newX < 0 || newX >= 100 || newY < 0 || newY >= 60) {
-				return;
+		
+		// Para el jugador (tipoNave > 0): bloquear en los 4 bordes.
+		// Para los enemigos (tipoNave == 0): NO bloquear aquí; si llegan al
+		// borde inferior, Espacio.isGameOver() lo detecta en el tablero espejo.
+		if (tipoNave > 0) {
+			for (Component c : components) {
+				int newX = c.getRefX() + dx;
+				int newY = c.getRefY() + dy;
+				if (newX < 0 || newX >= 100 || newY < 0 || newY >= 60) {
+					System.out.println("LIMITE alcanzado: pixel en " + c.getRefX() + "," + c.getRefY() + " intentaba ir a " + newX + "," + newY);
+					return;
+				}
 			}
 		}
 
@@ -69,6 +75,21 @@ public class Composite implements Component {
 		for (int i = 0; i < components.size(); i++) {
 			oldPositionsX[i] = components.get(i).getRefX();
 			oldPositionsY[i] = components.get(i).getRefY();
+		}
+		
+		// Para enemigos: verificar que todos los pixeles pueden moverse
+		// Si alguno sale del tablero, cancelar el movimiento completo
+		if (tipoNave == 0) {
+			boolean todoPuedeMoverse = true;
+			for (Component c : components) {
+				int newX = c.getRefX() + dx;
+				int newY = c.getRefY() + dy;
+				if (!Espacio.getEspacio().esValidoCelda(newX, newY)) {
+					todoPuedeMoverse = false;
+				    break;
+				}
+			}
+			if (!todoPuedeMoverse) return;
 		}
 
 		for (Component c : components) {
