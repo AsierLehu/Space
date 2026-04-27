@@ -1,9 +1,13 @@
 package model;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  * Jugador (singleton) que utiliza NaveFactory para obtener instancias de naves.
  */
-public class JugadorBueno {
+@SuppressWarnings("deprecation")
+public class JugadorBueno implements Observer {
 
 	private static JugadorBueno miJugadorBueno;
 
@@ -63,7 +67,37 @@ public class JugadorBueno {
 		}
 	}
 	
+	/**
+	 * Actualiza todos los disparos de la nave: llamado por TimerDisparo.
+	 */
+	public void actualizarDisparos() {
+		if (nave != null && nave.isVivo()) {
+			nave.actualizarDisparos();
+		}
+	}
+	
 	public Naves getNave() {
 		return nave;
+	}
+	
+	/**
+	 * Observer pattern: recibe notificaciones de Espacio sobre colisiones de disparos.
+	 */
+	@Override
+	public void update(Observable o, Object arg) {
+		if (arg == null || !(arg instanceof int[])) {
+			return;
+		}
+		
+		int[] datos = (int[]) arg;
+		
+		// Verificar si es mensaje de eliminar disparo
+		if (datos.length >= 3 && datos[0] == Espacio.MSG_ELIMINAR_DISPARO) {
+			int disparoX = datos[1];
+			int disparoY = datos[2];
+			if (nave != null && nave.isVivo()) {
+				nave.eliminarDisparoPorPosicion(disparoX, disparoY);
+			}
+		}
 	}
 }

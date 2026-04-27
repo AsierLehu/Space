@@ -13,16 +13,24 @@ import model.JugadorBueno;
 @SuppressWarnings("deprecation")
 public class MainFrame extends JFrame implements Observer {
 
-    private static final Color COLOR_FONDO   = new Color(20, 20, 20);
-    private static final Color COLOR_JUGADOR = Color.MAGENTA;
-    private static final Color COLOR_ENEMIGO = Color.RED;
-    private static final Color COLOR_DISPARO = Color.WHITE;
-    private static final Color COLOR_GAME_OVER = new Color(255, 102, 102);
+    // Constantes de celdas - mismo valor que en Espacio
+    private static int CELDA_VACIO = 0;
+    private static int CELDA_DISPARO = 1;
+    private static int CELDA_ENEMIGO = 2;
+    private static int CELDA_JUGADOR_NAVE1 = 3;
+    private static int CELDA_JUGADOR_NAVE2 = 4;
+    private static int CELDA_JUGADOR_NAVE3 = 5;
+
+    private static Color COLOR_FONDO   = new Color(20, 20, 20);
+    private static Color COLOR_JUGADOR = Color.MAGENTA;
+    private static Color COLOR_ENEMIGO = Color.RED;
+    private static Color COLOR_DISPARO = Color.WHITE;
+    private static Color COLOR_GAME_OVER = new Color(255, 102, 102);
     
     // Colores específicos por tipo de nave
-    private static final Color COLOR_NAVE1_VERDE = Color.GREEN;
-    private static final Color COLOR_NAVE2_AZUL = Color.BLUE;
-    private static final Color COLOR_NAVE3_MORADO = Color.MAGENTA; // Morado para Nave3
+    private static Color COLOR_NAVE1_VERDE = Color.GREEN;
+    private static Color COLOR_NAVE2_AZUL = Color.BLUE;
+    private static Color COLOR_NAVE3_MORADO = Color.MAGENTA; // Morado para Nave3
 
     private JLabel[][] celdas;
     private JLabel mensajeFin;

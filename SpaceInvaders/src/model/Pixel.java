@@ -10,7 +10,7 @@ public class Pixel implements Component {
 	private int x;
 	private int y;
 	private boolean activo = true;
-	private final boolean proyectil;
+	private boolean proyectil;
 
 	public Pixel(int x, int y) {
 		this(x, y, false);

@@ -97,4 +97,31 @@ public class Disparo {
 		}
 		return todasLasCeldas.toArray(new int[0][]);
 	}
+	
+	/**
+	 * Elimina el disparo que ocupa la posicion especificada.
+	 */
+	public void eliminarDisparoPorPosicion(int x, int y) {
+		for (int i = disparosActivos.size() - 1; i >= 0; i--) {
+			Component disparo = disparosActivos.get(i);
+			
+			// Verificar si alguna celda del disparo coincide con la posicion
+			if (disparo instanceof Composite comp) {
+				ArrayList<int[]> celdas = comp.celdasOcupadasActivas();
+				for (int[] celda : celdas) {
+					if (celda[0] == x && celda[1] == y) {
+						disparo.setActivo(false);
+						disparosActivos.remove(i);
+						return;
+					}
+				}
+			} else {
+				if (disparo.getRefX() == x && disparo.getRefY() == y) {
+					disparo.setActivo(false);
+					disparosActivos.remove(i);
+					return;
+				}
+			}
+		}
+	}
 }

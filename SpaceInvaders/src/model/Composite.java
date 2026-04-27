@@ -3,14 +3,14 @@ package model;
 import java.util.ArrayList;
 
 /**
- * Compuesto del patrón Composite: agrupa Component (normalmente Pixel).
- * proyectil == false: raíz de nave; comprueba límites y notifica movimiento del jugador en bloque.
+ * Compuesto del patrÃ³n Composite: agrupa Component (normalmente Pixel).
+ * proyectil == false: raÃ­z de nave; comprueba lÃ­mites y notifica movimiento del jugador en bloque.
  * proyectil == true: cuerpo de disparo compuesto.
  */
 public class Composite implements Component {
 
-	private final ArrayList<Component> components = new ArrayList<>();
-	private final boolean proyectil;
+	private ArrayList<Component> components = new ArrayList<>();
+	private boolean proyectil;
 
 	public Composite() {
 		this(false);
@@ -33,7 +33,7 @@ public class Composite implements Component {
 	}
 
 	/**
-	 * Celdas ocupadas por píxeles activos (disparos); recursivo por si hubiera anidación.
+	 * Celdas ocupadas por pÃ­xeles activos (disparos); recursivo por si hubiera anidaciÃ³n.
 	 */
 	public ArrayList<int[]> celdasOcupadasActivas() {
 		ArrayList<int[]> celdas = new ArrayList<>();
@@ -57,7 +57,7 @@ public class Composite implements Component {
 		}
 		
 		// Para el jugador (tipoNave > 0): bloquear en los 4 bordes.
-		// Para los enemigos (tipoNave == 0): NO bloquear aqu�; si llegan al
+		// Para los enemigos (tipoNave == 0): NO bloquear aquí; si llegan al
 		// borde inferior, Espacio.isGameOver() lo detecta en el tablero espejo.
 		if (tipoNave > 0) {
 			for (Component c : components) {
