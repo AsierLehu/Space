@@ -8,6 +8,30 @@ import java.util.ArrayList;
  */
 public class Disparo {
 
+	private static int PRIMER_ID_DISPARO = 21;
+
+	private static int siguienteIdDisparo = PRIMER_ID_DISPARO;
+
+	/** Reinicia la secuencia 21 … 29, 211, 212 … al iniciar una partida nueva. */
+	public static void reiniciarContadorIdsDisparo() {
+		siguienteIdDisparo = PRIMER_ID_DISPARO;
+	}
+
+	/**
+	 * Siguiente id único por proyectil/compuesto completo (mismo número para todas las piezas).
+	 */
+	public static int tomarSiguienteIdDisparo() {
+		int id = siguienteIdDisparo;
+		if (siguienteIdDisparo < 29) {
+			siguienteIdDisparo++;
+		} else if (siguienteIdDisparo == 29) {
+			siguienteIdDisparo = 211;
+		} else {
+			siguienteIdDisparo++;
+		}
+		return id;
+	}
+
 	private ArrayList<Component> disparosActivos;
 	private ArrayList<StrategyDisparo> estrategias;
 	private int indiceEstrategiaActual;
@@ -62,14 +86,81 @@ public class Disparo {
 	}
 
 	/** Actualiza todos los disparos activos (movimiento) y elimina los inactivos */
+	// TODO: REVISARSE TODA ESTA LÓGICA
 	public void actualizarDisparos() {
-		for (int i = disparosActivos.size() - 1; i >= 0; i--) {
+		if (disparosActivos.isEmpty()) return; // Evitar operaciones en lista vacía
+
+		// Orden crítico: proyectiles con menor Y (más arriba en pantalla) deben moverse primero.
+		// Si el de abajo mueve antes, su notificación tipo 2 borra la celda "old" donde otro
+		// proyectil acaba de pintarse en el mismo tick (misma columna, celdas adyacentes).
+		ordenarDisparosActivosPorPosicion(disparosActivos);
+
+		int i = 0;
+		while (i < disparosActivos.size()) {
 			Component disparo = disparosActivos.get(i);
 			disparo.mover(0, -1, 0);
 			if (!disparo.isActivo()) {
-				disparosActivos.remove(i);
+				disparosActivos.remove(disparo);
+			} else {
+				i++;
 			}
 		}
+	}
+
+	/** Proyectiles con menor Y y, a igualdad, menor X van primero. */
+	private static void ordenarDisparosActivosPorPosicion(ArrayList<Component> lista) {
+		int n = lista.size();
+		for (int i = 1; i < n; i++) {
+			Component insertion = lista.get(i);
+			int j = i;
+			while (j > 0 && proyectilVaAntesEnOrden(insertion, lista.get(j - 1))) {
+				lista.set(j, lista.get(j - 1));
+				j--;
+			}
+			lista.set(j, insertion);
+		}
+	}
+
+	/** Devuelve true si componente a debe actualizarse antes que componente b. */
+	private static boolean proyectilVaAntesEnOrden(Component a, Component b) {
+		int ya = menorYProyectil(a);
+		int yb = menorYProyectil(b);
+		if (ya < yb) {
+			return true;
+		}
+		if (ya > yb) {
+			return false;
+		}
+		return menorXProyectil(a) < menorXProyectil(b);
+	}
+
+	/** Menor coordenada Y ocupada por el proyectil (parte más alta del disparo). */
+	private static int menorYProyectil(Component c) {
+		int minY = Integer.MAX_VALUE;
+		if (c instanceof Composite comp) {
+			for (int[] cel : comp.celdasOcupadasActivas()) {
+				if (cel[1] < minY) {
+					minY = cel[1];
+				}
+			}
+		} else {
+			minY = c.getRefY();
+		}
+		return minY == Integer.MAX_VALUE ? 0 : minY;
+	}
+
+	private static int menorXProyectil(Component c) {
+		int minX = Integer.MAX_VALUE;
+		if (c instanceof Composite comp) {
+			for (int[] cel : comp.celdasOcupadasActivas()) {
+				if (cel[0] < minX) {
+					minX = cel[0];
+				}
+			}
+		} else {
+			minX = c.getRefX();
+		}
+		return minX == Integer.MAX_VALUE ? 0 : minX;
 	}
 
 	/** Devuelve la lista de disparos activos como Components */
@@ -98,32 +189,14 @@ public class Disparo {
 		return todasLasCeldas.toArray(new int[0][]);
 	}
 	
-	/**
-	 * Elimina el disparo que ocupa la posicion especificada o una posicion cercana.
-	 * Busca en la posición exacta y en un rango de +/-1 en Y (para compensar desincronización de timers).
-	 */
-	public void eliminarDisparoPorPosicion(int x, int y) {
+	/** Elimina de la lista el proyectil con el id indicado (compuesto completo mismo id). */
+	public void eliminarDisparoPorId(int disparoId) {
 		for (int i = disparosActivos.size() - 1; i >= 0; i--) {
 			Component disparo = disparosActivos.get(i);
-			
-			// Verificar si alguna celda del disparo coincide con la posicion o posiciones cercanas
-			if (disparo instanceof Composite comp) {
-				ArrayList<int[]> celdas = comp.celdasOcupadasActivas();
-				for (int[] celda : celdas) {
-					// Buscar en posición exacta y +/-1 en Y para compensar desincronización
-					if (celda[0] == x && (celda[1] == y || celda[1] == y - 1 || celda[1] == y + 1)) {
-						disparo.setActivo(false);
-						disparosActivos.remove(i);
-						return;
-					}
-				}
-			} else {
-				// Para disparos simples, buscar en posición exacta y +/-1 en Y
-				if (disparo.getRefX() == x && (disparo.getRefY() == y || disparo.getRefY() == y - 1 || disparo.getRefY() == y + 1)) {
-					disparo.setActivo(false);
-					disparosActivos.remove(i);
-					return;
-				}
+			if (disparo.getDisparoId() == disparoId) {
+				disparo.setActivo(false);
+				disparosActivos.remove(i);
+				return;
 			}
 		}
 	}

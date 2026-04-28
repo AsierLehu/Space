@@ -25,7 +25,8 @@ public class DisparoPixel implements StrategyDisparo {
 	@Override
 	public Component crearDisparo(int x, int y) {
 		if (gastar()) {
-			return new Pixel(x, y, true);
+			int idDisparo = Disparo.tomarSiguienteIdDisparo();
+			return new Pixel(x, y, true, idDisparo);
 		}
 		return null;
 	}

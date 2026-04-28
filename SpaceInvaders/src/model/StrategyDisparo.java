@@ -13,7 +13,5 @@ public interface StrategyDisparo {
 	// True si aÃºn se puede disparar con esta estrategia
 	boolean tieneMunicion();
 
-	/** Crea un disparo en la posición indicada si hay munición disponible.
-	 * Consume munición automáticamente. Devuelve null si no hay munición. */
 	Component crearDisparo(int x, int y);
 }

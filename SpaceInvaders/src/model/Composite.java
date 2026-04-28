@@ -11,13 +11,19 @@ public class Composite implements Component {
 
 	private ArrayList<Component> components = new ArrayList<>();
 	private boolean proyectilIndividual;
+	private int disparoId = -1;
 
 	public Composite() {
-		this(false);
+		this(false, -1);
 	}
 
-	public Composite(boolean proyectilIndividual) {
+	public Composite(boolean proyectilIndividual, int disparoId) {
 		this.proyectilIndividual = proyectilIndividual;
+		if (proyectilIndividual) {
+			this.disparoId = disparoId;
+		} else {
+			this.disparoId = -1;
+		}
 	}
 
 	public void addComponent(Component c) {
@@ -51,6 +57,9 @@ public class Composite implements Component {
 	public void mover(int dx, int dy, int tipoNave) {
 		if (proyectilIndividual) {
 			for (Component c : components) {
+				if (!isActivo()) {
+					break;
+				}
 				c.mover(dx, dy, 0); // Disparos no tienen tipo de nave
 			}
 			return;
@@ -141,6 +150,14 @@ public class Composite implements Component {
 				c.setActivo(b);
 			}
 		}
+	}
+
+	@Override
+	public int getDisparoId() {
+		if (proyectilIndividual) {
+			return disparoId;
+		}
+		return -1;
 	}
 
 	@Override

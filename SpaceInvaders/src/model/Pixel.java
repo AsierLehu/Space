@@ -11,15 +11,21 @@ public class Pixel implements Component {
 	private int y;
 	private boolean activo = true;
 	private boolean proyectilIndividual;
+	private int disparoId = -1;
 
 	public Pixel(int x, int y) {
-		this(x, y, false);
+		this(x, y, false, -1);
 	}
 
-	public Pixel(int x, int y, boolean proyectilIndividual) {
+	public Pixel(int x, int y, boolean proyectilIndividual, int disparoId) {
 		this.x = x;
 		this.y = y;
 		this.proyectilIndividual = proyectilIndividual;
+		if (proyectilIndividual) {
+			this.disparoId = disparoId;
+		} else {
+			this.disparoId = -1;
+		}
 	}
 
 	@Override
@@ -35,7 +41,7 @@ public class Pixel implements Component {
 			if (y < 0) {
 				activo = false;
 			}
-			notificarMovimientoDisparo(oldX, oldY, x, y);
+			Espacio.getEspacio().notificarMovimientoDisparo(oldX, oldY, x, y, disparoId);
 		} else {
 			int newX = x + dx;
 	        int newY = y + dy;
@@ -69,7 +75,16 @@ public class Pixel implements Component {
 	@Override
 	public void notificarDisparoNuevo() {
 		if (proyectilIndividual) {
-			Espacio.getEspacio().notificarDisparoNuevo(getRefX(), getRefY());
+			Espacio.getEspacio().notificarDisparoNuevo(getRefX(), getRefY(), disparoId);
 		}
 	}
+
+	@Override
+	public int getDisparoId() {
+		if (proyectilIndividual) {
+			return disparoId;
+		}
+		return -1;
+	}
+
 }

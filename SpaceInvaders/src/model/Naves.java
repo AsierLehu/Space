@@ -99,12 +99,11 @@ public abstract class Naves {
 		gestorDisparos.actualizarDisparos();
 	}
 	
-	/**
-	 * Elimina el disparo que se encuentra en la posicion especificada.
-	 */
-	public void eliminarDisparoPorPosicion(int x, int y) {
-		gestorDisparos.eliminarDisparoPorPosicion(x, y);
-		
+	/** Quita de la lista el proyectil con el id asignado al disparar. */
+	public void eliminarDisparoPorId(int disparoId) {
+		if (gestorDisparos != null) {
+			gestorDisparos.eliminarDisparoPorId(disparoId);
+		}
 	}
 
 	public Component getComponente() {

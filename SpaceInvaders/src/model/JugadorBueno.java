@@ -91,12 +91,11 @@ public class JugadorBueno implements Observer {
 		
 		int[] datos = (int[]) arg;
 		
-		// Verificar si es mensaje de eliminar disparo
-		if (datos.length >= 3 && datos[0] == 19) {
-			int disparoX = datos[1];
-			int disparoY = datos[2];
+		// Eliminar proyectil por id: [MSG_ELIMINAR_DISPARO = 19, disparoId]
+		if (datos.length >= 2 && datos[0] == 19) {
+			int disparoId = datos[1];
 			if (nave != null && nave.isVivo()) {
-				nave.eliminarDisparoPorPosicion(disparoX, disparoY);
+				nave.eliminarDisparoPorId(disparoId);
 			}
 		}
 	}

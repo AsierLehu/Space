@@ -31,12 +31,13 @@ public class DisparoRombo implements StrategyDisparo {
 	@Override
 	public Component crearDisparo(int x, int y) {
 		if (gastar()) {
-			Composite comp = new Composite(true);
-			comp.addComponent(new Pixel(x, y, true));
-			comp.addComponent(new Pixel(x - 1, y + 1, true));
-			comp.addComponent(new Pixel(x, y + 1, true));
-			comp.addComponent(new Pixel(x + 1, y + 1, true));
-			comp.addComponent(new Pixel(x, y + 2, true));
+			int idDisparo = Disparo.tomarSiguienteIdDisparo();
+			Composite comp = new Composite(true, idDisparo);
+			comp.addComponent(new Pixel(x, y, true, idDisparo));
+			comp.addComponent(new Pixel(x - 1, y + 1, true, idDisparo));
+			comp.addComponent(new Pixel(x, y + 1, true, idDisparo));
+			comp.addComponent(new Pixel(x + 1, y + 1, true, idDisparo));
+			comp.addComponent(new Pixel(x, y + 2, true, idDisparo));
 			return comp;
 		}
 		return null;
