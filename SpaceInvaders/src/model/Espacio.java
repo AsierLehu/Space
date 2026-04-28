@@ -597,7 +597,7 @@ public class Espacio extends Observable {
                     setCeldaMatriz(oldX[i], oldY[i], CELDA_VACIO);
                 }
                 
-                eliminarEnemigoYDisparo(enemigoId, componentes);
+                eliminarEnemigoYDisparo(enemigoId, componentes, oldX, oldY);
             } else {
                 // Sin colisión - actualizar matriz normalmente
                 // Limpiar posiciones anteriores
@@ -736,7 +736,7 @@ public class Espacio extends Observable {
     }
     
    
-    private void eliminarEnemigoYDisparo(int enemigoId, ArrayList<Component> componentes) {
+    private void eliminarEnemigoYDisparo(int enemigoId, ArrayList<Component> componentes, int[] oldX, int[] oldY) {
         // Encontrar todas las posiciones de disparos que colisionaron
         ArrayList<int[]> disparosColisionados = new ArrayList<>();
         
@@ -752,10 +752,10 @@ public class Espacio extends Observable {
         }
         
         // 2. Notificar MainFrame primero (borrado visual)
-        // Borrar enemigo visualmente
-        for (Component c : componentes) {
+        // Borrar enemigo visualmente desde sus posiciones anteriores
+        for (int i = 0; i < oldX.length; i++) {
             setChanged();
-            notifyObservers(new int[]{12, c.getRefX(), c.getRefY()}); // borrar píxel enemigo
+            notifyObservers(new int[]{12, oldX[i], oldY[i]}); // borrar píxel enemigo desde posición anterior
         }
         
         // Borrar disparos visualmente

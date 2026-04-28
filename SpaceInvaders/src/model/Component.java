@@ -30,7 +30,7 @@ public interface Component {
 		});
 	}
 
-	/** Vacío por defecto; Pixel y Composite en modo proyectil lo sustituyen. */
+	/** Vacío por defecto; Pixel y Composite en modo proyectilIndividual lo sustituyen. */
 	default void notificarDisparoNuevo() {
 	}
 

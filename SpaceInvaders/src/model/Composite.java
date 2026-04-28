@@ -3,21 +3,21 @@ package model;
 import java.util.ArrayList;
 
 /**
- * Compuesto del patrÃ³n Composite: agrupa Component (normalmente Pixel).
- * proyectil == false: raÃ­z de nave; comprueba lÃ­mites y notifica movimiento del jugador en bloque.
- * proyectil == true: cuerpo de disparo compuesto.
+ * Compuesto del patrón Composite: agrupa Component (normalmente Pixel).
+ * proyectilIndividual == false: raíz de nave; comprueba límites y notifica movimiento del jugador en bloque.
+ * proyectilIndividual == true: cuerpo de disparo compuesto.
  */
 public class Composite implements Component {
 
 	private ArrayList<Component> components = new ArrayList<>();
-	private boolean proyectil;
+	private boolean proyectilIndividual;
 
 	public Composite() {
 		this(false);
 	}
 
-	public Composite(boolean proyectil) {
-		this.proyectil = proyectil;
+	public Composite(boolean proyectilIndividual) {
+		this.proyectilIndividual = proyectilIndividual;
 	}
 
 	public void addComponent(Component c) {
@@ -49,7 +49,7 @@ public class Composite implements Component {
 
 	@Override
 	public void mover(int dx, int dy, int tipoNave) {
-		if (proyectil) {
+		if (proyectilIndividual) {
 			for (Component c : components) {
 				c.mover(dx, dy, 0); // Disparos no tienen tipo de nave
 			}
@@ -97,7 +97,8 @@ public class Composite implements Component {
 		}
 
 		Espacio espacio = Espacio.getEspacio();
-		espacio.notificarMovimientoJugadorCompleto(oldPositionsX, oldPositionsY, components, tipoNave);
+		// ESTO ES USADO POR NAVES ENEMIGAS Y EL JUGADOR
+		espacio.notificarMovimientoJugadorCompleto(oldPositionsX, oldPositionsY, components, tipoNave); // TODO: components deberian ser tambien coordenadas solo
 	}
 
 	@Override
@@ -122,7 +123,7 @@ public class Composite implements Component {
 
 	@Override
 	public boolean isActivo() {
-		if (proyectil) {
+		if (proyectilIndividual) {
 			for (Component c : components) {
 				if (c.isActivo()) {
 					return true;
@@ -135,7 +136,7 @@ public class Composite implements Component {
 
 	@Override
 	public void setActivo(boolean b) {
-		if (proyectil) {
+		if (proyectilIndividual) {
 			for (Component c : components) {
 				c.setActivo(b);
 			}
@@ -144,7 +145,7 @@ public class Composite implements Component {
 
 	@Override
 	public void notificarDisparoNuevo() {
-		if (proyectil) {
+		if (proyectilIndividual) {
 			for (Component c : components) {
 				c.notificarDisparoNuevo();
 			}
