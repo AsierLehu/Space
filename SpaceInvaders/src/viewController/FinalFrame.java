@@ -129,7 +129,8 @@ public class FinalFrame extends JFrame implements Observer {
 
     private JLabel crearInstruccion() {
         JLabel instruccion = new JLabel(">> PULSA SPACE PARA VOLVER <<");
-        instruccion.setForeground(new Color(0, 255, 150));
+        Color color = esVictoria ? new Color(0, 255, 100) : new Color(255, 102, 102);
+        instruccion.setForeground(color);
         instruccion.setFont(new Font("Monospaced", Font.BOLD, 26));
         return instruccion;
     }
