@@ -133,6 +133,7 @@ public class FlotaEnemigos implements Observer {
     /** Victoria: flota vacía (todos eliminados) o todos los restantes están muertos. */
     public boolean todosDestruidos() {
         if (enemigos.isEmpty()) {
+            System.out.println("Victoria: flota vacía");
             return true;
         }
         for (Enemigo e : enemigos) {
@@ -140,6 +141,7 @@ public class FlotaEnemigos implements Observer {
                 return false;
             }
         }
+        System.out.println("Victoria: todos los enemigos muertos");
         return true;
     }
     

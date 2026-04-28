@@ -85,14 +85,14 @@ public class JugadorBueno implements Observer {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		if (arg == null || !(arg instanceof int[])) {
+		if (arg == null || !(arg instanceof int[]) || !(o instanceof Espacio)) {
 			return;
 		}
 		
 		int[] datos = (int[]) arg;
 		
 		// Verificar si es mensaje de eliminar disparo
-		if (datos.length >= 3 && datos[0] == Espacio.MSG_ELIMINAR_DISPARO) {
+		if (datos.length >= 3 && datos[0] == 19) {
 			int disparoX = datos[1];
 			int disparoY = datos[2];
 			if (nave != null && nave.isVivo()) {

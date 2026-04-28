@@ -103,9 +103,8 @@ public abstract class Naves {
 	 * Elimina el disparo que se encuentra en la posicion especificada.
 	 */
 	public void eliminarDisparoPorPosicion(int x, int y) {
-		if (gestorDisparos != null) {
-			gestorDisparos.eliminarDisparoPorPosicion(x, y);
-		}
+		gestorDisparos.eliminarDisparoPorPosicion(x, y);
+		
 	}
 
 	public Component getComponente() {

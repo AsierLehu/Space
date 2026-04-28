@@ -99,24 +99,27 @@ public class Disparo {
 	}
 	
 	/**
-	 * Elimina el disparo que ocupa la posicion especificada.
+	 * Elimina el disparo que ocupa la posicion especificada o una posicion cercana.
+	 * Busca en la posición exacta y en un rango de +/-1 en Y (para compensar desincronización de timers).
 	 */
 	public void eliminarDisparoPorPosicion(int x, int y) {
 		for (int i = disparosActivos.size() - 1; i >= 0; i--) {
 			Component disparo = disparosActivos.get(i);
 			
-			// Verificar si alguna celda del disparo coincide con la posicion
+			// Verificar si alguna celda del disparo coincide con la posicion o posiciones cercanas
 			if (disparo instanceof Composite comp) {
 				ArrayList<int[]> celdas = comp.celdasOcupadasActivas();
 				for (int[] celda : celdas) {
-					if (celda[0] == x && celda[1] == y) {
+					// Buscar en posición exacta y +/-1 en Y para compensar desincronización
+					if (celda[0] == x && (celda[1] == y || celda[1] == y - 1 || celda[1] == y + 1)) {
 						disparo.setActivo(false);
 						disparosActivos.remove(i);
 						return;
 					}
 				}
 			} else {
-				if (disparo.getRefX() == x && disparo.getRefY() == y) {
+				// Para disparos simples, buscar en posición exacta y +/-1 en Y
+				if (disparo.getRefX() == x && (disparo.getRefY() == y || disparo.getRefY() == y - 1 || disparo.getRefY() == y + 1)) {
 					disparo.setActivo(false);
 					disparosActivos.remove(i);
 					return;

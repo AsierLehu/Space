@@ -37,7 +37,6 @@ public class Pixel implements Component {
 			}
 			notificarMovimientoDisparo(oldX, oldY, x, y);
 		} else {
-			System.out.println("Pixel: mover(" + dx + ", " + dy + ", " + tipoNave + ")");
 			int newX = x + dx;
 	        int newY = y + dy;
 	        if (newX >= 0 && newX < 100 && newY >= 0 && newY < 60) {

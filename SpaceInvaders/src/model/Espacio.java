@@ -35,6 +35,7 @@ public class Espacio extends Observable {
     private int[][] tablero;
  
     private boolean gameOver;
+    private boolean gameVictoria;
  
     private boolean colisionDetectadaEnDisparoSubir;
     
@@ -164,25 +165,39 @@ public class Espacio extends Observable {
     // LÓGICA DE ESTADO DEL JUEGO 
     // Derrota: jugador muerto, algún enemigo llegó al límite inferior, o colisión jugador-enemigo
     public boolean isGameOver() {
-    	if (gameOver) {
-    		System.out.println("gameOver ya era true");
-    		return true;
-    	}
+        if (gameOver) {
+            System.out.println("gameOver ya era true");
+            return true;
+        }
         if (FlotaEnemigos.getFlotaEnemigos().algunoLlegoAbajo(altura)) {
             System.out.println("GAME OVER: enemigo llego abajo");
             gameOver = true;
+            notificarGameOver();
             return true;
         }
         if (hayColisionJugadorEnemigo()) {
             System.out.println("GAME OVER: colision jugador-enemigo");
+            gameOver = true;
+            notificarGameOver();
             return true;
         }
+        
         return false;
     }
  
     // Victoria: la flota existe y todos los enemigos han sido destruidos
     public boolean isGameWon() {
-        return FlotaEnemigos.getFlotaEnemigos().todosDestruidos();
+        if (gameVictoria) {
+            System.out.println("gameVictoria ya era true");
+            return true;
+        }
+        if (FlotaEnemigos.getFlotaEnemigos().todosDestruidos()) {
+            System.out.println("Victoria");
+            gameVictoria = true;
+            notificarVictoria();
+            return true;
+        }
+        return false;
     }
     
     // COLISION JUGADOR - ENEMIGO detectada usando el tablero espejo.
@@ -567,7 +582,7 @@ public class Espacio extends Observable {
     }
  
     
-    public void notificarMovimientoJugadorCompleto(int[] oldX, int[] oldY, ArrayList<Component> componentes, int tipoNave) {
+    public void notificarMovimientoJugadorYEnemigo(int[] oldX, int[] oldY, ArrayList<Component> componentes, int tipoNave) {
         if (this.isGameOver() || this.isGameWon()) {
             return;
         }
@@ -605,20 +620,6 @@ public class Espacio extends Observable {
                     setCeldaMatriz(oldX[i], oldY[i], CELDA_VACIO);
                 }
                 
-                // NUEVO: si alguna nueva posicion esta fuera del tablero, eliminar el enemigo
-                boolean fueraDeLimites = false;
-                for (Component c : componentes) {
-                    if (!esValidoCelda(c.getRefX(), c.getRefY())) {
-                        fueraDeLimites = true;
-                        break;
-                    }
-                }
-                if (fueraDeLimites) {
-                    setChanged();
-                    notifyObservers(new int[]{MSG_ELIMINAR_ENEMIGO, enemigoId});
-                    return;
-                }
-                
                 // Establecer nuevas posiciones con el ID del enemigo
                 for (Component c : componentes) {
                     setCeldaMatriz(c.getRefX(), c.getRefY(), enemigoId);
@@ -644,7 +645,7 @@ public class Espacio extends Observable {
                 notifyObservers(new int[] {10, oldX[i], oldY[i]});
             }
             // Determinar tipo de mensaje según el tipo de nave recibido
-            int tipoMensaje = 15; // Por defecto verde (Nave1) para casos inesperados
+            int tipoMensaje = 15; 
             switch (tipoNave) {
                 case 1: tipoMensaje = 15; break; // Verde (Nave1)
                 case 2: tipoMensaje = 16; break; // Azul (Nave2)
@@ -764,7 +765,13 @@ public class Espacio extends Observable {
             notifyObservers(new int[]{3, disparo[0], disparo[1]}); // borrar píxel disparo
         }
         
-        // 3. Notificar FlotaEnemigos segundo (eliminar de lista)
+        // 3. Notificar JugadorBueno para eliminar disparos de su lista
+        for (int[] disparo : disparosColisionados) {
+            setChanged();
+            notifyObservers(new int[]{MSG_ELIMINAR_DISPARO, disparo[0], disparo[1]}); // eliminar disparo de lista
+        }
+        
+        // 4. Notificar FlotaEnemigos para eliminar enemigo de lista
         setChanged();
         notifyObservers(new int[]{MSG_ELIMINAR_ENEMIGO, enemigoId}); // MSG_ELIMINAR_ENEMIGO
     }

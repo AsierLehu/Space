@@ -140,9 +140,11 @@ public class MainFrame extends JFrame implements Observer {
     			break;
     			
     		case 7: 
+            System.out.println("Game Over");
             abrirFinalFrame(false);
                 break;
     		case 8: 
+            System.out.println("Victoria");
             abrirFinalFrame(true);
                 break;
     		

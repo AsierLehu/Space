@@ -98,7 +98,7 @@ public class Composite implements Component {
 
 		Espacio espacio = Espacio.getEspacio();
 		// ESTO ES USADO POR NAVES ENEMIGAS Y EL JUGADOR
-		espacio.notificarMovimientoJugadorCompleto(oldPositionsX, oldPositionsY, components, tipoNave); // TODO: components deberian ser tambien coordenadas solo
+		espacio.notificarMovimientoJugadorYEnemigo(oldPositionsX, oldPositionsY, components, tipoNave); // TODO: components deberian ser tambien coordenadas solo
 	}
 
 	@Override
