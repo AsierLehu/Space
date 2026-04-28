@@ -37,7 +37,8 @@ public class FlotaEnemigos implements Observer {
         int[] datos = (int[]) arg;
         
         
-        if (datos.length >= 2) {
+        // Solo procesar mensajes de eliminación de enemigos (MSG_ELIMINAR_ENEMIGO = 18)
+        if (datos.length >= 2 && datos[0] == 18) {
             int enemigoId = datos[1];
             eliminarEnemigoPorId(enemigoId);
         }
@@ -136,13 +137,24 @@ public class FlotaEnemigos implements Observer {
             System.out.println("Victoria: flota vacía");
             return true;
         }
+        
+        int vivos = 0;
+        int muertos = 0;
         for (Enemigo e : enemigos) {
             if (e.isVivo()) {
-                return false;
+                vivos++;
+            } else {
+                muertos++;
             }
         }
-        System.out.println("Victoria: todos los enemigos muertos");
-        return true;
+        
+        
+        if (vivos == 0) {
+            System.out.println("Victoria: todos los enemigos muertos");
+            return true;
+        }
+        
+        return false;
     }
     
     /**

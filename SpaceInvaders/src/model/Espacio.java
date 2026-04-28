@@ -166,7 +166,6 @@ public class Espacio extends Observable {
     // Derrota: jugador muerto, algún enemigo llegó al límite inferior, o colisión jugador-enemigo
     public boolean isGameOver() {
         if (gameOver) {
-            System.out.println("gameOver ya era true");
             return true;
         }
         if (FlotaEnemigos.getFlotaEnemigos().algunoLlegoAbajo(altura)) {
@@ -188,11 +187,10 @@ public class Espacio extends Observable {
     // Victoria: la flota existe y todos los enemigos han sido destruidos
     public boolean isGameWon() {
         if (gameVictoria) {
-            System.out.println("gameVictoria ya era true");
             return true;
         }
         if (FlotaEnemigos.getFlotaEnemigos().todosDestruidos()) {
-            System.out.println("Victoria");
+            System.out.println("Victoria detectada!");
             gameVictoria = true;
             notificarVictoria();
             return true;
