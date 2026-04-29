@@ -26,7 +26,7 @@ public class FinalFrame extends JFrame implements Observer {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-        JPanel panel = crearPanelPrincipal();
+        Component panel = crearPanelPrincipal();
         add(panel);
         
         pack();
@@ -44,45 +44,16 @@ public class FinalFrame extends JFrame implements Observer {
 
     // ==================== MÉTODOS GRÁFICOS ====================
 
-    private JPanel crearPanelPrincipal() {
-        JPanel panel = crearPanelConFondo();
-        panel.setOpaque(true);
-        panel.setBackground(Color.BLACK);
-        panel.setPreferredSize(new Dimension(900, 700));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.insets = new Insets(100, 20, 100, 20);
-
-        // Título del mensaje de fin
-        JLabel titulo = crearTituloMensaje();
-        gbc.gridy = 0;
-        panel.add(titulo, gbc);
-
-        // Instrucción para volver
-        JLabel instruccion = crearInstruccion();
-        gbc.gridy = 1;
-        gbc.insets = new Insets(50, 20, 50, 20);
-        panel.add(instruccion, gbc);
-
-        return panel;
+    private Component crearPanelPrincipal() {
+        Component comp = crearPanelConFondoYEstrellas();
+        if (comp instanceof JComponent) {
+            ((JComponent) comp).setPreferredSize(new Dimension(900, 700));
+        }
+        return comp;
     }
 
-    private JPanel crearPanelConFondo() {
-        JPanel panel = new JPanel(new GridBagLayout()) {
-            private java.util.Random random = new java.util.Random(12345);
-            private int[][] estrellas = null;
-            
-            private void generarEstrellas() {
-                if (estrellas == null) {
-                    estrellas = new int[150][2];
-                    for (int i = 0; i < estrellas.length; i++) {
-                        estrellas[i][0] = random.nextInt(getWidth());
-                        estrellas[i][1] = random.nextInt(getHeight());
-                    }
-                }
-            }
-            
+    private Component crearPanelConFondoYEstrellas() {
+        JPanel panelFondo = new JPanel(null) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -95,17 +66,6 @@ public class FinalFrame extends JFrame implements Observer {
                 g2d.setPaint(gradient);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
                 
-                // Generar estrellas
-                generarEstrellas();
-                
-                // Dibujar estrellas
-                for (int[] estrella : estrellas) {
-                    int tamanio = random.nextInt(3) + 1;
-                    float brillo = 0.3f + (random.nextFloat() * 0.7f);
-                    g2d.setColor(new Color(brillo, brillo, Math.min(brillo + 0.2f, 1.0f), 0.9f));
-                    g2d.fillOval(estrella[0], estrella[1], tamanio, tamanio);
-                }
-                
                 // Líneas decorativas
                 g2d.setColor(new Color(0, 100, 100, 15));
                 g2d.setStroke(new BasicStroke(1));
@@ -114,7 +74,55 @@ public class FinalFrame extends JFrame implements Observer {
                 }
             }
         };
-        return panel;
+        panelFondo.setBackground(Color.BLACK);
+        panelFondo.setOpaque(true);
+        
+        // Agregar estrellas como componentes
+        java.util.Random random = new java.util.Random(12345);
+        for (int i = 0; i < 150; i++) {
+            int x = random.nextInt(900);
+            int y = random.nextInt(700);
+            int tamanio = random.nextInt(3) + 1;
+            float brillo = 0.3f + (random.nextFloat() * 0.7f);
+            
+            JPanel estrella = new JPanel();
+            estrella.setBackground(new Color(brillo, brillo, Math.min(brillo + 0.2f, 1.0f)));
+            estrella.setBounds(x, y, tamanio, tamanio);
+            panelFondo.add(estrella);
+        }
+        
+        // Panel de contenido con GridBagLayout
+        JPanel panelContenido = new JPanel(new GridBagLayout());
+        panelContenido.setOpaque(false);
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.insets = new Insets(100, 20, 100, 20);
+
+        // Título del mensaje de fin
+        JLabel titulo = crearTituloMensaje();
+        gbc.gridy = 0;
+        panelContenido.add(titulo, gbc);
+
+        // Instrucción para volver
+        JLabel instruccion = crearInstruccion();
+        gbc.gridy = 1;
+        gbc.insets = new Insets(50, 20, 50, 20);
+        panelContenido.add(instruccion, gbc);
+        
+        // Usar JLayeredPane para superponer los paneles correctamente
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(900, 700));
+        
+        // Agregar panelFondo en la capa inferior
+        layeredPane.add(panelFondo, JLayeredPane.DEFAULT_LAYER);
+        panelFondo.setBounds(0, 0, 900, 700);
+        
+        // Agregar panelContenido en la capa superior
+        layeredPane.add(panelContenido, JLayeredPane.PALETTE_LAYER);
+        panelContenido.setBounds(0, 0, 900, 700);
+        
+        return layeredPane;
     }
 
     private JLabel crearTituloMensaje() {
