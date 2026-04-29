@@ -45,18 +45,6 @@ public class Disparo {
 		this.disparosActivos = new ArrayList<>();
 	}
 
-	public String getTipoActual() {
-		return estrategias.get(indiceEstrategiaActual).getTipo();
-	}
-
-	public int getMunicionActual() {
-		return estrategias.get(indiceEstrategiaActual).getMunicion();
-	}
-
-	public ArrayList<StrategyDisparo> getEstrategias() {
-		return estrategias;
-	}
-
 	/** Cambia al siguiente tipo de disparo disponible con munición */
 	public void cambiarTipoDisparo() {
 		if (estrategias.isEmpty()) return;
@@ -168,13 +156,6 @@ public class Disparo {
 		return disparosActivos;
 	}
 
-	/** Desactiva todos los disparos */
-	public void desactivarTodosLosDisparos() {
-		for (Component disparo : disparosActivos) {
-			disparo.setActivo(false);
-		}
-		disparosActivos.clear();
-	}
 
 	public int[][] celdasOcupadas() {
 		ArrayList<int[]> todasLasCeldas = new ArrayList<>();

@@ -128,12 +128,7 @@ public class Espacio extends Observable {
             tablero[x][y] = tipo;
         }
     }
- 
-    /** Método público para que FlotaEnemigos pueda limpiar celdas. */
-    public void limpiarCelda(int x, int y) {
-        setCeldaMatriz(x, y, CELDA_VACIO);
-    }
- 
+   
     public boolean esValidoCelda(int x, int y) {
         return x >= 0 && x < anchura && y >= 0 && y < altura;
     }
@@ -324,36 +319,7 @@ public class Espacio extends Observable {
  
     // GESTI�N DE DISPAROS 
     
-    /**
-     * Comprueba si un disparo espec�fico colisiona con alg�n enemigo.
-     * @param disparo El disparo a comprobar
-     * @return true si hay colisi�n, false en caso contrario
-     */
-    public boolean comprobarColisionDisparoEnemigo(Component disparo) {
-        if (disparo == null || !disparo.isActivo()) {
-            return false;
-        }
-        
-        // Obtener las celdas ocupadas por el disparo
-        int[][] celdasDisparo = getCeldasOcupadas(disparo);
-        
-        // Verificar si alguna celda del disparo coincide con un enemigo
-        for (int[] celda : celdasDisparo) {
-            int valorCelda = getCelda(celda[0], celda[1]);
-            if (esEnemigoId(valorCelda)) {
-                // Hay colision - notificar a los observadores
-                setChanged();
-                notifyObservers(new int[] { MSG_ELIMINAR_DISPARO, disparo.getDisparoId() });
-                
-                // Tambien eliminar el enemigo
-                notificarFlotaEliminarEnemigo(celda[0], celda[1]);
-                
-                return true;
-            }
-        }
-        
-        return false;
-    }
+   
     
     
  
@@ -636,15 +602,6 @@ public class Espacio extends Observable {
         notificarGameOver();
     }
  
-    /** Invocado desde el modelo al cambiar de celda del jugador; dispara el Observer de la vista. */
-    public void notificarMovimientoJugador(int oldX, int oldY, int newX, int newY) {
-        Naves n = getNaveJugador();
-        int celdaJ = (n != null) ? tipoNaveACeldaJugador(n.getTipoNave()) : CELDA_JUGADOR_NAVE1;
-        setCeldaMatriz(oldX, oldY, CELDA_VACIO);
-        setCeldaMatriz(newX, newY, celdaJ);
-        setChanged();
-        notifyObservers(new int[] {0, oldX, oldY, newX, newY});
-    }
  
 // TODO: REVISAR ESTO
     public void notificarDisparoNuevo(int x, int y, int disparoId) {
