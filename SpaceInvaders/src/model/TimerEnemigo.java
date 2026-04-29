@@ -48,13 +48,4 @@ public class TimerEnemigo {
         }
     }
     
-    /**
-     * Para el timer y lo marca como no iniciado para que pueda volver a arrancarse una nueva partida.
-     */
-    public void detener() {
-    	if (timer != null) {
-    		timer.stop();
-    	}
-    	iniciado = false;
     }
-}
