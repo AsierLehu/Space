@@ -23,9 +23,7 @@ public interface Component {
 	default int getDisparoId() {
 		return -1;
 	}
-	// TODO: QUITAR LO DE DEFAULT
-
-
+	
 	default void notificarMuerteJugador() {
 		Espacio.getEspacio().notificarMuerteJugador(new int[][] {
 			{ getRefX(), getRefY() }

@@ -105,9 +105,16 @@ public class Composite implements Component {
 			c.mover(dx, dy, tipoNave); // Propaga el tipo de nave
 		}
 
+		int[] currentPositionsX = new int[components.size()];
+		int[] currentPositionsY = new int[components.size()];
+		for (int i = 0; i < components.size(); i++) {
+			currentPositionsX[i] = components.get(i).getRefX();
+			currentPositionsY[i] = components.get(i).getRefY();
+		}
+
 		Espacio espacio = Espacio.getEspacio();
 		// ESTO ES USADO POR NAVES ENEMIGAS Y EL JUGADOR
-		espacio.notificarMovimientoJugadorYEnemigo(oldPositionsX, oldPositionsY, components, tipoNave); // TODO: components deberian ser tambien coordenadas solo
+		espacio.notificarMovimientoJugadorYEnemigo(oldPositionsX, oldPositionsY, currentPositionsX, currentPositionsY, tipoNave);
 	}
 
 	@Override

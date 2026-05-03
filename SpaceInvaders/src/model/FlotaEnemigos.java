@@ -36,6 +36,10 @@ public class FlotaEnemigos implements Observer {
         
         int[] datos = (int[]) arg;
         
+        // Inicializar flota con enemigos aleatorios
+        if (datos.length >= 2 && datos[0] == 20) {
+            inicializar(100, datos[1]);
+        }
         
         // Solo procesar mensajes de eliminación de enemigos (MSG_ELIMINAR_ENEMIGO = 18)
         if (datos.length >= 2 && datos[0] == 18) {
@@ -82,12 +86,11 @@ public class FlotaEnemigos implements Observer {
 
     // ─── Inicialización ───────────────────────────────────────────────────────
 
-    // Limpia la flota y añade 4-8 enemigos en posiciones aleatorias de la fila superior sin tocarse
-    public void inicializar(int anchura) {
+    // Limpia la flota y añade n_enemigos enemigos en posiciones aleatorias de la fila superior sin tocarse
+    public void inicializar(int anchura, int n_enemigos) {
         enemigos.clear();
         siguienteId = 11; // Reiniciar contador de IDs
         Random rand = new Random();
-        int n_enemigos = rand.nextInt(5) + 4;
         ArrayList<Integer> xOcupadas = new ArrayList<>();
 
         int intentos = 0;
