@@ -48,7 +48,7 @@ public class MainFrame extends JFrame implements Observer {
         celdas = new JLabel[cols][rows];
 
         // --- Capa 1: imagen de fondo escalada al tamaño del panel ---
-        java.net.URL urlImagen = getClass().getResource("/images/fondo.png");
+        java.net.URL urlImagen = getClass().getResource("/images/fondo2.png");
         Image imgEscalada = new ImageIcon(urlImagen).getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         JLabel fondoLabel = new JLabel(new ImageIcon(imgEscalada));
         fondoLabel.setBounds(0, 0, ancho, alto);

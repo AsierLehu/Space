@@ -53,7 +53,7 @@ public class StartFrame extends JFrame implements Observer {
      */
     private Component crearPanelPrincipalConEstrellas() {
         // Fondo con imagen escalada al tamaño del frame
-        java.net.URL urlImagen = getClass().getResource("/images/fondo.png");
+        java.net.URL urlImagen = getClass().getResource("/images/fondo1.png");
         Image imgEscalada = new ImageIcon(urlImagen).getImage().getScaledInstance(900, 700, Image.SCALE_SMOOTH);
         JLabel panelFondo = new JLabel(new ImageIcon(imgEscalada));
         panelFondo.setPreferredSize(new Dimension(900, 700));
@@ -64,36 +64,23 @@ public class StartFrame extends JFrame implements Observer {
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.insets = new Insets(30, 20, 30, 20);
 
-        // Título grande y llamativo
-        JLabel titulo = new JLabel("SPACE INVADERS");
-        titulo.setForeground(new Color(0, 255, 100));
-        titulo.setFont(new Font("Monospaced", Font.BOLD, 72));
+        // Espacio vertical arriba: absorbe altura extra y baja el bloque de texto
         gbc.gridy = 0;
-        panelContenido.add(titulo, gbc);
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        JPanel espacioSuperior = new JPanel();
+        espacioSuperior.setOpaque(false);
+        panelContenido.add(espacioSuperior, gbc);
 
-        // Subtítulo con estilo
-        JLabel subtitulo = new JLabel("Sprint 2 - Battle Edition");
-        subtitulo.setForeground(new Color(100, 200, 255));
-        subtitulo.setFont(new Font("Monospaced", Font.ITALIC, 24));
-        gbc.gridy = 1;
-        gbc.insets = new Insets(10, 20, 40, 20);
-        panelContenido.add(subtitulo, gbc);
-
-        // Línea decorativa
-        JLabel linea1 = new JLabel("==================================================");
-        linea1.setForeground(new Color(0, 200, 200));
-        linea1.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        gbc.gridy = 2;
-        gbc.insets = new Insets(5, 20, 20, 20);
-        panelContenido.add(linea1, gbc);
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
 
         // Selección de nave (1 / 2 / 3)
         etiquetaNave = new JLabel();
         etiquetaNave.setForeground(new Color(255, 200, 0));
         etiquetaNave.setFont(new Font("Monospaced", Font.BOLD, 20));
-        gbc.gridy = 3;
+        gbc.gridy = 1;
         gbc.insets = new Insets(20, 20, 20, 20);
         panelContenido.add(etiquetaNave, gbc);
         actualizarTextoNave();
@@ -102,45 +89,37 @@ public class StartFrame extends JFrame implements Observer {
         JLabel pressSpace = new JLabel(">> PULSA SPACE PARA JUGAR <<");
         pressSpace.setForeground(new Color(0, 255, 150));
         pressSpace.setFont(new Font("Monospaced", Font.BOLD, 26));
-        gbc.gridy = 4;
+        gbc.gridy = 2;
         gbc.insets = new Insets(30, 20, 30, 20);
         panelContenido.add(pressSpace, gbc);
-
-        // Línea decorativa
-        JLabel linea2 = new JLabel("==================================================");
-        linea2.setForeground(new Color(0, 200, 200));
-        linea2.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        gbc.gridy = 5;
-        gbc.insets = new Insets(10, 20, 30, 20);
-        panelContenido.add(linea2, gbc);
 
         // Controles (con mejor formato)
         JLabel control1 = new JLabel("1 / 2 / 3  ==  Tipo de nave");
         control1.setForeground(new Color(150, 150, 255));
         control1.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        gbc.gridy = 6;
+        gbc.gridy = 3;
         gbc.insets = new Insets(10, 20, 10, 20);
         panelContenido.add(control1, gbc);
 
         JLabel control2 = new JLabel("FLECHAS (^ v < >)  ==  Mover nave");
         control2.setForeground(new Color(150, 150, 255));
         control2.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        gbc.gridy = 7;
+        gbc.gridy = 4;
         gbc.insets = new Insets(10, 20, 10, 20);
         panelContenido.add(control2, gbc);
 
         JLabel control3 = new JLabel("SPACE  ==  Disparar");
         control3.setForeground(new Color(150, 150, 255));
         control3.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        gbc.gridy = 8;
+        gbc.gridy = 5;
         gbc.insets = new Insets(10, 20, 10, 20);
         panelContenido.add(control3, gbc);
 
         JLabel control4 = new JLabel("M  ==  Cambiar tipo de disparo");
         control4.setForeground(new Color(150, 150, 255));
         control4.setFont(new Font("Monospaced", Font.PLAIN, 16));
-        gbc.gridy = 9;
-        gbc.insets = new Insets(10, 20, 20, 20);
+        gbc.gridy = 6;
+        gbc.insets = new Insets(10, 20, 60, 20);
         panelContenido.add(control4, gbc);
         
         // Poner el contenido dentro de la imagen de fondo
