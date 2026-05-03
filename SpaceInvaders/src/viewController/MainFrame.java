@@ -13,24 +13,14 @@ import model.JugadorBueno;
 @SuppressWarnings("deprecation")
 public class MainFrame extends JFrame implements Observer {
 
-    // Constantes de celdas - mismo valor que en Espacio
-    private static int CELDA_VACIO = 0;
-    private static int CELDA_DISPARO = 1;
-    private static int CELDA_ENEMIGO = 2;
-    private static int CELDA_JUGADOR_NAVE1 = 3;
-    private static int CELDA_JUGADOR_NAVE2 = 4;
-    private static int CELDA_JUGADOR_NAVE3 = 5;
-
-    private static Color COLOR_FONDO   = new Color(20, 20, 20);
     private static Color COLOR_JUGADOR = Color.MAGENTA;
     private static Color COLOR_ENEMIGO = Color.RED;
     private static Color COLOR_DISPARO = Color.WHITE;
-    private static Color COLOR_GAME_OVER = new Color(255, 102, 102);
     
     // Colores específicos por tipo de nave
-    private static Color COLOR_NAVE1_VERDE = Color.GREEN;
-    private static Color COLOR_NAVE2_AZUL = Color.BLUE;
-    private static Color COLOR_NAVE3_MORADO = Color.MAGENTA; // Morado para Nave3
+    private static Color COLOR_NAVE1_VERDE  = Color.GREEN;
+    private static Color COLOR_NAVE2_AZUL   = Color.BLUE;
+    private static Color COLOR_NAVE3_MORADO = Color.MAGENTA;
 
     private JLabel[][] celdas;
     private JLabel mensajeFin;
@@ -52,26 +42,56 @@ public class MainFrame extends JFrame implements Observer {
     private void initPanel() {
         int cols = 100;
         int rows = 60;
+        int ancho = cols * 10; // 1000px
+        int alto  = rows * 10; // 600px
 
         celdas = new JLabel[cols][rows];
 
-        JPanel gamePanel = new JPanel(new GridLayout(rows, cols, 0, 0));
-        gamePanel.setBackground(COLOR_FONDO);
+        // --- Capa 1: imagen de fondo escalada al tamaño del panel ---
+        java.net.URL urlImagen = getClass().getResource("/images/fondo.png");
+        Image imgEscalada = new ImageIcon(urlImagen).getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+        JLabel fondoLabel = new JLabel(new ImageIcon(imgEscalada));
+        fondoLabel.setBounds(0, 0, ancho, alto);
+
+        // --- Capa 2: grid de celdas transparente encima ---
+        JPanel gridPanel = new JPanel(new GridLayout(rows, cols, 0, 0));
+        gridPanel.setOpaque(false);
+        gridPanel.setBounds(0, 0, ancho, alto);
 
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
                 JLabel lbl = new JLabel();
-                lbl.setPreferredSize(new Dimension(10,10));
-                lbl.setOpaque(true);
-                lbl.setBackground(COLOR_FONDO);
+                lbl.setPreferredSize(new Dimension(10, 10));
+                lbl.setOpaque(false);
                 celdas[x][y] = lbl;
-                gamePanel.add(lbl);
+                gridPanel.add(lbl);
             }
         }
-        addKeyListener(new Controller());
-        add(gamePanel);
-    }
 
+        // --- JLayeredPane: apila fondoLabel debajo y gridPanel encima ---
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(ancho, alto));
+        layeredPane.add(fondoLabel, JLayeredPane.DEFAULT_LAYER);
+        layeredPane.add(gridPanel,  JLayeredPane.PALETTE_LAYER);
+
+        addKeyListener(new Controller());
+        add(layeredPane);
+    }
+    
+    private void borrarCelda(int x, int y) {
+        if (esValido(x, y)) {
+            celdas[x][y].setOpaque(false);
+            celdas[x][y].repaint();
+        }
+    }
+    
+    private void pintarCelda(int x, int y, Color c) {
+        if (esValido(x, y)) {
+            celdas[x][y].setOpaque(true);
+            celdas[x][y].setBackground(c);
+            celdas[x][y].repaint();
+        }
+    }
 
 
     @Override
@@ -85,48 +105,48 @@ public class MainFrame extends JFrame implements Observer {
     	
     	switch (tipo) {
     		case 0: // jugador se mueve - [tipo, oldX, oldY, newX, newY]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
-    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_JUGADOR);
+    			borrarCelda(datos[1], datos[2]);
+    			pintarCelda(datos[3], datos[4], COLOR_JUGADOR);
     			break;
         
     		case 1: // disparo nuevo - [tipo, newX, newY]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_DISPARO);
+    			pintarCelda(datos[1], datos[2], COLOR_DISPARO);
     			break;
     			
     		case 2: // disparo se mueve - [tipo, oldX, oldY, newX, newY]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
-    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_DISPARO);
+    			borrarCelda(datos[1], datos[2]);
+    			pintarCelda(datos[3], datos[4], COLOR_DISPARO);
     			break;
     			
     		case 3: // disparo salio del tablero - [tipo, oldX, oldY]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			borrarCelda(datos[1], datos[2]);
     			break;
     		
     		case 4: // enemigo baja - [tipo, oldX, oldY, newX, newY]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
-    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO);
+    			borrarCelda(datos[1], datos[2]);
+    			pintarCelda(datos[3], datos[4], COLOR_ENEMIGO);
     			break;
     		
     		case 5: // colision - [tipo, disparoX, disparoY, enemigoX, enemigoY, ]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
-    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_FONDO);
+    			borrarCelda(datos[1], datos[2]);
+    			borrarCelda(datos[3], datos[4]);
     			break;
     			
     		case 6: // inicialización del juego - [tipo, jugadorX, jugadorY, enemigoX, enemigoY]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR);
-    			if (esValido(datos[3], datos[4])) celdas[datos[3]][datos[4]].setBackground(COLOR_ENEMIGO);
+    			pintarCelda(datos[1], datos[2], COLOR_JUGADOR);
+    			pintarCelda(datos[3], datos[4], COLOR_ENEMIGO);
     			break;
     		
     		case 12: // borrar píxel de enemigo - [tipo, x, y]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			borrarCelda(datos[1], datos[2]);
     			break;
     		
     		case 13: // inicialización de nave - [tipo, x, y]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_JUGADOR);
+    			pintarCelda(datos[1], datos[2], COLOR_JUGADOR);
     			break;
     		
     		case 14: // inicialización de enemigo o pintar píxel de enemigo - [tipo, x, y]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_ENEMIGO);
+    			pintarCelda(datos[1], datos[2], COLOR_ENEMIGO);
     			break;
     			
     		case 7: 
@@ -139,19 +159,19 @@ public class MainFrame extends JFrame implements Observer {
                 break;
     		
     		case 10: // borrar celda de jugador - [tipo, x, y]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_FONDO);
+    			borrarCelda(datos[1], datos[2]);
     			break;
     		
     		case 15: // pintar nave verde (Nave1) - [tipo, x, y]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_NAVE1_VERDE);
+    			pintarCelda(datos[1], datos[2], COLOR_NAVE1_VERDE);
     			break;
     		
     		case 16: // pintar nave azul (Nave2) - [tipo, x, y]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_NAVE2_AZUL);
+    			pintarCelda(datos[1], datos[2], COLOR_NAVE2_AZUL);
     			break;
     		
     		case 17: // pintar nave morada (Nave3) - [tipo, x, y]
-    			if (esValido(datos[1], datos[2])) celdas[datos[1]][datos[2]].setBackground(COLOR_NAVE3_MORADO);
+    			pintarCelda(datos[1], datos[2], COLOR_NAVE3_MORADO);
     			break;
 
             case 18: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12

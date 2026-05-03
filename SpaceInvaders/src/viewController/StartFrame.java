@@ -1,7 +1,5 @@
 package viewController;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -54,46 +52,15 @@ public class StartFrame extends JFrame implements Observer {
      * Crea el panel principal con estrellas como componentes de Swing
      */
     private Component crearPanelPrincipalConEstrellas() {
-        JPanel panelFondo = new JPanel(null) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                
-                // Fondo con degradado vertical
-                GradientPaint gradient = new GradientPaint(0, 0, new Color(10, 10, 30), 
-                                                          0, getHeight(), new Color(0, 0, 0));
-                g2d.setPaint(gradient);
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-                
-                // Líneas decorativas horizontales sutiles
-                g2d.setColor(new Color(0, 100, 100, 15));
-                g2d.setStroke(new BasicStroke(1));
-                for (int i = 0; i < getHeight(); i += 40) {
-                    g2d.drawLine(0, i, getWidth(), i);
-                }
-            }
-        };
-        panelFondo.setBackground(Color.BLACK);
-        panelFondo.setOpaque(true);
-        
-        // Agregar estrellas como componentes
-        java.util.Random random = new java.util.Random(12345);
-        for (int i = 0; i < 150; i++) {
-            int x = random.nextInt(900);
-            int y = random.nextInt(700);
-            int tamanio = random.nextInt(3) + 1;
-            float brillo = 0.3f + (random.nextFloat() * 0.7f);
-            
-            JPanel estrella = new JPanel();
-            estrella.setBackground(new Color(brillo, brillo, Math.min(brillo + 0.2f, 1.0f)));
-            estrella.setBounds(x, y, tamanio, tamanio);
-            panelFondo.add(estrella);
-        }
-        
+        // Fondo con imagen escalada al tamaño del frame
+        java.net.URL urlImagen = getClass().getResource("/images/fondo.png");
+        Image imgEscalada = new ImageIcon(urlImagen).getImage().getScaledInstance(900, 700, Image.SCALE_SMOOTH);
+        JLabel panelFondo = new JLabel(new ImageIcon(imgEscalada));
+        panelFondo.setPreferredSize(new Dimension(900, 700));
+
         // Panel de contenido con GridBagLayout
         JPanel panelContenido = new JPanel(new GridBagLayout());
-        panelContenido.setOpaque(false);
+        panelContenido.setOpaque(false); // Transparente para que se vea el fondo
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -176,19 +143,11 @@ public class StartFrame extends JFrame implements Observer {
         gbc.insets = new Insets(10, 20, 20, 20);
         panelContenido.add(control4, gbc);
         
-        // Usar JLayeredPane para superponer los paneles correctamente
-        JLayeredPane layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(900, 700));
+        // Poner el contenido dentro de la imagen de fondo
+        panelFondo.setLayout(new BorderLayout());
+        panelFondo.add(panelContenido, BorderLayout.CENTER);
         
-        // Agregar panelFondo en la capa inferior
-        layeredPane.add(panelFondo, JLayeredPane.DEFAULT_LAYER);
-        panelFondo.setBounds(0, 0, 900, 700);
-        
-        // Agregar panelContenido en la capa superior
-        layeredPane.add(panelContenido, JLayeredPane.PALETTE_LAYER);
-        panelContenido.setBounds(0, 0, 900, 700);
-        
-        return layeredPane;
+        return panelFondo;
     }
 
 
