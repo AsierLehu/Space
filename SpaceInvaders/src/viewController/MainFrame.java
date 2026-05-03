@@ -174,7 +174,7 @@ public class MainFrame extends JFrame implements Observer {
     			pintarCelda(datos[1], datos[2], COLOR_NAVE3_MORADO);
     			break;
     		
-    		case 18: // pintar nave morada (Nave3) - [tipo, x, y]
+    		case 21: // pintar nave morada (Nave3) - [tipo, x, y]
     			pintarCelda(datos[1], datos[2], COLOR_NAVE4_AMARILLO);
     			break;
 

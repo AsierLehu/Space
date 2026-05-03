@@ -215,6 +215,8 @@ public class Espacio extends Observable {
         }
         if (hayColisionJugadorEnemigo()) {
             System.out.println("GAME OVER: colision jugador-enemigo");
+            gameOver = true;
+            notificarGameOver();
             return true;
         }
         
@@ -483,7 +485,7 @@ public class Espacio extends Observable {
      * Una celda de nave jugadora en la posición inicial: actualiza el espejo y notifica a la vista (tipos 15–17).
      */
     public void registrarCeldaJugadorInicialEnMatrizYVista(int x, int y, int tipoNave) {
-        if (tipoNave <= 0 || tipoNave > 3) {
+        if (tipoNave <= 0 || tipoNave > 4) {
             return;
         }
         int tipoMensaje = 15;
@@ -491,6 +493,7 @@ public class Espacio extends Observable {
             case 1: tipoMensaje = 15; break;
             case 2: tipoMensaje = 16; break;
             case 3: tipoMensaje = 17; break;
+            case 4: tipoMensaje = 21; break;
         }
         int celdaJugador = tipoNaveACeldaJugador(tipoNave);
         setCeldaMatriz(x, y, celdaJugador);
@@ -568,7 +571,7 @@ public class Espacio extends Observable {
                 case 1: tipoMensaje = 15; break; // Verde (Nave1)
                 case 2: tipoMensaje = 16; break; // Azul (Nave2)
                 case 3: tipoMensaje = 17; break; // Morado (Nave3)
-                case 4: tipoMensaje = 18; break; // Amarillo (Nave4)
+                case 4: tipoMensaje = 21; break; // Amarillo (Nave4)
             }
             // Luego pinta todas las celdas nuevas con el color correcto
             for (int i = 0; i < currentX.length; i++) {
