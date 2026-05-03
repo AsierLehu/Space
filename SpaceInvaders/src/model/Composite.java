@@ -202,6 +202,7 @@ public class Composite implements Component {
 		if (proyectilIndividual) {
 			return;
 		}
+		Espacio.getEspacio().registrarEnemigoCreadoEnConteo();
 		for (Component c : components) {
 			c.registrarEnemigoEnMatrizInicial(idEnemigo);
 		}

@@ -120,32 +120,6 @@ public class FlotaEnemigos implements Observer {
         return enemigos;
     }
 
-    /** Victoria: flota vacía (todos eliminados) o todos los restantes están muertos. */
-    public boolean todosDestruidos() {
-        if (enemigos.isEmpty()) {
-            System.out.println("Victoria: flota vacía");
-            return true;
-        }
-        
-        int vivos = 0;
-        int muertos = 0;
-        for (Enemigo e : enemigos) {
-            if (e.isVivo()) {
-                vivos++;
-            } else {
-                muertos++;
-            }
-        }
-        
-        
-        if (vivos == 0) {
-            System.out.println("Victoria: todos los enemigos muertos");
-            return true;
-        }
-        
-        return false;
-    }
-    
     /**
      * Método llamado por TimerEnemigo para mover todos los enemigos.
      * Cada enemigo llama a su método mover() que notificará a Espacio.

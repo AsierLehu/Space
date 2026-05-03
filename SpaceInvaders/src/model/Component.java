@@ -46,7 +46,7 @@ public interface Component {
 	default void registrarPosicionInicialJugador(int tipoNave) {
 	}
 
-	/** Enemigos: pintan su id en el espejo al crearse (no aplica a proyectiles). */
+	/** Enemigos: pintan su id en el espejo al crearse (no aplica a proyectiles). El {@link Composite} raíz también cuenta el enemigo en {@link Espacio}. */
 	default void registrarEnemigoEnMatrizInicial(int idEnemigo) {
 	}
 }

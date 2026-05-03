@@ -38,6 +38,11 @@ public class Espacio extends Observable {
  
     private boolean gameOver;
     private boolean gameVictoria;
+
+    /** Enemigos vivos en esta partida (incrementa al crearse cada {@link Enemigo}, decrementa al eliminarlo). */
+    private int enemigosVivosRestantes;
+    /** Evita restar dos veces si varias rutas notifican la muerte del mismo id. */
+    private ArrayList<Integer> idsEnemigoYaRestadosEnEliminacion = new ArrayList<>();
  
  
     // CONSTRUCTOR Y PATR�N SINGLETON 
@@ -64,9 +69,30 @@ public class Espacio extends Observable {
     private void inicializar() {
         gameOver = false;
         gameVictoria = false;
+        enemigosVivosRestantes = 0;
+        idsEnemigoYaRestadosEnEliminacion.clear();
         Disparo.reiniciarContadorIdsDisparo();
         inicializarTablero();
         notificarInicializarFlota();
+    }
+
+    public void registrarEnemigoCreadoEnConteo() {
+        enemigosVivosRestantes++;
+    }
+
+    private void registrarEnemigoEliminadoEnConteo(int enemigoId) {
+        if (!esEnemigoId(enemigoId)) {
+            return;
+        }
+        for (int i = 0; i < idsEnemigoYaRestadosEnEliminacion.size(); i++) {
+            if (idsEnemigoYaRestadosEnEliminacion.get(i) == enemigoId) {
+                return;
+            }
+        }
+        idsEnemigoYaRestadosEnEliminacion.add(enemigoId);
+        if (enemigosVivosRestantes > 0) {
+            enemigosVivosRestantes--;
+        }
     }
     
     private void notificarInicializarFlota() {
@@ -193,12 +219,12 @@ public class Espacio extends Observable {
         return false;
     }
  
-    // Victoria: la flota existe y todos los enemigos han sido destruidos
+    // Victoria: contador de enemigos vivos llegó a 0 (véase {@link #registrarEnemigoCreadoEnConteo} / {@link #registrarEnemigoEliminadoEnConteo}).
     public boolean isGameWon() {
         if (gameVictoria) {
             return true;
         }
-        if (FlotaEnemigos.getFlotaEnemigos().todosDestruidos()) { // TODO: QUE SE HAGA CONTANDO AQUI LOS ENEMIGOS
+        if (enemigosVivosRestantes <= 0) {
             System.out.println("Victoria detectada!");
             gameVictoria = true;
             notificarVictoria();
@@ -351,6 +377,7 @@ public class Espacio extends Observable {
             }
         }
         
+        registrarEnemigoEliminadoEnConteo(enemigoId);
         // Notificar a FlotaEnemigos para que elimine el enemigo de su lista
         setChanged();
         notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, enemigoId, -1, -1 });
@@ -377,6 +404,7 @@ public class Espacio extends Observable {
                 }
             }
             
+            registrarEnemigoEliminadoEnConteo(enemigoId);
             // Notificar a FlotaEnemigos para que elimine el enemigo de su lista
             setChanged();
             notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, enemigoId, x, y });
@@ -420,6 +448,7 @@ public class Espacio extends Observable {
             notifyObservers(new int[]{3, colision[0], colision[1]}); // borrar disparo
         }
         
+        registrarEnemigoEliminadoEnConteo(enemigoId);
         // Notificar a FlotaEnemigos para eliminar de la lista
         setChanged();
         notifyObservers(new int[]{MSG_ELIMINAR_ENEMIGO, enemigoId, -1, -1});
@@ -608,15 +637,10 @@ public class Espacio extends Observable {
                         notifyObservers(new int[]{12, celda[0], celda[1]});
                     }
                     
+                    registrarEnemigoEliminadoEnConteo(enemigoId);
                     // Notificar eliminación del enemigo a FlotaEnemigos
                     setChanged();
                     notifyObservers(new int[]{MSG_ELIMINAR_ENEMIGO, enemigoId});
-                    
-                    // C. Verificar victoria
-                    boolean victoria = isGameWon();
-                    if (victoria) {
-                        notificarVictoria();
-                    }
                     
                 } else {
                     // Sin colisión: actualizar matriz normalmente
@@ -696,6 +720,7 @@ public class Espacio extends Observable {
             borrarProyectilCompletoPorId(idsDisparos.get(i), false, 0, 0);
         }
 
+        registrarEnemigoEliminadoEnConteo(enemigoId);
         setChanged();
         notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, enemigoId });
     }
