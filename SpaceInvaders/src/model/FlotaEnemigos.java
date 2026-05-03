@@ -120,20 +120,6 @@ public class FlotaEnemigos implements Observer {
         return enemigos;
     }
 
-    public boolean algunoLlegoAbajo(int altura) {
-        for (Enemigo e : enemigos) {
-            if (e.isVivo()) {
-                int[][] celdas = e.celdasOcupadas();
-                for (int[] celda : celdas) {
-                    if (celda[1] >= altura - 1) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     /** Victoria: flota vacía (todos eliminados) o todos los restantes están muertos. */
     public boolean todosDestruidos() {
         if (enemigos.isEmpty()) {

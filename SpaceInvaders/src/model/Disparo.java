@@ -8,13 +8,12 @@ import java.util.ArrayList;
  */
 public class Disparo {
 
-	private static int PRIMER_ID_DISPARO = 21;
-
-	private static int siguienteIdDisparo = PRIMER_ID_DISPARO;
+	/** Primera id asignada en cada partida (coincide con el rango de celdas de proyectil en {@link Espacio}). */
+	private static int siguienteIdDisparo = 21;
 
 	/** Reinicia la secuencia 21 … 29, 211, 212 … al iniciar una partida nueva. */
 	public static void reiniciarContadorIdsDisparo() {
-		siguienteIdDisparo = PRIMER_ID_DISPARO;
+		siguienteIdDisparo = 21;
 	}
 
 	/**

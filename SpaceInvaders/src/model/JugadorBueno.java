@@ -31,6 +31,7 @@ public class JugadorBueno implements Observer {
 		crearNaveParaPartida();
 		if (nave != null) {
 			nave.inicializar();
+			notificarPosicionInicialAlEspacio();
 		}
 	}
 	
@@ -79,7 +80,12 @@ public class JugadorBueno implements Observer {
 	public Naves getNave() {
 		return nave;
 	}
-	
+
+	/** Sincroniza matriz y vista inicial del jugador vía la nave y el árbol {@link Component}. */
+	public void notificarPosicionInicialAlEspacio() {
+			nave.registrarPosicionInicialEnEspacio();
+	}
+
 	/**
 	 * Observer pattern: recibe notificaciones de Espacio sobre colisiones de disparos.
 	 */

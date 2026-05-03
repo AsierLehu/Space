@@ -129,4 +129,14 @@ public abstract class Naves {
 			ComponenteNave.inicializar();
 		}
 	}
+
+	public void registrarPosicionInicialEnEspacio() {
+		ComponenteNave.registrarPosicionInicialJugador(getTipoNave());
+	}
+
+	public void registrarEnemigoEnMatrizInicial(int idEnemigo) {
+		if (ComponenteNave != null) {
+			ComponenteNave.registrarEnemigoEnMatrizInicial(idEnemigo);
+		}
+	}
 }

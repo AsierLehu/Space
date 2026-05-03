@@ -80,11 +80,19 @@ public class Pixel implements Component {
 	}
 
 	@Override
-	public int getDisparoId() {
-		if (proyectilIndividual) {
-			return disparoId;
+	public void registrarPosicionInicialJugador(int tipoNave) {
+		if (proyectilIndividual || tipoNave <= 0) {
+			return;
 		}
-		return -1;
+		Espacio.getEspacio().registrarCeldaJugadorInicialEnMatrizYVista(getRefX(), getRefY(), tipoNave);
+	}
+
+	@Override
+	public void registrarEnemigoEnMatrizInicial(int idEnemigo) {
+		if (proyectilIndividual) {
+			return;
+		}
+		Espacio.getEspacio().registrarCeldaEnemigoInicialEnMatrizYVista(getRefX(), getRefY(), idEnemigo);
 	}
 
 }

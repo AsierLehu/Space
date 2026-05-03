@@ -13,6 +13,7 @@ public class Enemigo extends Naves {
 		super(x, y, velocidad);
 		this.id = id;
 		inicializarNaveJugador();
+		registrarEnemigoEnMatrizInicial(id);
 	}
 
 	@Override

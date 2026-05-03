@@ -186,4 +186,24 @@ public class Composite implements Component {
 		}
 		Espacio.getEspacio().notificarMuerteJugador(posiciones);
 	}
+
+	@Override
+	public void registrarPosicionInicialJugador(int tipoNave) {
+		if (proyectilIndividual || tipoNave <= 0) {
+			return;
+		}
+		for (Component c : components) {
+			c.registrarPosicionInicialJugador(tipoNave);
+		}
+	}
+
+	@Override
+	public void registrarEnemigoEnMatrizInicial(int idEnemigo) {
+		if (proyectilIndividual) {
+			return;
+		}
+		for (Component c : components) {
+			c.registrarEnemigoEnMatrizInicial(idEnemigo);
+		}
+	}
 }
