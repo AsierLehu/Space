@@ -133,10 +133,10 @@ public class FlotaEnemigos implements Observer {
                 // Cada enemigo se mueve y notifica a Espacio a través del Component interface
                 enemigo.mover(0, 1, 0);
                 
-                // Si el juego terminó durante el movimiento, salir del bucle
-                if (Espacio.getEspacio().isGameOver() || Espacio.getEspacio().isGameWon()) {
-                    break;
-                }
+                // Si el juego termin� durante el movimiento, salir del bucle
+                // if (Espacio.getEspacio().isGameOver() || Espacio.getEspacio().isGameWon()) {
+                    // break;
+                // }
             }
         }
     }

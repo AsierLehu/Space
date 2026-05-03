@@ -34,6 +34,8 @@ public class NaveFactory {
 				return new Nave2(x, y, velocidad);
 			case "Nave3":
 				return new Nave3(x, y, velocidad);
+			case "Nave4":
+				return new Nave4(x, y, velocidad);
 			default:
 				return null;
 		}

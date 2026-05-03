@@ -12,9 +12,9 @@ public class Disparo {
 	private static int siguienteIdDisparo = 21;
 
 	/** Reinicia la secuencia 21 … 29, 211, 212 … al iniciar una partida nueva. */
-	public static void reiniciarContadorIdsDisparo() {
-		siguienteIdDisparo = 21;
-	}
+	//public static void reiniciarContadorIdsDisparo() {
+		//siguienteIdDisparo = 21;
+	//}
 
 	/**
 	 * Siguiente id único por proyectil/compuesto completo (mismo número para todas las piezas).

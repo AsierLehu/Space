@@ -21,9 +21,9 @@ public class MainFrame extends JFrame implements Observer {
     private static Color COLOR_NAVE1_VERDE  = Color.GREEN;
     private static Color COLOR_NAVE2_AZUL   = Color.BLUE;
     private static Color COLOR_NAVE3_MORADO = Color.MAGENTA;
+    private static Color COLOR_NAVE4_AMARILLO = Color.YELLOW;
 
     private JLabel[][] celdas;
-    private JLabel mensajeFin;
 
     public MainFrame() {
         Espacio.getEspacio().addObserver(this);
@@ -173,8 +173,12 @@ public class MainFrame extends JFrame implements Observer {
     		case 17: // pintar nave morada (Nave3) - [tipo, x, y]
     			pintarCelda(datos[1], datos[2], COLOR_NAVE3_MORADO);
     			break;
+    		
+    		case 18: // pintar nave morada (Nave3) - [tipo, x, y]
+    			pintarCelda(datos[1], datos[2], COLOR_NAVE4_AMARILLO);
+    			break;
 
-            case 18: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12
+            case 19: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12
                 break;
     	}
     }

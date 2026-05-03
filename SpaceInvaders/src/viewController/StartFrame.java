@@ -45,7 +45,7 @@ public class StartFrame extends JFrame implements Observer {
     }
 
     private void actualizarTextoNave() {
-        etiquetaNave.setText("Nave elegida: " + tipoNavePendiente + "   (pulsa 1, 2 o 3 para cambiar)");
+        etiquetaNave.setText("Nave elegida: " + tipoNavePendiente + "   (pulsa 1, 2, 3 o 4 para cambiar)");
     }
 
     /**
@@ -76,7 +76,7 @@ public class StartFrame extends JFrame implements Observer {
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.NONE;
 
-        // Selección de nave (1 / 2 / 3)
+        // Selección de nave (1 / 2 / 3 / 4)
         etiquetaNave = new JLabel();
         etiquetaNave.setForeground(new Color(255, 200, 0));
         etiquetaNave.setFont(new Font("Monospaced", Font.BOLD, 20));
@@ -162,6 +162,11 @@ public class StartFrame extends JFrame implements Observer {
             }
             if (k == KeyEvent.VK_3) {
                 tipoNavePendiente = "Nave3";
+                actualizarTextoNave();
+                return;
+            }
+            if (k == KeyEvent.VK_4) {
+                tipoNavePendiente = "Nave4";
                 actualizarTextoNave();
                 return;
             }

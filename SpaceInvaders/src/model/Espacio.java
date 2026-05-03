@@ -16,6 +16,7 @@ public class Espacio extends Observable {
     public static int CELDA_JUGADOR_NAVE1 = 3;
     public static int CELDA_JUGADOR_NAVE2 = 4;
     public static int CELDA_JUGADOR_NAVE3 = 5;
+    public static int CELDA_JUGADOR_NAVE4 = 6;
     private static int NO_ID_DISPARO = -1;
     /** Notificaci�n a observadores: eliminar de la flota al enemigo que contiene la celda (x,y). */
     public static int MSG_ELIMINAR_ENEMIGO = 18;
@@ -71,7 +72,7 @@ public class Espacio extends Observable {
         gameVictoria = false;
         enemigosVivosRestantes = 0;
         idsEnemigoYaRestadosEnEliminacion.clear();
-        Disparo.reiniciarContadorIdsDisparo();
+        // Disparo.reiniciarContadorIdsDisparo();
         inicializarTablero();
         notificarInicializarFlota();
     }
@@ -189,6 +190,7 @@ public class Espacio extends Observable {
             case 1: return CELDA_JUGADOR_NAVE1;
             case 2: return CELDA_JUGADOR_NAVE2;
             case 3: return CELDA_JUGADOR_NAVE3;
+            case 4: return CELDA_JUGADOR_NAVE4;
             default: return CELDA_JUGADOR_NAVE1;
         }
     }
@@ -566,6 +568,7 @@ public class Espacio extends Observable {
                 case 1: tipoMensaje = 15; break; // Verde (Nave1)
                 case 2: tipoMensaje = 16; break; // Azul (Nave2)
                 case 3: tipoMensaje = 17; break; // Morado (Nave3)
+                case 4: tipoMensaje = 18; break; // Amarillo (Nave4)
             }
             // Luego pinta todas las celdas nuevas con el color correcto
             for (int i = 0; i < currentX.length; i++) {
