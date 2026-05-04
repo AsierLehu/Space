@@ -252,17 +252,6 @@ public class Espacio extends Observable {
         return false;
     }
 
-    //private int idDisparoEnCeldaJugador(int x, int y) {
-        //if (!esValidoCelda(x, y)) {
-          //  return NO_ID_DISPARO;
-    //}
-    //int valor = getCelda(x, y);
-    //if (valor >= 21) {
-    //    return valor;
-    //}
-    //return NO_ID_DISPARO;
-    //}
-
     /** Celdas del espejo cuyo valor es exactamente este {@code disparoId}. */
     private ArrayList<int[]> celdasDelProyectilJugadorPorId(int disparoId) {
         ArrayList<int[]> celdas = new ArrayList<>();
@@ -338,62 +327,7 @@ public class Espacio extends Observable {
     
     
  
-    /** Superposición en el espejo: alguna celda del disparo coincide con {@link #CELDA_ENEMIGO}. */
-    private boolean disparoDetectarColisionMatrizAntesMover(Component d) {
-        for (int[] celda : getCeldasOcupadas(d)) {
-            if (esEnemigoId(getCelda(celda[0], celda[1]))) {
-                return true;
-            }
-        }
-        return false;
-    }
- 
-    private void disparoResolverImpactoConEnemigoSuperposicion(Component d) {
-        int[][] celdasDisparo = getCeldasOcupadas(d);
-        d.setActivo(false);
-        // Borrar visual del disparo y notificar eliminación de enemigos en cada celda con colisión
-        for (int[] celda : celdasDisparo) {
-            if (esEnemigoId(getCelda(celda[0], celda[1]))) {
-                // Primero notificar eliminación del enemigo (antes de limpiar la celda)
-                notificarFlotaEliminarEnemigo(celda[0], celda[1]);
-                // Luego limpiar el disparo
-                setCeldaMatriz(celda[0], celda[1], CELDA_VACIO);
-                setChanged();
-                notifyObservers(new int[] {3, celda[0], celda[1]});  // borrar disparo
-            } else {
-                setCeldaMatriz(celda[0], celda[1], CELDA_VACIO);
-                setChanged();
-                notifyObservers(new int[] {3, celda[0], celda[1]});
-            }
-        }
-    }
- 
- 
-    /** Elimina un enemigo usando directamente su ID. */
-    private void notificarFlotaEliminarEnemigoConId(int enemigoId) {
-        // Buscar todas las celdas en la matriz que tengan este mismo ID
-        ArrayList<int[]> celdasDelEnemigo = new ArrayList<>();
-        for (int i = 0; i < anchura; i++) {
-            for (int j = 0; j < altura; j++) {
-                if (getCelda(i, j) == enemigoId) {
-                    celdasDelEnemigo.add(new int[]{i, j});
-                }
-            }
-        }
-        
-        registrarEnemigoEliminadoEnConteo(enemigoId);
-        // Notificar a FlotaEnemigos para que elimine el enemigo de su lista
-        setChanged();
-        notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, enemigoId, -1, -1 });
-        
-        // Borrar visualmente todas las celdas del enemigo encontradas en la matriz
-        for (int[] celda : celdasDelEnemigo) {
-            setCeldaMatriz(celda[0], celda[1], CELDA_VACIO);
-            setChanged();
-            notifyObservers(new int[] {12, celda[0], celda[1]});
-        }
-    }
-    
+
     /** Elimina un enemigo: busca todas las celdas con su ID en la matriz y las borra. */
     private void notificarFlotaEliminarEnemigo(int x, int y) {
         int enemigoId = getCelda(x, y); // Obtener el ID del enemigo desde la matriz
@@ -436,45 +370,7 @@ public class Espacio extends Observable {
     // GESTIÓN DE ENEMIGOS 
     // Llamado cada 200 ms: baja los enemigos 1 píxel
     
-    /** Elimina un enemigo que colisiona con disparo durante su movimiento. */
-    //private void enemigoEliminarPorColisionEnMovimiento(int enemigoId, ArrayList<int[]> celdasActuales, ArrayList<int[]> colisionesConDisparos) {
-        // Limpiar todas las celdas actuales del enemigo
-        //for (int[] celda : celdasActuales) {
-          //  setCeldaMatriz(celda[0], celda[1], CELDA_VACIO);
-            //setChanged();
-            //notifyObservers(new int[]{12, celda[0], celda[1]}); // borrar enemigo
-    //}
-        
-        // Limpiar disparos que colisionaron - TODO: RESOLVER EL HECHO DE QUE SOLO SE BORRAN LOS PIXELES DEL DISPARO QUE COLISIONAN
-    //for (int[] colision : colisionesConDisparos) {
-    //  setCeldaMatriz(colision[0], colision[1], CELDA_VACIO);
-    //  setChanged();
-    //    notifyObservers(new int[]{3, colision[0], colision[1]}); // borrar disparo
-    //}
-        
-    // registrarEnemigoEliminadoEnConteo(enemigoId);
-    // Notificar a FlotaEnemigos para eliminar de la lista
-    //setChanged();
-    //  notifyObservers(new int[]{MSG_ELIMINAR_ENEMIGO, enemigoId, -1, -1});
-    // }
-    
-    /** Mueve un enemigo en la matriz de una posición a otra. */
-    //private void enemigoMoverEnMatriz(int enemigoId, ArrayList<int[]> celdasActuales, ArrayList<int[]> nuevasPosiciones) {
-        // Limpiar posiciones anteriores
-        //for (int[] celda : celdasActuales) {
-          //  setCeldaMatriz(celda[0], celda[1], CELDA_VACIO);
-            //setChanged();
-            //notifyObservers(new int[]{12, celda[0], celda[1]}); // borrar píxel anterior
-        //}
-        
-        // Establecer nuevas posiciones con el ID del enemigo
-        //for (int[] nuevaPos : nuevasPosiciones) {
-          //  setCeldaMatriz(nuevaPos[0], nuevaPos[1], enemigoId);
-          //  setChanged();
-          //  notifyObservers(new int[]{14, nuevaPos[0], nuevaPos[1]}); // pintar enemigo
-        //}
-    //}
- 
+
     // SISTEMA DE NOTIFICACIONES 
     private void notificarCambioPantalla() {
         setChanged();

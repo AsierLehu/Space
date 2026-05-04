@@ -2,8 +2,8 @@ package viewController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -95,31 +95,31 @@ public class StartFrame extends JFrame implements Observer {
 
         // Controles (con mejor formato)
         JLabel control1 = new JLabel("1 / 2 / 3  ==  Tipo de nave");
-        control1.setForeground(new Color(150, 150, 255));
+        control1.setForeground(Color.WHITE);
         control1.setFont(new Font("Monospaced", Font.PLAIN, 16));
         gbc.gridy = 3;
         gbc.insets = new Insets(10, 20, 10, 20);
         panelContenido.add(control1, gbc);
 
         JLabel control2 = new JLabel("FLECHAS (^ v < >)  ==  Mover nave");
-        control2.setForeground(new Color(150, 150, 255));
+        control2.setForeground(Color.WHITE);
         control2.setFont(new Font("Monospaced", Font.PLAIN, 16));
         gbc.gridy = 4;
         gbc.insets = new Insets(10, 20, 10, 20);
         panelContenido.add(control2, gbc);
 
         JLabel control3 = new JLabel("SPACE  ==  Disparar");
-        control3.setForeground(new Color(150, 150, 255));
+        control3.setForeground(Color.WHITE);
         control3.setFont(new Font("Monospaced", Font.PLAIN, 16));
         gbc.gridy = 5;
         gbc.insets = new Insets(10, 20, 10, 20);
         panelContenido.add(control3, gbc);
 
         JLabel control4 = new JLabel("M  ==  Cambiar tipo de disparo");
-        control4.setForeground(new Color(150, 150, 255));
+        control4.setForeground(Color.WHITE);
         control4.setFont(new Font("Monospaced", Font.PLAIN, 16));
         gbc.gridy = 6;
-        gbc.insets = new Insets(10, 20, 60, 20);
+        gbc.insets = new Insets(10, 20, 120, 20);
         panelContenido.add(control4, gbc);
         
         // Poner el contenido dentro de la imagen de fondo
@@ -145,7 +145,7 @@ public class StartFrame extends JFrame implements Observer {
      * Controlador para gestionar la interacción del usuario con la pantalla de inicio
      * Clase privada interna según patrón MVC
      */
-    private class Controller implements KeyListener {
+    private class Controller extends KeyAdapter {
 
         @Override
         public void keyPressed(KeyEvent e) {
@@ -173,16 +173,6 @@ public class StartFrame extends JFrame implements Observer {
             if (k == KeyEvent.VK_SPACE) {
                 JugadorBueno.getJugadorBueno().inicializar(tipoNavePendiente);
             }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            // No se necesita acción al soltar la tecla
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-            // No se necesita acción
         }
     }
 }

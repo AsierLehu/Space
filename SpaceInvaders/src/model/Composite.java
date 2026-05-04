@@ -34,9 +34,6 @@ public class Composite implements Component {
 		components.remove(c);
 	}
 
-	public ArrayList<Component> getComponents() {
-		return components;
-	}
 
 	/**
 	 * Celdas ocupadas por pÃ­xeles activos (disparos); recursivo por si hubiera anidaciÃ³n.
