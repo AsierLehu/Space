@@ -65,7 +65,7 @@ public class Disparo {
 		Component nuevoDisparo = estrategiaActual.crearDisparo(origenX, origenY);
 		
 		if (nuevoDisparo != null) {
-		    System.out.println("A�adiendo disparo a lista, id=" + nuevoDisparo.getDisparoId());
+		    System.out.println("A�adiendo disparo a lista, id=" + nuevoDisparo.getDisparoId());
 			disparosActivos.add(nuevoDisparo);
 			nuevoDisparo.notificarDisparoNuevo();
 			return true;
@@ -76,11 +76,8 @@ public class Disparo {
 	/** Actualiza todos los disparos activos (movimiento) y elimina los inactivos */
 	// TODO: REVISARSE TODA ESTA LÓGICA
 	public void actualizarDisparos() {
-		if (disparosActivos.isEmpty()) return; // Evitar operaciones en lista vacía
+		if (disparosActivos.isEmpty()) return;
 
-		// Orden crítico: proyectiles con menor Y (más arriba en pantalla) deben moverse primero.
-		// Si el de abajo mueve antes, su notificación tipo 2 borra la celda "old" donde otro
-		// proyectil acaba de pintarse en el mismo tick (misma columna, celdas adyacentes).
 		ordenarDisparosActivosPorPosicion(disparosActivos);
 
 		int i = 0;

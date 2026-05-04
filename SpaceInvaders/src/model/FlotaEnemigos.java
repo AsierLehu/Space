@@ -50,12 +50,10 @@ public class FlotaEnemigos implements Observer {
 
     /** Encuentra un enemigo por su ID. */
     public Enemigo encontrarEnemigoPorId(int id) {
-        for (Enemigo e : enemigos) {
-            if (e.isVivo() && e.getId() == id) {
-                return e;
-            }
-        }
-        return null;
+        return enemigos.stream()
+            .filter(e -> e.isVivo() && e.getId() == id)
+            .findFirst()
+            .orElse(null);
     }
 
     /** Elimina enemigo por ID de la lista. */
@@ -103,19 +101,11 @@ public class FlotaEnemigos implements Observer {
      * Cada enemigo llama a su método mover() que notificará a Espacio.
      */
     public void moverEnemigos() {
-        // Crear una copia para evitar problemas de concurrencia durante eliminaciones
         ArrayList<Enemigo> enemigosCopia = new ArrayList<>(enemigos);
-        
-        for (Enemigo enemigo : enemigosCopia) {
+        enemigosCopia.forEach(enemigo -> {
             if (enemigo.isVivo()) {
-                // Cada enemigo se mueve y notifica a Espacio a través del Component interface
                 enemigo.mover(0, 1, 0);
-                
-                // Si el juego termin� durante el movimiento, salir del bucle
-                // if (Espacio.getEspacio().isGameOver() || Espacio.getEspacio().isGameWon()) {
-                    // break;
-                // }
             }
-        }
+        });
     }
 }

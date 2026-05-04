@@ -54,60 +54,41 @@ public class Composite implements Component {
 	public void mover(int dx, int dy, int tipoNave) {
 		if (proyectilIndividual) {
 			for (Component c : components) {
-				if (!isActivo()) {
-					break;
-				}
-				c.mover(dx, dy, 0); // Disparos no tienen tipo de nave
+				if (!isActivo()) break;
+				c.mover(dx, dy, 0);
 			}
 			return;
 		}
 		
-		// Para el jugador (tipoNave > 0): bloquear en los 4 bordes.
-		// Para los enemigos (tipoNave == 0): NO bloquear aquí; si llegan al
-		// borde inferior, Espacio.isGameOver() lo detecta en el tablero espejo.
 		if (tipoNave > 0) {
-			for (Component c : components) {
+			boolean dentroDeLimites = components.stream().allMatch(c -> {
 				int newX = c.getRefX() + dx;
 				int newY = c.getRefY() + dy;
 				if (newX < 0 || newX >= 100 || newY < 0 || newY >= 60) {
 					System.out.println("LIMITE alcanzado: pixel en " + c.getRefX() + "," + c.getRefY() + " intentaba ir a " + newX + "," + newY);
-					return;
+					return false;
 				}
-			}
+				return true;
+			});
+			if (!dentroDeLimites) return;
 		}
 
-		int[] oldPositionsX = new int[components.size()];
-		int[] oldPositionsY = new int[components.size()];
-		for (int i = 0; i < components.size(); i++) {
-			oldPositionsX[i] = components.get(i).getRefX();
-			oldPositionsY[i] = components.get(i).getRefY();
-		}
+		int[] oldPositionsX = components.stream().mapToInt(Component::getRefX).toArray();
+		int[] oldPositionsY = components.stream().mapToInt(Component::getRefY).toArray();
 		
-		// Para enemigos: verificar que todos los pixeles pueden moverse
-		// Si alguno sale del tablero, cancelar el movimiento completo
 		if (tipoNave == 0) {
-			boolean todoPuedeMoverse = true;
-			for (Component c : components) {
+			boolean todoPuedeMoverse = components.stream().allMatch(c -> {
 				int newX = c.getRefX() + dx;
 				int newY = c.getRefY() + dy;
-				if (!Espacio.getEspacio().esValidoCelda(newX, newY)) {
-					todoPuedeMoverse = false;
-				    break;
-				}
-			}
+				return Espacio.getEspacio().esValidoCelda(newX, newY);
+			});
 			if (!todoPuedeMoverse) return;
 		}
 
-		for (Component c : components) {
-			c.mover(dx, dy, tipoNave); // Propaga el tipo de nave
-		}
+		components.forEach(c -> c.mover(dx, dy, tipoNave));
 
-		int[] currentPositionsX = new int[components.size()];
-		int[] currentPositionsY = new int[components.size()];
-		for (int i = 0; i < components.size(); i++) {
-			currentPositionsX[i] = components.get(i).getRefX();
-			currentPositionsY[i] = components.get(i).getRefY();
-		}
+		int[] currentPositionsX = components.stream().mapToInt(Component::getRefX).toArray();
+		int[] currentPositionsY = components.stream().mapToInt(Component::getRefY).toArray();
 
 		Espacio espacio = Espacio.getEspacio();
 		// ESTO ES USADO POR NAVES ENEMIGAS Y EL JUGADOR
@@ -150,9 +131,7 @@ public class Composite implements Component {
 	@Override
 	public void setActivo(boolean b) {
 		if (proyectilIndividual) {
-			for (Component c : components) {
-				c.setActivo(b);
-			}
+			components.forEach(c -> c.setActivo(b));
 		}
 	}
 
@@ -167,9 +146,7 @@ public class Composite implements Component {
 	@Override
 	public void notificarDisparoNuevo() {
 		if (proyectilIndividual) {
-			for (Component c : components) {
-				c.notificarDisparoNuevo();
-			}
+			components.forEach(Component::notificarDisparoNuevo);
 		}
 	}
 
@@ -186,22 +163,14 @@ public class Composite implements Component {
 
 	@Override
 	public void registrarPosicionInicialJugador(int tipoNave) {
-		if (proyectilIndividual || tipoNave <= 0) {
-			return;
-		}
-		for (Component c : components) {
-			c.registrarPosicionInicialJugador(tipoNave);
-		}
+		if (proyectilIndividual || tipoNave <= 0) return;
+		components.forEach(c -> c.registrarPosicionInicialJugador(tipoNave));
 	}
 
 	@Override
 	public void registrarEnemigoEnMatrizInicial(int idEnemigo) {
-		if (proyectilIndividual) {
-			return;
-		}
+		if (proyectilIndividual) return;
 		Espacio.getEspacio().registrarEnemigoCreadoEnConteo();
-		for (Component c : components) {
-			c.registrarEnemigoEnMatrizInicial(idEnemigo);
-		}
+		components.forEach(c -> c.registrarEnemigoEnMatrizInicial(idEnemigo));
 	}
 }
