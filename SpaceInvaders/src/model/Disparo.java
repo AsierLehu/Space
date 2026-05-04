@@ -65,6 +65,7 @@ public class Disparo {
 		Component nuevoDisparo = estrategiaActual.crearDisparo(origenX, origenY);
 		
 		if (nuevoDisparo != null) {
+		    System.out.println("Añadiendo disparo a lista, id=" + nuevoDisparo.getDisparoId());
 			disparosActivos.add(nuevoDisparo);
 			nuevoDisparo.notificarDisparoNuevo();
 			return true;
@@ -171,11 +172,14 @@ public class Disparo {
 	
 	/** Elimina de la lista el proyectil con el id indicado (compuesto completo mismo id). */
 	public void eliminarDisparoPorId(int disparoId) {
+		System.out.println("Buscando disparo id: " + disparoId);
 		for (int i = disparosActivos.size() - 1; i >= 0; i--) {
 			Component disparo = disparosActivos.get(i);
+			System.out.println("  disparo en lista tiene id: " + disparo.getDisparoId());
 			if (disparo.getDisparoId() == disparoId) {
 				disparo.setActivo(false);
 				disparosActivos.remove(i);
+				System.out.println("  ELIMINADO");
 				return;
 			}
 		}

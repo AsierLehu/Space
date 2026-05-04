@@ -26,6 +26,7 @@ public class DisparoPixel implements StrategyDisparo {
 	public Component crearDisparo(int x, int y) {
 		if (gastar()) {
 			int idDisparo = Disparo.tomarSiguienteIdDisparo();
+			System.out.println("Creando disparo pixel con id: " + idDisparo);
 			return new Pixel(x, y, true, idDisparo);
 		}
 		return null;

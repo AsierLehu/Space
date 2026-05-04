@@ -619,6 +619,7 @@ public class Espacio extends Observable {
                 
                 // Detectar colisión con enemigo
                 if (esEnemigoId(valorCelda)) {
+                	System.out.println("Colision detectada, disparoId recibido: " + disparoId);
                     int enemigoId = valorCelda;
 
                     // A. Todo el proyectil (mismo disparoId): matriz, vista y lista del jugador

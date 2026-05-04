@@ -15,6 +15,7 @@ public class Pixel implements Component {
 
 	public Pixel(int x, int y) {
 		this(x, y, false, -1);
+		System.out.println("Pixel creado SIN id: " + x + "," + y);
 	}
 
 	public Pixel(int x, int y, boolean proyectilIndividual, int disparoId) {
@@ -26,6 +27,7 @@ public class Pixel implements Component {
 		} else {
 			this.disparoId = -1;
 		}
+		System.out.println("Pixel creado CON id=" + disparoId + " proyectil=" + proyectilIndividual + " en " + x + "," + y);
 	}
 
 	@Override
@@ -93,6 +95,11 @@ public class Pixel implements Component {
 			return;
 		}
 		Espacio.getEspacio().registrarCeldaEnemigoInicialEnMatrizYVista(getRefX(), getRefY(), idEnemigo);
+	}
+	
+	@Override
+	public int getDisparoId() {
+	    return disparoId;
 	}
 
 }
