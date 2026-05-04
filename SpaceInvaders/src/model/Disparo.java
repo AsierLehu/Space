@@ -155,20 +155,6 @@ public class Disparo {
 	public ArrayList<Component> getDisparosActivos() {
 		return disparosActivos;
 	}
-
-
-	public int[][] celdasOcupadas() {
-		ArrayList<int[]> todasLasCeldas = new ArrayList<>();
-		
-		for (Component disparo : disparosActivos) {
-			if (disparo instanceof Composite comp) {
-				todasLasCeldas.addAll(comp.celdasOcupadasActivas());
-			} else {
-				todasLasCeldas.add(new int[] { disparo.getRefX(), disparo.getRefY() });
-			}
-		}
-		return todasLasCeldas.toArray(new int[0][]);
-	}
 	
 	/** Elimina de la lista el proyectil con el id indicado (compuesto completo mismo id). */
 	public void eliminarDisparoPorId(int disparoId) {

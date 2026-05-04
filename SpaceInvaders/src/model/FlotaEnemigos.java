@@ -48,22 +48,6 @@ public class FlotaEnemigos implements Observer {
         }
     }
 
-    /** Quita de la lista al enemigo vivo que ocupa la celda (x,y), si existe. */
-    public void eliminarEnemigoQueContieneCelda(int x, int y) {
-        for (int i = 0; i < enemigos.size(); i++) {
-            Enemigo enemigo = enemigos.get(i);
-            if (enemigo.isVivo()) {
-                int[][] celdas = enemigo.celdasOcupadas();
-                for (int[] celda : celdas) {
-                    if (celda[0] == x && celda[1] == y) {
-                        enemigos.remove(i);
-                        return; // Solo eliminar el primero que coincida
-                    }
-                }
-            }
-        }
-    }
-
     /** Encuentra un enemigo por su ID. */
     public Enemigo encontrarEnemigoPorId(int id) {
         for (Enemigo e : enemigos) {
@@ -112,12 +96,6 @@ public class FlotaEnemigos implements Observer {
             }
             intentos++;
         }
-    }
-
-    // ─── Consultas de estado ──────────────────────────────────────────────────
-
-    public ArrayList<Enemigo> getEnemigos() {
-        return enemigos;
     }
 
     /**

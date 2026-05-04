@@ -31,10 +31,6 @@ public abstract class Naves {
 		return vivo;
 	}
 
-	public void setVivo(boolean b) {
-		this.vivo = b;
-	}
-
 	public void setGestorDisparos(Disparo gestor) {
 		this.gestorDisparos = gestor;
 	}
@@ -87,13 +83,6 @@ public abstract class Naves {
 		}
 	}
 
-	public ArrayList<Component> getDisparos() {
-		if (gestorDisparos != null) {
-			return gestorDisparos.getDisparosActivos();
-		}
-		return new ArrayList<>();
-	}
-
 	/** Actualiza todos los disparos de la nave (movimiento y eliminación de inactivos) */
 	public void actualizarDisparos() {
 		gestorDisparos.actualizarDisparos();
@@ -104,10 +93,6 @@ public abstract class Naves {
 		if (gestorDisparos != null) {
 			gestorDisparos.eliminarDisparoPorId(disparoId);
 		}
-	}
-
-	public Component getComponente() {
-		return ComponenteNave;
 	}
 
 	public void mover(int dx, int dy, int tipoNave) {

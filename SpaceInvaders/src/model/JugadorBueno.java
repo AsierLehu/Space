@@ -76,10 +76,6 @@ public class JugadorBueno implements Observer {
 			nave.actualizarDisparos();
 		}
 	}
-	
-	public Naves getNave() {
-		return nave;
-	}
 
 	/** Sincroniza matriz y vista inicial del jugador vía la nave y el árbol {@link Component}. */
 	public void notificarPosicionInicialAlEspacio() {

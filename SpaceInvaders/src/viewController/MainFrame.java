@@ -13,7 +13,7 @@ import model.JugadorBueno;
 @SuppressWarnings("deprecation")
 public class MainFrame extends JFrame implements Observer {
 
-    private static Color COLOR_JUGADOR = Color.MAGENTA;
+    //private static Color COLOR_JUGADOR = Color.MAGENTA;
     private static Color COLOR_ENEMIGO = Color.RED;
     private static Color COLOR_DISPARO = Color.WHITE;
     
@@ -110,10 +110,10 @@ public class MainFrame extends JFrame implements Observer {
     	int tipo = datos[0];
     	
     	switch (tipo) {
-    		case 0: // jugador se mueve - [tipo, oldX, oldY, newX, newY]
-    			borrarCelda(datos[1], datos[2]);
-    			pintarCelda(datos[3], datos[4], COLOR_JUGADOR);
-    			break;
+    		//case 0: // jugador se mueve - [tipo, oldX, oldY, newX, newY]
+    			//borrarCelda(datos[1], datos[2]);
+    			//pintarCelda(datos[3], datos[4], COLOR_JUGADOR);
+    			//break;
         
     		case 1: // disparo nuevo - [tipo, newX, newY]
     			pintarCelda(datos[1], datos[2], COLOR_DISPARO);
@@ -128,28 +128,28 @@ public class MainFrame extends JFrame implements Observer {
     			borrarCelda(datos[1], datos[2]);
     			break;
     		
-    		case 4: // enemigo baja - [tipo, oldX, oldY, newX, newY]
-    			borrarCelda(datos[1], datos[2]);
-    			pintarCelda(datos[3], datos[4], COLOR_ENEMIGO);
-    			break;
+    		//case 4: // enemigo baja - [tipo, oldX, oldY, newX, newY]
+    			//borrarCelda(datos[1], datos[2]);
+    			//pintarCelda(datos[3], datos[4], COLOR_ENEMIGO);
+    			//break;
     		
-    		case 5: // colision - [tipo, disparoX, disparoY, enemigoX, enemigoY, ]
-    			borrarCelda(datos[1], datos[2]);
-    			borrarCelda(datos[3], datos[4]);
-    			break;
+    		//case 5: // colision - [tipo, disparoX, disparoY, enemigoX, enemigoY, ]
+    			//borrarCelda(datos[1], datos[2]);
+    			//borrarCelda(datos[3], datos[4]);
+    			//break;
     			
-    		case 6: // inicialización del juego - [tipo, jugadorX, jugadorY, enemigoX, enemigoY]
-    			pintarCelda(datos[1], datos[2], COLOR_JUGADOR);
-    			pintarCelda(datos[3], datos[4], COLOR_ENEMIGO);
-    			break;
+    		//case 6: // inicialización del juego - [tipo, jugadorX, jugadorY, enemigoX, enemigoY]
+    			//pintarCelda(datos[1], datos[2], COLOR_JUGADOR);
+    			//pintarCelda(datos[3], datos[4], COLOR_ENEMIGO);
+    			//break;
     		
     		case 12: // borrar píxel de enemigo - [tipo, x, y]
     			borrarCelda(datos[1], datos[2]);
     			break;
     		
-    		case 13: // inicialización de nave - [tipo, x, y]
-    			pintarCelda(datos[1], datos[2], COLOR_JUGADOR);
-    			break;
+    		//case 13: // inicialización de nave - [tipo, x, y]
+    			//pintarCelda(datos[1], datos[2], COLOR_JUGADOR);
+    			//break;
     		
     		case 14: // inicialización de enemigo o pintar píxel de enemigo - [tipo, x, y]
     			pintarCelda(datos[1], datos[2], COLOR_ENEMIGO);
@@ -180,8 +180,8 @@ public class MainFrame extends JFrame implements Observer {
     			pintarCelda(datos[1], datos[2], COLOR_NAVE3_MORADO);
     			break;
 
-            case 19: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12
-                break;
+            //case 19: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12
+                //break;
                 
             case 21: // pintar nave morada (Nave3) - [tipo, x, y]
     			pintarCelda(datos[1], datos[2], COLOR_NAVE4_AMARILLO);
