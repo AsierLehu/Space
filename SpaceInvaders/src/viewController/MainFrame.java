@@ -24,6 +24,7 @@ public class MainFrame extends JFrame implements Observer {
     private static Color COLOR_NAVE4_AMARILLO = Color.YELLOW;
 
     private JLabel[][] celdas;
+    private JLabel labelPuntuacion;
 
     public MainFrame() {
         Espacio.getEspacio().addObserver(this);
@@ -74,6 +75,11 @@ public class MainFrame extends JFrame implements Observer {
         layeredPane.add(fondoLabel, JLayeredPane.DEFAULT_LAYER);
         layeredPane.add(gridPanel,  JLayeredPane.PALETTE_LAYER);
 
+        labelPuntuacion = new JLabel("Puntuacion: 0");
+        labelPuntuacion.setForeground(Color.WHITE);
+        labelPuntuacion.setFont(new Font("Monospaced", Font.BOLD, 16));
+        labelPuntuacion.setBounds(10, 5, 250, 25);
+        layeredPane.add(labelPuntuacion, JLayeredPane.MODAL_LAYER);
         addKeyListener(new Controller());
         add(layeredPane);
     }
@@ -151,11 +157,11 @@ public class MainFrame extends JFrame implements Observer {
     			
     		case 7: 
             System.out.println("Game Over");
-            abrirFinalFrame(false);
+            abrirFinalFrame(false, datos[1]);
                 break;
     		case 8: 
             System.out.println("Victoria");
-            abrirFinalFrame(true);
+            abrirFinalFrame(true, datos[1]);
                 break;
     		
     		case 10: // borrar celda de jugador - [tipo, x, y]
@@ -173,12 +179,16 @@ public class MainFrame extends JFrame implements Observer {
     		case 17: // pintar nave morada (Nave3) - [tipo, x, y]
     			pintarCelda(datos[1], datos[2], COLOR_NAVE3_MORADO);
     			break;
-    		
-    		case 21: // pintar nave morada (Nave3) - [tipo, x, y]
+
+            case 19: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12
+                break;
+                
+            case 21: // pintar nave morada (Nave3) - [tipo, x, y]
     			pintarCelda(datos[1], datos[2], COLOR_NAVE4_AMARILLO);
     			break;
 
-            case 19: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12
+            case 22: // puntuacion actualizada - [tipo, puntuacion]
+                labelPuntuacion.setText("Puntuacion: " + datos[1]);
                 break;
     	}
     }
@@ -189,10 +199,10 @@ public class MainFrame extends JFrame implements Observer {
     
     // ==================== TRANSICIÓN DE PANTALLA ====================
     
-    private void abrirFinalFrame(boolean victoria) {
+    private void abrirFinalFrame(boolean victoria, int puntuacion) {
         Espacio.getEspacio().deleteObserver(this);
         this.setVisible(false);
-        new FinalFrame(victoria);
+        new FinalFrame(victoria, puntuacion);
     }
     
     private class Controller implements KeyListener {

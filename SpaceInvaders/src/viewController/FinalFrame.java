@@ -13,12 +13,14 @@ import model.Espacio;
 public class FinalFrame extends JFrame implements Observer {
 
     private boolean esVictoria;
+    private int puntuacion;
 
 	/**
 	 * Create the frame.
 	 */
-    public FinalFrame(boolean victoria) {
+    public FinalFrame(boolean victoria, int puntuacion) {
         this.esVictoria = victoria;
+        this.puntuacion = puntuacion;
         
         setTitle("Space Invaders - Fin del Juego");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,7 +42,7 @@ public class FinalFrame extends JFrame implements Observer {
         Espacio.getEspacio().addObserver(this);
     }
 
-    // ==================== MÉTODOS GRÁFICOS ====================
+    // ==================== MÉTODOS GR�FICOS ====================
 
     private Component crearPanelPrincipal() {
         Component comp = crearPanelConFondoYEstrellas();
@@ -69,10 +71,18 @@ public class FinalFrame extends JFrame implements Observer {
         JLabel titulo = crearTituloMensaje();
         gbc.gridy = 0;
         panelContenido.add(titulo, gbc);
+        
+        // Puntuacion obtenida
+        JLabel labelPuntuacion = new JLabel("Puntuacion: " + puntuacion);
+        labelPuntuacion.setForeground(Color.WHITE);
+        labelPuntuacion.setFont(new Font("Monospaced", Font.BOLD, 28));
+        gbc.gridy = 1;
+        gbc.insets = new Insets(20, 20, 20, 20);
+        panelContenido.add(labelPuntuacion, gbc);
 
         // Instrucción para volver
         JLabel instruccion = crearInstruccion();
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.insets = new Insets(50, 20, 50, 20);
         panelContenido.add(instruccion, gbc);
         

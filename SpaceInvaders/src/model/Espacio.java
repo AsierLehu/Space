@@ -30,6 +30,8 @@ public class Espacio extends Observable {
     // PROPIEDADES DE ESTADO    
     private static int anchura = 100;
     private static int altura  = 60;
+    
+    private int puntuacion = 0;
  
     /** [x][y]: copia del estado visual seg�n las mismas notificaciones que la vista. */
     private int[][] tablero;
@@ -72,6 +74,7 @@ public class Espacio extends Observable {
         gameVictoria = false;
         enemigosVivosRestantes = 0;
         idsEnemigoYaRestadosEnEliminacion.clear();
+        puntuacion = 0;
         // Disparo.reiniciarContadorIdsDisparo();
         inicializarTablero();
         notificarInicializarFlota();
@@ -93,6 +96,9 @@ public class Espacio extends Observable {
         idsEnemigoYaRestadosEnEliminacion.add(enemigoId);
         if (enemigosVivosRestantes > 0) {
             enemigosVivosRestantes--;
+            puntuacion += 100;
+            setChanged();
+            notifyObservers(new int[] {22, puntuacion});
         }
     }
     
@@ -680,12 +686,12 @@ public class Espacio extends Observable {
  
     private void notificarGameOver() {
         setChanged();
-        notifyObservers(new int[] {7});
+        notifyObservers(new int[] {7, puntuacion});
     }
  
     private void notificarVictoria() {
         setChanged();
-        notifyObservers(new int[] {8});
+        notifyObservers(new int[] {8, puntuacion});
     }
  
     // BUCLE PRINCIPAL DE JUEGO 
