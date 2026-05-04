@@ -565,6 +565,16 @@ public class Espacio extends Observable {
                 setChanged();
                 notifyObservers(new int[] {10, oldX[i], oldY[i]});
             }
+            
+            // Comprobar si alguna celda nueva del jugador contiene un enemigo
+            for (int i = 0; i < currentX.length; i++) {
+                if (esEnemigoId(getCelda(currentX[i], currentY[i]))) {
+                    gameOver = true;
+                    notificarGameOver();
+                    return;
+                }
+            }
+            
             // Determinar tipo de mensaje según el tipo de nave recibido
             int tipoMensaje = 15; 
             switch (tipoNave) {
