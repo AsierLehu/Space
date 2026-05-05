@@ -20,9 +20,7 @@ public class TimerEnemigo {
         timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Verificar que el juego sigue activo antes de mover enemigos
                 FlotaEnemigos.getFlotaEnemigos().moverEnemigos();
-                
             }
         });
     }

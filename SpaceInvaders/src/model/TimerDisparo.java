@@ -20,10 +20,6 @@ public class TimerDisparo {
         timer = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Verificar que el juego sigue activo antes de actualizar disparos
-                boolean gameOver = Espacio.getEspacio().isGameOver();
-                boolean gameWon = Espacio.getEspacio().isGameWon();
-                
                 JugadorBueno.getJugadorBueno().actualizarDisparos();
                 
             }
