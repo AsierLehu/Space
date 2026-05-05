@@ -63,10 +63,11 @@ public class Composite implements Component {
 		int[] oldPositionsX = components.stream().mapToInt(Component::getRefX).toArray();
 		int[] oldPositionsY = components.stream().mapToInt(Component::getRefY).toArray();
 		
-		Espacio.getEspacio().intentarMovimientoNave(
-			oldPositionsX, oldPositionsY, dx, dy, tipoNave, 
-			() -> components.forEach(c -> c.mover(dx, dy, tipoNave))
-		);
+		Espacio.getEspacio().intentarMovimientoNave(this, oldPositionsX, oldPositionsY, dx, dy, tipoNave);
+	}
+
+	public void aplicarMovimientoFisico(int dx, int dy, int tipoNave) {
+		components.forEach(c -> c.mover(dx, dy, tipoNave));
 	}
 
 	@Override

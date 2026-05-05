@@ -166,12 +166,12 @@ public class Espacio extends Observable {
         return true;
     }
 
-    public void intentarMovimientoNave(int[] oldX, int[] oldY, int dx, int dy, int tipoNave, Runnable accionMovimiento) {
+    public void intentarMovimientoNave(Composite nave, int[] oldX, int[] oldY, int dx, int dy, int tipoNave) {
         if (!puedeMoverse(oldX, oldY, dx, dy, tipoNave)) {
             return;
         }
 
-        accionMovimiento.run();
+        nave.aplicarMovimientoFisico(dx, dy, tipoNave);
 
         int[] currentX = new int[oldX.length];
         int[] currentY = new int[oldY.length];
