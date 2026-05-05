@@ -141,10 +141,6 @@ public class Disparo {
 		return minX == Integer.MAX_VALUE ? 0 : minX;
 	}
 
-	/** Devuelve la lista de disparos activos como Components */
-	public ArrayList<Component> getDisparosActivos() {
-		return disparosActivos;
-	}
 	
 	/** Elimina de la lista el proyectil con el id indicado (compuesto completo mismo id). */
 	public void eliminarDisparoPorId(int disparoId) {
