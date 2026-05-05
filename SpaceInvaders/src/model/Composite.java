@@ -60,39 +60,13 @@ public class Composite implements Component {
 			return;
 		}
 		
-		if (tipoNave > 0) {
-			boolean dentroDeLimites = components.stream().allMatch(c -> {
-				int newX = c.getRefX() + dx;
-				int newY = c.getRefY() + dy;
-				if (newX < 0 || newX >= 100 || newY < 0 || newY >= 60) {
-					System.out.println("LIMITE alcanzado: pixel en " + c.getRefX() + "," + c.getRefY() + " intentaba ir a " + newX + "," + newY);
-					return false;
-				}
-				return true;
-			});
-			if (!dentroDeLimites) return;
-		}
-
 		int[] oldPositionsX = components.stream().mapToInt(Component::getRefX).toArray();
 		int[] oldPositionsY = components.stream().mapToInt(Component::getRefY).toArray();
 		
-		if (tipoNave == 0) {
-			boolean todoPuedeMoverse = components.stream().allMatch(c -> {
-				int newX = c.getRefX() + dx;
-				int newY = c.getRefY() + dy;
-				return Espacio.getEspacio().esValidoCelda(newX, newY);
-			});
-			if (!todoPuedeMoverse) return;
-		}
-
-		components.forEach(c -> c.mover(dx, dy, tipoNave));
-
-		int[] currentPositionsX = components.stream().mapToInt(Component::getRefX).toArray();
-		int[] currentPositionsY = components.stream().mapToInt(Component::getRefY).toArray();
-
-		Espacio espacio = Espacio.getEspacio();
-		// ESTO ES USADO POR NAVES ENEMIGAS Y EL JUGADOR
-		espacio.notificarMovimientoJugadorYEnemigo(oldPositionsX, oldPositionsY, currentPositionsX, currentPositionsY, tipoNave);
+		Espacio.getEspacio().intentarMovimientoNave(
+			oldPositionsX, oldPositionsY, dx, dy, tipoNave, 
+			() -> components.forEach(c -> c.mover(dx, dy, tipoNave))
+		);
 	}
 
 	@Override
