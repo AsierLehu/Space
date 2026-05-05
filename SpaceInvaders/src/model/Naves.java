@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public abstract class Naves {
 
-	private int x;
-	private int y;
+	protected int x;
+	protected int y;
 	private int velocidad;
 	private boolean vivo;
 
@@ -17,14 +17,6 @@ public abstract class Naves {
 		this.y = y;
 		this.velocidad = velocidad;
 		this.vivo = true;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
 	}
 
 	public boolean isVivo() {
@@ -47,7 +39,6 @@ public abstract class Naves {
 
 	public abstract int[][] celdasOcupadas();
 
-	public abstract int getTipoNave();
 
 	public int origenDisparoX() {
 		return x;
@@ -115,8 +106,8 @@ public abstract class Naves {
 		}
 	}
 
-	public void registrarPosicionInicialEnEspacio() {
-		ComponenteNave.registrarPosicionInicialJugador(getTipoNave());
+	public void registrarPosicionInicialEnEspacio(int tipoNave) {
+		ComponenteNave.registrarPosicionInicialJugador(tipoNave);
 	}
 
 	public void registrarEnemigoEnMatrizInicial(int idEnemigo) {

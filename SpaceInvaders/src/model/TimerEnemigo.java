@@ -21,9 +21,8 @@ public class TimerEnemigo {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Verificar que el juego sigue activo antes de mover enemigos
-                if (!Espacio.getEspacio().isGameOver() && !Espacio.getEspacio().isGameWon()) {
-                    FlotaEnemigos.getFlotaEnemigos().moverEnemigos();
-                }
+                FlotaEnemigos.getFlotaEnemigos().moverEnemigos();
+                
             }
         });
     }

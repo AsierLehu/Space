@@ -12,7 +12,7 @@ public class JugadorBueno implements Observer {
 	private static JugadorBueno miJugadorBueno;
 
 	private String tipoNaveElegido;
-
+	private int tipoNaveNumero;
 	private Naves nave;
 
 	private JugadorBueno() {}
@@ -31,6 +31,8 @@ public class JugadorBueno implements Observer {
 		crearNaveParaPartida();
 		if (nave != null) {
 			nave.inicializar();
+			this.tipoNaveNumero = tipoNave();
+
 			notificarPosicionInicialAlEspacio();
 		}
 	}
@@ -48,7 +50,7 @@ public class JugadorBueno implements Observer {
 	/** Pide el movimiento a la nave almacenada en nave. */
 	public void mover(int dx, int dy) {
 		if (nave != null && nave.isVivo() ) {
-			nave.mover(dx, dy, nave.getTipoNave());
+			nave.mover(dx, dy, tipoNaveNumero);
 		}
 	}
 	
@@ -79,7 +81,7 @@ public class JugadorBueno implements Observer {
 
 	/** Sincroniza matriz y vista inicial del jugador vía la nave y el árbol {@link Component}. */
 	public void notificarPosicionInicialAlEspacio() {
-			nave.registrarPosicionInicialEnEspacio();
+			nave.registrarPosicionInicialEnEspacio(tipoNaveNumero);
 	}
 
 	/**
@@ -101,4 +103,17 @@ public class JugadorBueno implements Observer {
 			}
 		}
 	}
-}
+	private int tipoNave() {
+		switch (this.tipoNaveElegido) {
+			case "Nave1":
+				return 1;
+			case "Nave2":
+				return 2;
+			case "Nave3":
+				return 3;
+			case "Nave4":
+				return 4;
+				
+	}
+		return 0;
+}}

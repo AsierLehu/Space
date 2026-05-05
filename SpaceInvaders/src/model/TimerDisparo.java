@@ -24,9 +24,8 @@ public class TimerDisparo {
                 boolean gameOver = Espacio.getEspacio().isGameOver();
                 boolean gameWon = Espacio.getEspacio().isGameWon();
                 
-                if (!gameOver && !gameWon) {
-                    JugadorBueno.getJugadorBueno().actualizarDisparos();
-                }
+                JugadorBueno.getJugadorBueno().actualizarDisparos();
+                
             }
         });
     }

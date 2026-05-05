@@ -15,7 +15,7 @@ public class FlotaEnemigos implements Observer {
 
     private static FlotaEnemigos miFlotaEnemigos;
     private ArrayList<Enemigo> enemigos;
-    private static int siguienteId = 11;
+    private int siguienteId = 11;
 
     private FlotaEnemigos() {
         this.enemigos = new ArrayList<>();

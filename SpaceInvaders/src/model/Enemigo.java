@@ -18,39 +18,33 @@ public class Enemigo extends Naves {
 
 	@Override
 	public void construir() {
-		int bx = getX();
-		int by = getY();
 
-		anadirComponente(new Pixel(bx, by));
-		anadirComponente(new Pixel(bx + 1, by));
-		anadirComponente(new Pixel(bx + 3, by));
-		anadirComponente(new Pixel(bx + 4, by));
+		anadirComponente(new Pixel(x, y));
+		anadirComponente(new Pixel(x + 1, y));
+		anadirComponente(new Pixel(x + 3, y));
+		anadirComponente(new Pixel(x + 4, y));
 
-		anadirComponente(new Pixel(bx + 1, by + 1));
-		anadirComponente(new Pixel(bx + 2, by + 1));
-		anadirComponente(new Pixel(bx + 3, by + 1));
+		anadirComponente(new Pixel(x + 1, y + 1));
+		anadirComponente(new Pixel(x + 2, y + 1));
+		anadirComponente(new Pixel(x + 3, y + 1));
 
-		anadirComponente(new Pixel(bx + 2, by + 2));
+		anadirComponente(new Pixel(x + 2, y + 2));
 	}
 
 	@Override
 	public int[][] celdasOcupadas() {
 		return new int[][] {
-			{ getX(), getY() },
-			{ getX() + 1, getY() },
-			{ getX() + 3, getY() },
-			{ getX() + 4, getY() },
-			{ getX() + 1, getY() + 1 },
-			{ getX() + 2, getY() + 1 },
-			{ getX() + 3, getY() + 1 },
-			{ getX() + 2, getY() + 2 }
+			{ x, y },
+			{ x + 1, y },
+			{ x + 3, y },
+			{ x + 4, y },
+			{ x + 1, y + 1 },
+			{ x + 2, y + 1 },
+			{ x + 3, y + 1 },
+			{ x + 2, y + 2 }
 		};
 	}
 	
-	public int getTipoNave() {
-		return 0;
-	}
-
 	public int getId() {
 		return id;
 	}

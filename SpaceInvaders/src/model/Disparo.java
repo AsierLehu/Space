@@ -10,15 +10,11 @@ public class Disparo {
 
 	/** Primera id asignada en cada partida (coincide con el rango de celdas de proyectil en {@link Espacio}). */
 	private static int siguienteIdDisparo = 21;
+	private ArrayList<Component> disparosActivos;
+	private ArrayList<StrategyDisparo> estrategias;
+	private int indiceEstrategiaActual;
 
-	/** Reinicia la secuencia 21 … 29, 211, 212 … al iniciar una partida nueva. */
-	//public static void reiniciarContadorIdsDisparo() {
-		//siguienteIdDisparo = 21;
-	//}
-
-	/**
-	 * Siguiente id único por proyectil/compuesto completo (mismo número para todas las piezas).
-	 */
+	
 	public static int tomarSiguienteIdDisparo() {
 		int id = siguienteIdDisparo;
 		if (siguienteIdDisparo < 29) {
@@ -31,9 +27,6 @@ public class Disparo {
 		return id;
 	}
 
-	private ArrayList<Component> disparosActivos;
-	private ArrayList<StrategyDisparo> estrategias;
-	private int indiceEstrategiaActual;
 
 	/**
 	 * Crea el gestor de disparos con las estrategias disponibles.
