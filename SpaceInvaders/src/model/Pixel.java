@@ -13,10 +13,7 @@ public class Pixel implements Component {
 	private boolean esProyectil;
 	private int disparoId = -1;
 
-	public Pixel(int x, int y) {
-		this(x, y, false, -1);
-		System.out.println("Pixel creado SIN id: " + x + "," + y);
-	}
+	
 
 	public Pixel(int x, int y, boolean esProyectil, int disparoId) {
 		this.x = x;

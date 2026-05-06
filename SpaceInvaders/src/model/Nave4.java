@@ -16,11 +16,11 @@ public class Nave4 extends Naves {
  
 	@Override
 	public void construir() {
-		anadirComponente(new Pixel(x, y));
-		anadirComponente(new Pixel(x,     y + 1));
-		anadirComponente(new Pixel(x + 1, y + 1));
-		anadirComponente(new Pixel(x + 2, y));
-		anadirComponente(new Pixel(x + 2, y + 1));
+		anadirComponente(new Pixel(x, y, false, -1));
+		anadirComponente(new Pixel(x,     y + 1, false, -1));
+		anadirComponente(new Pixel(x + 1, y + 1, false, -1));
+		anadirComponente(new Pixel(x + 2, y, false, -1));
+		anadirComponente(new Pixel(x + 2, y + 1, false, -1));
 	}
  
 	@Override

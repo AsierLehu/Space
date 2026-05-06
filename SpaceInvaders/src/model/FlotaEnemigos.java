@@ -28,6 +28,11 @@ public class FlotaEnemigos implements Observer {
         return miFlotaEnemigos;
     }
 
+    /** Arranca el ciclo periódico de movimiento de la flota ({@link TimerEnemigo}). */
+    private void iniciarTimerMovimiento() {
+        TimerEnemigo.getInstancia().iniciar();
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         if (arg == null || !(arg instanceof int[])) {
@@ -94,6 +99,7 @@ public class FlotaEnemigos implements Observer {
             }
             intentos++;
         }
+        iniciarTimerMovimiento();
     }
 
     /**

@@ -65,8 +65,6 @@ public class Espacio extends Observable {
         addObserver(JugadorBueno.getJugadorBueno());
         inicializar();
         notificarCambioPantalla();
-        TimerEnemigo.getInstancia().iniciar();
-        TimerDisparo.getInstancia().iniciar();
     }
  
     private void inicializar() {
@@ -94,8 +92,9 @@ public class Espacio extends Observable {
             }
         }
         idsEnemigoYaRestadosEnEliminacion.add(enemigoId);
+        enemigosVivosRestantes--;
+
         if (enemigosVivosRestantes > 0) {
-            enemigosVivosRestantes--;
             puntuacion += 100;
             setChanged();
             notifyObservers(new int[] {22, puntuacion});

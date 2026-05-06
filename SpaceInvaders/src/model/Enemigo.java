@@ -19,16 +19,16 @@ public class Enemigo extends Naves {
 	@Override
 	public void construir() {
 
-		anadirComponente(new Pixel(x, y));
-		anadirComponente(new Pixel(x + 1, y));
-		anadirComponente(new Pixel(x + 3, y));
-		anadirComponente(new Pixel(x + 4, y));
+		anadirComponente(new Pixel(x, y, false, -1));
+		anadirComponente(new Pixel(x + 1, y, false, -1));
+		anadirComponente(new Pixel(x + 3, y, false, -1));
+		anadirComponente(new Pixel(x + 4, y, false, -1));
 
-		anadirComponente(new Pixel(x + 1, y + 1));
-		anadirComponente(new Pixel(x + 2, y + 1));
-		anadirComponente(new Pixel(x + 3, y + 1));
+		anadirComponente(new Pixel(x + 1, y + 1, false, -1));
+		anadirComponente(new Pixel(x + 2, y + 1, false, -1));
+		anadirComponente(new Pixel(x + 3, y + 1, false, -1));
 
-		anadirComponente(new Pixel(x + 2, y + 2));
+		anadirComponente(new Pixel(x + 2, y + 2, false, -1));
 	}
 
 	

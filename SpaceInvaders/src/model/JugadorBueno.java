@@ -34,6 +34,7 @@ public class JugadorBueno implements Observer {
 			this.tipoNaveNumero = tipoNave();
 
 			notificarPosicionInicialAlEspacio();
+			iniciarTimerDisparos();
 		}
 	}
 	
@@ -77,6 +78,11 @@ public class JugadorBueno implements Observer {
 		if (nave != null && nave.isVivo()) {
 			nave.actualizarDisparos();
 		}
+	}
+
+	/** Arranca el ciclo periódico de actualización de disparos ({@link TimerDisparo}). */
+	private void iniciarTimerDisparos() {
+		TimerDisparo.getInstancia().iniciar();
 	}
 
 	/** Sincroniza matriz y vista inicial del jugador vía la nave y el árbol {@link Component}. */
