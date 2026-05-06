@@ -27,17 +27,9 @@ public abstract class Naves {
 		this.gestorDisparos = gestor;
 	}
 
-	public void morirComoJugador() {
-		if (!vivo) {
-			return;
-		}
-		vivo = false;
-		ComponenteNave.notificarMuerteJugador();
-	}
 
 	public abstract void construir();
 
-	public abstract int[][] celdasOcupadas();
 
 
 	public int origenDisparoX() {

@@ -38,21 +38,6 @@ public class Nave1 extends Naves {
 		return y - 3;
 	}
 
-	@Override
-	public int[][] celdasOcupadas() {
-		return new int[][] {
-			{ x, y },
-			{ x + 2, y },
-			{ x, y + 1 },
-			{ x + 1, y + 1 },
-			{ x + 2, y + 1 },
-			{ x - 1, y + 2 },
-			{ x, y + 2 },
-			{ x + 1, y + 2 },
-			{ x + 2, y + 2 },
-			{ x + 3, y + 2 },
-		};
-	}
 
 	
 }

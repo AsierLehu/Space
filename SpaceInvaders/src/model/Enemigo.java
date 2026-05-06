@@ -31,19 +31,6 @@ public class Enemigo extends Naves {
 		anadirComponente(new Pixel(x + 2, y + 2));
 	}
 
-	@Override
-	public int[][] celdasOcupadas() {
-		return new int[][] {
-			{ x, y },
-			{ x + 1, y },
-			{ x + 3, y },
-			{ x + 4, y },
-			{ x + 1, y + 1 },
-			{ x + 2, y + 1 },
-			{ x + 3, y + 1 },
-			{ x + 2, y + 2 }
-		};
-	}
 	
 	public int getId() {
 		return id;

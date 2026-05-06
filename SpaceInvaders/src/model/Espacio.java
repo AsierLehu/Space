@@ -328,44 +328,8 @@ public class Espacio extends Observable {
     
  
 
-    /** Elimina un enemigo: busca todas las celdas con su ID en la matriz y las borra. */
-    private void notificarFlotaEliminarEnemigo(int x, int y) {
-        int enemigoId = getCelda(x, y); // Obtener el ID del enemigo desde la matriz
-        if (esEnemigoId(enemigoId)) {
-            // Buscar todas las celdas en la matriz que tengan este mismo ID
-            ArrayList<int[]> celdasDelEnemigo = new ArrayList<>();
-            for (int i = 0; i < anchura; i++) {
-                for (int j = 0; j < altura; j++) {
-                    if (getCelda(i, j) == enemigoId) {
-                        celdasDelEnemigo.add(new int[]{i, j});
-                    }
-                }
-            }
-            
-            registrarEnemigoEliminadoEnConteo(enemigoId);
-            // Notificar a FlotaEnemigos para que elimine el enemigo de su lista
-            setChanged();
-            notifyObservers(new int[] { MSG_ELIMINAR_ENEMIGO, enemigoId, x, y });
-            
-            // Borrar visualmente todas las celdas del enemigo encontradas en la matriz
-            for (int[] celda : celdasDelEnemigo) {
-                setCeldaMatriz(celda[0], celda[1], CELDA_VACIO);
-                setChanged();
-                notifyObservers(new int[] {12, celda[0], celda[1]});
-            }
-        }
-    }
  
-    
- 
-    // Método auxiliar para obtener celdas ocupadas por un Component
-    private int[][] getCeldasOcupadas(Component disparo) {
-        if (disparo instanceof Composite comp) {
-            ArrayList<int[]> lista = comp.celdasOcupadasActivas();
-            return lista.toArray(new int[0][]);
-        }
-        return new int[][] { { disparo.getRefX(), disparo.getRefY() } };
-    }
+
  
     // GESTIÓN DE ENEMIGOS 
     // Llamado cada 200 ms: baja los enemigos 1 píxel
