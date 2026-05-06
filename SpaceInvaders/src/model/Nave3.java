@@ -13,7 +13,6 @@ public class Nave3 extends Naves {
 		setGestorDisparos(new Disparo(estrategias));
 		inicializarNaveJugador();
 	}
-	// TODO: QUITAR EL AÑADIR COMPONENTE?
 	@Override
 	public void construir() {
 		anadirComponente(new Pixel(x + 1, y));

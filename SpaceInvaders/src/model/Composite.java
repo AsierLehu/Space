@@ -13,10 +13,6 @@ public class Composite implements Component {
 	private boolean esProyectil;
 	private int disparoId = -1;
 
-	public Composite() { //TODO ES RARO ESTO
-		this(false, -1);
-	}
-
 	public Composite(boolean esProyectil, int disparoId) {
 		this.esProyectil = esProyectil;
 		if (esProyectil) {

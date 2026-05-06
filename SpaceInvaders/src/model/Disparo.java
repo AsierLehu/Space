@@ -67,7 +67,6 @@ public class Disparo {
 	}
 
 	/** Actualiza todos los disparos activos (movimiento) y elimina los inactivos */
-	// TODO: REVISARSE TODA ESTA LÓGICA
 	public void actualizarDisparos() {
 		if (disparosActivos.isEmpty()) return;
 
