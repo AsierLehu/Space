@@ -77,6 +77,7 @@ public class Disparo {
 		while (i < disparosActivos.size()) {
 			Component disparo = disparosActivos.get(i);
 			disparo.mover(0, -1, 0);
+			// APUNTE: parece redundante por que ya se notifica cuando impacta, pero esto sirve para cuando se sale por arriba
 			if (!disparo.isActivo()) {
 				disparosActivos.remove(disparo);
 			} else {

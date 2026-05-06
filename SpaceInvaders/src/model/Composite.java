@@ -4,22 +4,22 @@ import java.util.ArrayList;
 
 /**
  * Compuesto del patrón Composite: agrupa Component (normalmente Pixel).
- * proyectilIndividual == false: raíz de nave; comprueba límites y notifica movimiento del jugador en bloque.
- * proyectilIndividual == true: cuerpo de disparo compuesto.
+ * esProyectil == false: raíz de nave; comprueba límites y notifica movimiento del jugador en bloque.
+ * esProyectil == true: cuerpo de disparo compuesto.
  */
 public class Composite implements Component {
 
 	private ArrayList<Component> components = new ArrayList<>();
-	private boolean proyectilIndividual;
+	private boolean esProyectil;
 	private int disparoId = -1;
 
-	public Composite() {
+	public Composite() { //TODO ES RARO ESTO
 		this(false, -1);
 	}
 
-	public Composite(boolean proyectilIndividual, int disparoId) {
-		this.proyectilIndividual = proyectilIndividual;
-		if (proyectilIndividual) {
+	public Composite(boolean esProyectil, int disparoId) {
+		this.esProyectil = esProyectil;
+		if (esProyectil) {
 			this.disparoId = disparoId;
 		} else {
 			this.disparoId = -1;
@@ -52,7 +52,7 @@ public class Composite implements Component {
 
 	@Override
 	public void mover(int dx, int dy, int tipoNave) {
-		if (proyectilIndividual) {
+		if (esProyectil) {
 			for (Component c : components) {
 				if (!isActivo()) break;
 				c.mover(dx, dy, 0);
@@ -60,16 +60,27 @@ public class Composite implements Component {
 			return;
 		}
 		
-		int[] oldPositionsX = components.stream().mapToInt(Component::getRefX).toArray();
-		int[] oldPositionsY = components.stream().mapToInt(Component::getRefY).toArray();
-		
-		Espacio.getEspacio().intentarMovimientoNave(this, oldPositionsX, oldPositionsY, dx, dy, tipoNave);
+		int n = components.size();
+		int[] oldPositionsX = new int[n];
+		int[] oldPositionsY = new int[n];
+		for (int i = 0; i < n; i++) {
+			Component c = components.get(i);
+			oldPositionsX[i] = c.getRefX();
+			oldPositionsY[i] = c.getRefY();
+		}
+		// APUNTE: si no es posible, no se mueve
+		if (!Espacio.getEspacio().puedeAplicarMovimientoNave(oldPositionsX, oldPositionsY, dx, dy, tipoNave)) {
+			return;
+		}
+		aplicarMovimientoFisico(dx, dy, tipoNave);
+		Espacio.getEspacio().realizarMovimientoNaveConMatriz(oldPositionsX, oldPositionsY, dx, dy, tipoNave);
 	}
 
+	// APUNTE: llama a mover() de cada componente, como son pixeles, unicamente registran el cambio en la posicion
 	public void aplicarMovimientoFisico(int dx, int dy, int tipoNave) {
 		components.forEach(c -> c.mover(dx, dy, tipoNave));
 	}
-
+	// toma la celda mas a la izquierda de los componentes activos
 	@Override
 	public int getRefX() {
 		if (components.isEmpty()) return 0;
@@ -92,7 +103,7 @@ public class Composite implements Component {
 
 	@Override
 	public boolean isActivo() {
-		if (proyectilIndividual) {
+		if (esProyectil) {
 			for (Component c : components) {
 				if (c.isActivo()) {
 					return true;
@@ -105,14 +116,14 @@ public class Composite implements Component {
 
 	@Override
 	public void setActivo(boolean b) {
-		if (proyectilIndividual) {
+		if (esProyectil) {
 			components.forEach(c -> c.setActivo(b));
 		}
 	}
 
 	@Override
 	public int getDisparoId() {
-		if (proyectilIndividual) {
+		if (esProyectil) {
 			return disparoId;
 		}
 		return -1;
@@ -120,7 +131,7 @@ public class Composite implements Component {
 
 	@Override
 	public void notificarDisparoNuevo() {
-		if (proyectilIndividual) {
+		if (esProyectil) {
 			components.forEach(Component::notificarDisparoNuevo);
 		}
 	}
@@ -138,13 +149,13 @@ public class Composite implements Component {
 
 	@Override
 	public void registrarPosicionInicialJugador(int tipoNave) {
-		if (proyectilIndividual || tipoNave <= 0) return;
+		if (esProyectil || tipoNave <= 0) return;
 		components.forEach(c -> c.registrarPosicionInicialJugador(tipoNave));
 	}
 
 	@Override
 	public void registrarEnemigoEnMatrizInicial(int idEnemigo) {
-		if (proyectilIndividual) return;
+		if (esProyectil) return;
 		Espacio.getEspacio().registrarEnemigoCreadoEnConteo();
 		components.forEach(c -> c.registrarEnemigoEnMatrizInicial(idEnemigo));
 	}

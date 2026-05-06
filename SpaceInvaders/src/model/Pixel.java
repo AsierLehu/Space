@@ -2,15 +2,15 @@ package model;
 
 /**
  * Hoja del Composite: una celda del tablero.
- * proyectilIndividual == false: parte de una nave (sin notificación individual al mover).
- * proyectilIndividual == true: parte de un disparo (notifica a Espacio).
+ * esProyectil == false: parte de una nave (sin notificación individual al mover).
+ * esProyectil == true: parte de un disparo (notifica a Espacio).
  */
 public class Pixel implements Component {
 
 	private int x;
 	private int y;
 	private boolean activo = true;
-	private boolean proyectilIndividual;
+	private boolean esProyectil;
 	private int disparoId = -1;
 
 	public Pixel(int x, int y) {
@@ -18,21 +18,21 @@ public class Pixel implements Component {
 		System.out.println("Pixel creado SIN id: " + x + "," + y);
 	}
 
-	public Pixel(int x, int y, boolean proyectilIndividual, int disparoId) {
+	public Pixel(int x, int y, boolean esProyectil, int disparoId) {
 		this.x = x;
 		this.y = y;
-		this.proyectilIndividual = proyectilIndividual;
-		if (proyectilIndividual) {
+		this.esProyectil = esProyectil;
+		if (esProyectil) {
 			this.disparoId = disparoId;
 		} else {
 			this.disparoId = -1;
 		}
-		System.out.println("Pixel creado CON id=" + disparoId + " proyectil=" + proyectilIndividual + " en " + x + "," + y);
+		System.out.println("Pixel creado CON id=" + disparoId + " proyectil=" + esProyectil + " en " + x + "," + y);
 	}
 
 	@Override
 	public void mover(int dx, int dy, int tipoNave) {
-		if (proyectilIndividual) { // si es un unico pixel, solo se mueve el mismo, no es un conjunto :)
+		if (esProyectil) { // si es proyectil se implementa aquí la logica :)
 			if (!activo) {
 				return;
 			}
@@ -76,14 +76,14 @@ public class Pixel implements Component {
 
 	@Override
 	public void notificarDisparoNuevo() {
-		if (proyectilIndividual) {
+		if (esProyectil) {
 			Espacio.getEspacio().notificarDisparoNuevo(getRefX(), getRefY(), disparoId);
 		}
 	}
 
 	@Override
 	public void registrarPosicionInicialJugador(int tipoNave) {
-		if (proyectilIndividual || tipoNave <= 0) {
+		if (esProyectil || tipoNave <= 0) {
 			return;
 		}
 		Espacio.getEspacio().registrarCeldaJugadorInicialEnMatrizYVista(getRefX(), getRefY(), tipoNave);
@@ -91,7 +91,7 @@ public class Pixel implements Component {
 
 	@Override
 	public void registrarEnemigoEnMatrizInicial(int idEnemigo) {
-		if (proyectilIndividual) {
+		if (esProyectil) {
 			return;
 		}
 		Espacio.getEspacio().registrarCeldaEnemigoInicialEnMatrizYVista(getRefX(), getRefY(), idEnemigo);

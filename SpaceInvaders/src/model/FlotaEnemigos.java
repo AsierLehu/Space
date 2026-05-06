@@ -100,6 +100,7 @@ public class FlotaEnemigos implements Observer {
      * Método llamado por TimerEnemigo para mover todos los enemigos.
      * Cada enemigo llama a su método mover() que notificará a Espacio.
      */
+    // APUNTE: la copia es ** superficial**: son las mismas instancias de Enemigo; solo se duplica la estructura de la lista, no los objetos
     public void moverEnemigos() {
         ArrayList<Enemigo> enemigosCopia = new ArrayList<>(enemigos);
         enemigosCopia.forEach(enemigo -> {
