@@ -152,6 +152,37 @@ public class Espacio extends Observable {
         return x >= 0 && x < anchura && y >= 0 && y < altura;
     }
  
+    public boolean puedeMoverse(int[] xs, int[] ys, int dx, int dy, int tipoNave) {
+        for (int i = 0; i < xs.length; i++) {
+            int newX = xs[i] + dx;
+            int newY = ys[i] + dy;
+            if (!esValidoCelda(newX, newY)) {
+                if (tipoNave > 0) {
+                    System.out.println("LIMITE alcanzado: pixel en " + xs[i] + "," + ys[i] + " intentaba ir a " + newX + "," + newY);
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void intentarMovimientoNave(Composite nave, int[] oldX, int[] oldY, int dx, int dy, int tipoNave) {
+        if (!puedeMoverse(oldX, oldY, dx, dy, tipoNave)) {
+            return;
+        }
+
+        nave.aplicarMovimientoFisico(dx, dy, tipoNave);
+
+        int[] currentX = new int[oldX.length];
+        int[] currentY = new int[oldY.length];
+        for (int i = 0; i < oldX.length; i++) {
+            currentX[i] = oldX[i] + dx;
+            currentY[i] = oldY[i] + dy;
+        }
+
+        notificarMovimientoJugadorYEnemigo(oldX, oldY, currentX, currentY, tipoNave);
+    }
+
     /** Verifica si un valor representa un ID de enemigo (>= 11). */
     private boolean esEnemigoId(int valor) {
         return valor >= 11;
