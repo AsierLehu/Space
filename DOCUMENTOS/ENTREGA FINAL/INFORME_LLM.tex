@@ -1,0 +1,422 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+
+\geometry{margin=2.5cm}
+
+% Colores
+\definecolor{azulprincipal}{RGB}{30, 90, 160}
+\definecolor{naranja}{RGB}{255, 152, 0}
+\definecolor{verdeexito}{RGB}{76, 175, 80}
+\definecolor{grisclaro}{RGB}{245, 245, 245}
+\definecolor{codigofondo}{RGB}{240, 244, 250}
+
+% Estilo de secciones
+\titleformat{\section}{\Large\bfseries\color{azulprincipal}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{azulprincipal}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{naranja}}{}{0em}{}
+
+% Header y Footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textit{Informe LLM}}
+\lhead{\textit{Space Invaders - Grupo Cachopin}}
+\cfoot{\thepage}
+
+% Código
+\lstset{
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{codigofondo},
+    frame=single,
+    breaklines=true,
+    language=Java,
+    keywordstyle=\color{azulprincipal}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{teal},
+}
+
+% --------------------------------------------------
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\LARGE \textbf{INFORME: Uso de Modelos de Lenguaje}}\\[0.5em]
+    {\Large \textit{Large Language Models (LLMs) en Space Invaders}}\\[1.5em]
+    
+    \vspace{1cm}
+    
+    {\large \textbf{Proyecto de Programación Orientada a Objetos}}\\[0.3em]
+    {\large Space Invaders — Grupo Cachopin}\\[1em]
+    
+    \vspace{2cm}
+    
+    {\textbf{Fecha:}} \today\\[0.5em]
+    {\textbf{Sprint:}} 3 — Documentación Final\\[3em]
+    
+    \vspace{2cm}
+    
+    {\large \textit{Documentación sobre las herramientas de IA utilizadas}}\\[0.2em]
+    {\large \textit{en el desarrollo del proyecto Space Invaders}}
+    
+    \vfill
+    
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ==================================================
+\section{Introducción}
+
+En el desarrollo moderno de software, los \textbf{Modelos de Lenguaje de Gran Escala (Large Language Models - LLMs)} se han convertido en herramientas poderosas para mejorar la productividad, la calidad del código y la velocidad de desarrollo. Durante la implementación del proyecto \textit{Space Invaders}, se han utilizado diversas herramientas basadas en LLMs para acelerar ciertos aspectos del desarrollo.
+
+Este informe documenta:
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Qué herramientas LLM} se han utilizado
+    \item \textbf{Para qué propósitos específicos} se emplearon
+    \item \textbf{En qué fases del proyecto} se aplicaron
+    \item \textbf{Resultados y impacto} en el desarrollo
+    \item \textbf{Limitaciones y consideraciones} éticas
+\end{itemize}
+
+Es importante aclarar que, aunque se han utilizado herramientas de IA, la \textbf{responsabilidad final del código y el diseño recae en el equipo de desarrollo}. Los LLMs han sido asistentes complementarios, no reemplazos del pensamiento crítico y la implementación manual.
+
+% ==================================================
+\section{Herramientas LLM Utilizadas}
+
+% --------------------------------------------------
+\subsection{GitHub Copilot}
+
+\subsubsection{Descripción}
+
+\textbf{GitHub Copilot} es un asistente de codificación basado en IA, desarrollado por GitHub en colaboración con OpenAI. Funciona como un complemento para editores de código (VS Code, JetBrains, etc.) que proporciona sugerencias de código en tiempo real.
+
+\subsubsection{Tecnología Base}
+
+\begin{itemize}[leftmargin=2em]
+    \item Basado en el modelo \texttt{Codex} de OpenAI
+    \item Entrenado con millones de repositorios públicos de GitHub
+    \item Entiende contexto, patrones de código y mejores prácticas
+    \item Soporta múltiples lenguajes de programación
+\end{itemize}
+
+\subsubsection{Uso en Space Invaders}
+
+GitHub Copilot se utilizó en las siguientes funciones:
+
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Autocompletado de Código}]
+        Cuando se escribía un método o clase, Copilot sugería continuaciones coherentes basadas en el contexto. Por ejemplo, al escribir el método \lstinline|mover()| en la clase \texttt{Nave}, sugerían lógicas comunes de movimiento.
+    
+    \item[\textbf{Generación de Getters y Setters}]
+        Para clases con muchos atributos, Copilot generaba automáticamente métodos de acceso, reduciendo código boilerplate.
+    
+    \item[\textbf{Implementación de Métodos Comunes}]
+        Métodos como \lstinline|equals()|, \lstinline|hashCode()| y \lstinline|toString()| eran sugeridos y completados automáticamente.
+    
+    \item[\textbf{Patrones de Diseño}]
+        Al iniciar la implementación del patrón Singleton en \texttt{NaveFactory}, Copilot sugería el estructura completa correcta.
+\end{description}
+
+\subsubsection{Ventajas Observadas}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Velocidad:} Aceleró significativamente la escritura de código repetitivo
+    \item \textbf{Precisión:} Las sugerencias eran mayormente correctas y seguían convenciones Java
+    \item \textbf{Contexto:} Entendía el contexto del proyecto y mantenía consistencia con el código existente
+    \item \textbf{Patrones:} Sugería implementaciones correctas de patrones de diseño
+\end{itemize}
+
+\subsubsection{Limitaciones}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Lógica Compleja:} No siempre generaba correctamente lógica de juego compleja
+    \item \textbf{Necesidad de Revisión:} Requería revisión manual casi siempre
+    \item \textbf{Contexto Limitado:} A veces perdía el hilo del contexto más amplio del proyecto
+    \item \textbf{Errores Sutiles:} Podía introducir bugs semánticos en lógica condicional
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{ChatGPT / Claude}
+
+\subsubsection{Descripción}
+
+Se utilizaron asistentes generales de IA conversacionales como \textbf{ChatGPT} (OpenAI) o \textbf{Claude} (Anthropic) para consultas, explicaciones y resolución de problemas durante el desarrollo.
+
+\subsubsection{Uso en Space Invaders}
+
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Explicación de Conceptos}]
+        Cuando surgían dudas sobre patrones de diseño específicos (Factory, Strategy, Composite) o arquitectura MVC, se utilizaban para obtener explicaciones claras y ejemplos.
+    
+        \textit{Ejemplo:} «Explícame cómo implementar el patrón Strategy para sistemas de disparo intercambiables»
+    
+    \item[\textbf{Debugging y Resolución de Problemas}]
+        Cuando había errores que no se entendían fácilmente, se describía el problema y se obtenían sugerencias sobre causas posibles y soluciones.
+    
+        \textit{Ejemplo:} «Mi Observer no recibe notificaciones. Aquí está el código...»
+    
+    \item[\textbf{Generación de Documentación}]
+        Para documentar clases complejas, se utilizaban estos modelos para generar Javadoc coherente y explicaciones claras.
+    
+        \textit{Ejemplo:} «Genera documentación Javadoc para esta clase de Composite compleja»
+    
+    \item[\textbf{Refactorización}]
+        Se pedían sugerencias sobre cómo mejorar la calidad del código, seguir principios SOLID, o hacer código más limpio.
+    
+        \textit{Ejemplo:} «Aquí tengo este código con muchos if-else. ¿Cómo puedo refactorizarlo?»
+    
+    \item[\textbf{Escritura de Documentos}]
+        La generación de esta documentación técnica se vio facilitada por lluvia de ideas y estructura sugerida por LLMs.
+\end{description}
+
+\subsubsection{Ventajas}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Versatilidad:} Funciona para código, conceptos, debugging y documentación
+    \item \textbf{Explicaciones:} Proporciona explicaciones claras en lenguaje natural
+    \item \textbf{Iteración:} Permite preguntas de seguimiento y refinamiento
+    \item \textbf{Aprendizaje:} Excelente para entender conceptos nuevos o complejos
+    \item \textbf{Generación de Contenido:} Acelera creación de documentos y comentarios
+\end{itemize}
+
+\subsubsection{Limitaciones}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Información Desactualizada:} El conocimiento tiene corte en cierta fecha
+    \item \textbf{Alucinaciones:} A veces genera información con confianza pero incorrecta
+    \item \textbf{Falta de Contexto Completo:} Sin acceso a todo el codebase, puede perder detalles importantes
+    \item \textbf{Requiere Síntesis:} Las respuestas a veces son largas y requieren filtrado manual
+\end{itemize}
+
+% ==================================================
+\section{Aplicaciones Específicas}
+
+\subsection{Sprint 1: Arquitectura Básica MVC}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Copilot:} Autocompletado de métodos getter/setter y estructura básica de clases
+    \item \textbf{ChatGPT:} Explicación del patrón MVC, cómo implementar Observer en Java
+    \item \textbf{Impacto:} Aceleró la implementación inicial del patrón, reduciendo confusión conceptual
+\end{itemize}
+
+\subsection{Sprint 2: Patrones de Diseño}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Copilot:} Estructura del patrón Singleton en NaveFactory, implementación de interfaces
+    \item \textbf{ChatGPT:} Diferencias entre Factory, Factory Method y Abstract Factory; cómo implementar Strategy correctamente
+    \item \textbf{Impacto:} Clarificó conceptos de patrones complejos, aceleró implementación de Factory y Strategy
+\end{itemize}
+
+\subsection{Sprint 3: Documentación y Extensiones}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{ChatGPT/Claude:} Generación de estructura de documentación, redacción de explicaciones complejas
+    \item \textbf{Copilot:} Implementación de nuevas características opcionales (HU11)
+    \item \textbf{Impacto:} Redujo tiempo de documentación significativamente, permitió documentación más completa
+\end{itemize}
+
+% ==================================================
+\section{Análisis de Impacto}
+
+\subsection{Beneficios}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|X|X|X|}
+        \hline
+        \textbf{Aspecto} & \textbf{Beneficio} & \textbf{Estimación} \\
+        \hline
+        Velocidad de Codificación & Aceleración de código boilerplate & +30\% de velocidad \\
+        \hline
+        Calidad Documentación & Documentación más completa y coherente & +40\% de cobertura \\
+        \hline
+        Curva de Aprendizaje & Mejor comprensión de patrones complejos & Reducción de confusión \\
+        \hline
+        Debugging & Sugerencias útiles para resolución de problemas & +20\% más rápido \\
+        \hline
+        Refactorización & Ideas para mejorar código existente & Mejor arquitectura \\
+        \hline
+    \end{tabularx}
+    \caption{Análisis de beneficios del uso de LLMs}
+\end{table}
+
+\subsection{Desafíos y Limitaciones}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Validación Necesaria:} Todo código generado requería revisión y validación manual
+    \item \textbf{Responsabilidad Humana:} El equipo retenía responsabilidad total sobre el código final
+    \item \textbf{Contexto Complejo:} Para lógica muy específica del proyecto, el LLM a veces no entendía completamente
+    \item \textbf{Deuda Técnica Potencial:} Riesgo de aceptar sugerencias sin entender completamente el código
+\end{itemize}
+
+\subsection{Gestión de Riesgos}
+
+Para mitigar riesgos asociados al uso de LLMs:
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{Revisión Manual Obligatoria:} Todo código sugerido fue revisado antes de integración
+    \item \textbf{Comprensión Total:} Solo se aceptaban sugerencias que el desarrollador comprendía completamente
+    \item \textbf{Testing:} Se verificaba que el código generado pasaba todos los tests
+    \item \textbf{Documentación:} Se documentaba el razonamiento detrás de cada cambio importante
+\end{enumerate}
+
+% ==================================================
+\section{Áreas de Mayor Impacto}
+
+\subsection{Patrones de Diseño}
+
+\textbf{Impacto Alto}
+
+El uso de LLMs fue particularmente valioso para entender e implementar patrones de diseño:
+
+\begin{itemize}[leftmargin=2em]
+    \item Explicación clara de Factory vs. Factory Method vs. Abstract Factory
+    \item Ejemplos concretos de implementación de Strategy
+    \item Estructura correcta de Composite con manejo de jerarquía
+    \item Patrones Observer y cómo evitar problemas comunes
+\end{itemize}
+
+\subsection{Documentación Técnica}
+
+\textbf{Impacto Alto}
+
+Los LLMs aceleraron significativamente la documentación:
+
+\begin{itemize}[leftmargin=2em]
+    \item Generación de estructura de documentos complejos
+    \item Redacción clara de conceptos técnicos
+    \item Creación de diagramas conceptuales en texto
+    \item Síntesis de información compleja en explicaciones accesibles
+\end{itemize}
+
+\subsection{Debugging y Resolución de Problemas}
+
+\textbf{Impacto Medio}
+
+Útil para sugerir causas posibles, pero requería trabajo adicional:
+
+\begin{itemize}[leftmargin=2em]
+    \item Sugerencias sobre errores comunes en Java
+    \item Ideas para problemas de lógica Observer
+    \item Recomendaciones sobre rendimiento
+\end{itemize}
+
+\subsection{Generación de Código Boilerplate}
+
+\textbf{Impacto Medio}
+
+Aceleró tareas repetitivas:
+
+\begin{itemize}[leftmargin=2em]
+    \item Getters y setters automáticos
+    \item Métodos toString() y equals()
+    \item Constructores básicos
+    \item Métodos getter/setter para múltiples atributos
+\end{itemize}
+
+% ==================================================
+\section{Consideraciones Éticas}
+
+\subsection{Transparencia}
+
+Este informe documenta explícitamente el uso de LLMs. Toda asistencia de IA ha sido:
+
+\begin{itemize}[leftmargin=2em]
+    \item Declarada abiertamente
+    \item Utilizada de forma ética y responsable
+    \item Siempre bajo revisión y validación humana
+\end{itemize}
+
+\subsection{Autoría del Código}
+
+\begin{itemize}[leftmargin=2em]
+    \item El \textbf{equipo de desarrollo mantiene plena autoría} del código final
+    \item Los LLMs fueron \textbf{asistentes, no autores}
+    \item Se aceptaban sugerencias solo cuando el equipo comprendía y aprobaba
+    \item Todo código fue adaptado para cumplir con el estilo y requisitos específicos del proyecto
+\end{itemize}
+
+\subsection{Responsabilidad y Calidad}
+
+\begin{itemize}[leftmargin=2em]
+    \item El equipo es responsable de la corrección del código generado
+    \item Los errores introducidos por LLMs son responsabilidad del equipo que los aceptó
+    \item La arquitectura y decisiones de diseño fueron responsabilidad del equipo
+    \item Los LLMs no tomaron decisiones arquitectónicas, solo sugirieron implementaciones
+\end{itemize}
+
+% ==================================================
+\section{Lecciones Aprendidas}
+
+\subsection{Uso Efectivo de LLMs}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Mejor para:} Explicaciones conceptuales, documentación, código repetitivo, debugging
+    \item \textbf{Peor para:} Lógica muy específica del dominio, decisiones arquitectónicas críticas
+    \item \textbf{Óptimo:} Usar como complemento a pensamiento crítico, no como reemplazo
+\end{itemize}
+
+\subsection{Impacto en Productividad}
+
+\begin{itemize}[leftmargin=2em]
+    \item Los LLMs NO eliminaron la necesidad de pensamiento crítico
+    \item Redujeron tareas repetitivas, dejando más tiempo para diseño
+    \item Aceleraron documentación y aprendizaje de conceptos complejos
+    \item La curva de aprendizaje fue más suave con LLM como asistente
+\end{itemize}
+
+\subsection{Recomendaciones Futuras}
+
+\begin{itemize}[leftmargin=2em]
+    \item Usar LLMs para explicar conceptos y diseño, menos para generación de código crítico
+    \item Mantener altos estándares de revisión manual
+    \item Documentar explícitamente cuándo y por qué se utilizó asistencia de IA
+    \item Equilibrar productividad con comprensión profunda del código
+\end{itemize}
+
+% ==================================================
+\section{Conclusión}
+
+Los Modelos de Lenguaje de Gran Escala han sido herramientas \textbf{útiles y productivas} en el desarrollo del proyecto Space Invaders. Su impacto ha sido principalmente positivo en:
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Velocidad:} Aceleración de tareas repetitivas
+    \item \textbf{Aprendizaje:} Mejor comprensión de conceptos complejos
+    \item \textbf{Documentación:} Creación de documentos técnicos de calidad
+    \item \textbf{Debugging:} Asistencia en resolución de problemas
+\end{itemize}
+
+Sin embargo, es crucial enfatizar que:
+
+\begin{enumerate}[leftmargin=2em]
+    \item Los LLMs fueron \textbf{asistentes complementarios}, no herramientas de desarrollo principal
+    \item El \textbf{equipo de desarrollo retiene responsabilidad total} sobre el código y diseño
+    \item Toda asistencia de IA fue \textbf{revisada, validada y adaptada} por profesionales
+    \item La arquitectura, decisiones de diseño y lógica crítica fueron \textbf{completamente desarrolladas por humanos}
+\end{enumerate}
+
+Los LLMs en la industria de software son una realidad cada vez más presente. Su uso responsable, transparente y bien gestionado puede mejorar significativamente la productividad sin comprometer la calidad o la responsabilidad humana.
+
+\vspace{2em}
+
+\begin{center}
+    \textcolor{verdeexito}{\textbf{Desarrollo Responsable con IA}}
+\end{center}
+
+\end{document}

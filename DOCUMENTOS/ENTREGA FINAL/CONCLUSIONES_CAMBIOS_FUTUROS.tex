@@ -1,0 +1,703 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tikz}
+
+\geometry{margin=2.5cm}
+
+% Colores
+\definecolor{azulprincipal}{RGB}{30, 90, 160}
+\definecolor{naranja}{RGB}{255, 152, 0}
+\definecolor{verdeexito}{RGB}{76, 175, 80}
+\definecolor{rojopeligro}{RGB}{244, 67, 54}
+\definecolor{grisclaro}{RGB}{245, 245, 245}
+
+% Estilo de secciones
+\titleformat{\section}{\Large\bfseries\color{azulprincipal}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{azulprincipal}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{naranja}}{}{0em}{}
+
+% Header y Footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textit{Conclusiones y Futuro}}
+\lhead{\textit{Space Invaders - Grupo Cachopin}}
+\cfoot{\thepage}
+
+% Código
+\lstset{
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{grisclaro},
+    frame=single,
+    breaklines=true,
+    language=Java,
+    keywordstyle=\color{azulprincipal}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{teal},
+}
+
+% --------------------------------------------------
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\LARGE \textbf{CONCLUSIONES Y CAMBIOS FUTUROS}}\\[0.5em]
+    {\Large \textit{Reflexión y Visión del Proyecto}}\\[1.5em]
+    
+    \vspace{1cm}
+    
+    {\large \textbf{Proyecto de Programación Orientada a Objetos}}\\[0.3em]
+    {\large Space Invaders — Grupo Cachopin}\\[1em]
+    
+    \vspace{2cm}
+    
+    {\textbf{Fecha:}} \today\\[0.5em]
+    {\textbf{Sprint:}} 3 — Documentación Final\\[3em]
+    
+    \vspace{2cm}
+    
+    {\large \textit{Reflexión sobre logros alcanzados}}\\[0.2em]
+    {\large \textit{y caminos a explorar en el futuro}}
+    
+    \vfill
+    
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ==================================================
+\section{Introducción}
+
+Este documento constituye una reflexión exhaustiva sobre el desarrollo del proyecto Space Invaders a lo largo de los tres sprints. Se presentan las conclusiones de lo aprendido, los desafíos superados, y una visión clara de las posibilidades futuras del proyecto.
+
+Más que un simple resumen técnico, este informe busca documentar la evolución del equipo, las decisiones tomadas, las lecciones aprendidas, y los caminos que podrían explorarse en futuras iteraciones del proyecto.
+
+% ==================================================
+\section{Conclusiones del Desarrollo}
+
+% --------------------------------------------------
+\subsection{Logros Principales}
+
+Durante los tres sprints, se han alcanzado significativos hitos en el desarrollo del proyecto:
+
+\subsubsection{Sprint 1: Fundación Sólida}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Implementación Perfecta del Patrón MVC}
+        Se logró separar completamente la lógica del juego (Modelo), la presentación (Vista) y la interacción del usuario (Controlador), estableciendo una arquitectura limpia y mantenible desde el inicio.
+    
+    \item \textbf{Patrón Observer Funcional}
+        La comunicación entre el modelo y las vistas mediante el patrón Observer fue implementada correctamente, permitiendo sincronización automática sin acoplamiento directo.
+    
+    \item \textbf{Juego Básico Funcional}
+        Se logró desarrollar un juego completamente funcional con nave de un píxel, enemigo básico y sistema de disparos elemental.
+    
+    \item \textbf{Arquitectura Escalable}
+        A pesar de la simplicidad inicial, la arquitectura permitió extensión sin modificación de código existente.
+\end{itemize}
+
+\subsubsection{Sprint 2: Flexibilidad y Patrones}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Múltiples Naves}
+        Implementación exitosa de tres naves diferentes (Green, Blue, Red) con características distintas.
+    
+    \item \textbf{Patrones de Diseño Aplicados}
+        Factory centraliza creación, Strategy permite disparos intercambiables, Composite estructura píxeles de forma jerárquica.
+    
+    \item \textbf{Sistema de Disparos Avanzado}
+        Tres tipos de disparo (Pixel, Flecha, Rombo) con gestión de munición y cambio dinámico de estrategia.
+    
+    \item \textbf{Naves y Enemigos Multipíxel}
+        Extensión del sistema para soportar estructuras complejas de múltiples píxeles.
+\end{itemize}
+
+\subsubsection{Sprint 3: Pulido y Documentación}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Documentación Completa}
+        Generación de documentación técnica exhaustiva cubriendo arquitectura, patrones y decisiones de diseño.
+    
+    \item \textbf{Código Limpio y Profesional}
+        Refactorización del código para mejorar legibilidad y adherencia a principios SOLID.
+    
+    \item \textbf{Gestión con Metodología SCRUM}
+        Aplicación exitosa de metodología ágil con sprints bien definidos, reuniones y entregas iterativas.
+    
+    \item \textbf{Colaboración Efectiva}
+        Trabajo en equipo organizado con Git, asignación clara de responsabilidades y revisión de código.
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Desafíos Superados}
+
+\subsubsection{Desafío 1: Implementación Correcta del Patrón MVC}
+
+\textbf{Problema:} Los desarrolladores principiantes a menudo mezclan lógica de negocio en la vista o insertan presentación en el modelo.
+
+\textbf{Solución:} 
+\begin{itemize}[leftmargin=1.5em]
+    \item Establecer claramente los límites entre capas
+    \item Validación por profesor en Sprint 1
+    \item Revisión continua del código
+    \item Documentación clara de responsabilidades
+\end{itemize}
+
+\textbf{Resultado:} El patrón MVC está perfectamente implementado y bien documentado.
+
+\subsubsection{Desafío 2: Gestión Compleja de Notificaciones Observer}
+
+\textbf{Problema:} Coordinar notificaciones correctas desde el modelo a múltiples vistas con diferentes responsabilidades.
+
+\textbf{Solución:}
+\begin{itemize}[leftmargin=1.5em]
+    \item Definir sistema de tipos de notificación (0-9)
+    \item Usar arrays de enteros para transportar datos relevantes
+    \item Separar lógica de notificación para transiciones vs. inicialización
+\end{itemize}
+
+\textbf{Resultado:} Sistema de notificación robusto y eficiente.
+
+\subsubsection{Desafío 3: Implementación de Patrones Complejos}
+
+\textbf{Problema:} Entender y aplicar correctamente Factory, Strategy y Composite requería comprensión profunda.
+
+\textbf{Solución:}
+\begin{itemize}[leftmargin=1.5em]
+    \item Estudiar patrones con ejemplos concretos
+    \item Implementación incremental en Sprint 2
+    \item Uso de herramientas LLM para explicaciones
+    \item Documentación detallada del propósito de cada patrón
+\end{itemize}
+
+\textbf{Resultado:} Todos los patrones implementados correctamente y con propósito claro.
+
+\subsubsection{Desafío 4: Trabajo Colaborativo en Equipo}
+
+\textbf{Problema:} Coordinar trabajo de múltiples desarrolladores sin conflictos de código.
+
+\textbf{Solución:}
+\begin{itemize}[leftmargin=1.5em]
+    \item Uso de Git desde el inicio
+    \item Ramas por característica o sprint
+    \item Asignación clara de módulos a desarrolladores
+    \item Reuniones de sincronización regulares
+\end{itemize}
+
+\textbf{Resultado:} Colaboración fluida con historial de commits completo.
+
+% --------------------------------------------------
+\subsection{Aprendizajes Clave}
+
+\subsubsection{Arquitectura de Software}
+
+\begin{itemize}[leftmargin=2em]
+    \item La \textbf{separación de responsabilidades} es fundamental para código mantenible
+    \item Los \textbf{patrones de diseño} no son accesorios sino herramientas prácticas que resuelven problemas reales
+    \item El \textbf{bajo acoplamiento} y \textbf{alta cohesión} facilitan extensión sin modificación
+    \item La \textbf{arquitectura inicial bien pensada} ahorra problemas y refactorización posterior
+\end{itemize}
+
+\subsubsection{Desarrollo en Equipo}
+
+\begin{itemize}[leftmargin=2em]
+    \item La \textbf{comunicación clara} es esencial para evitar malentendidos
+    \item El \textbf{control de versiones} es imprescindible, no opcional
+    \item La \textbf{documentación del código} facilita trabajo colaborativo
+    \item Las \textbf{reuniones y sincronización} previenen trabajo duplicado
+\end{itemize}
+
+\subsubsection{Metodología Ágil}
+
+\begin{itemize}[leftmargin=2em]
+    \item Los \textbf{sprints cortos} permiten feedback rápido y correcciones tempranas
+    \item Las \textbf{demostraciones al cliente} son cruciales para validar requisitos
+    \item La \textbf{retroalimentación iterativa} mejora la calidad del producto
+    \item La \textbf{planificación realista} evita estrés y sobre-promesas
+\end{itemize}
+
+% ==================================================
+\section{Reflexión sobre el Proyecto}
+
+% --------------------------------------------------
+\subsection{Fortalezas del Proyecto}
+
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Arquitectura Robusta}]
+        La separación clara en MVC, combinada con Observer, proporciona una base sólida y extensible.
+    
+    \item[\textbf{Patrones Bien Aplicados}]
+        Factory, Strategy y Composite no son meros ejercicios académicos sino soluciones a problemas reales del diseño.
+    
+    \item[\textbf{Código Limpio}]
+        El código sigue convenciones Java, es legible y está bien documentado.
+    
+    \item[\textbf{Documentación Exhaustiva}]
+        Cada aspecto del proyecto está documentado con ejemplos y diagramas.
+    
+    \item[\textbf{Colaboración Efectiva}]
+        El equipo trabajó de manera coordinada con Git y comunicación clara.
+\end{description}
+
+% --------------------------------------------------
+\subsection{Áreas de Mejora}
+
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Testing Automatizado}]
+        El proyecto carece de tests unitarios automatizados. JUnit podría mejorar la confiabilidad del código.
+    
+    \item[\textbf{Performance}]
+        Aunque funciona bien, no se han optimizado aspectos de rendimiento (detección de colisiones, actualización de pantalla).
+    
+    \item[\textbf{Manejo de Excepciones}]
+        El código podría ser más robusto en el manejo de situaciones excepcionales.
+    
+    \item[\textbf{Interfaz Gráfica}]
+        La presentación actual es funcional pero podría beneficiarse de gráficos más avanzados (sprites, animaciones).
+    
+    \item[\textbf{Logging y Debugging}]
+        Implementar sistema de logs facilitaría debugging y análisis de problemas.
+\end{description}
+
+% ==================================================
+\section{Posibles Cambios y Mejoras Futuras}
+
+% --------------------------------------------------
+\subsection{Mejoras de Corto Plazo}
+
+Estos cambios podrían implementarse relativamente rápidamente:
+
+\subsubsection{Testing Automatizado}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Agregar \textbf{JUnit} para tests unitarios
+    \item Tests para clases del modelo (\texttt{Nave}, \texttt{Enemigo}, \texttt{Disparo})
+    \item Tests de colisiones y movimiento
+    \item CI/CD con GitHub Actions para ejecutar tests automáticamente
+\end{itemize}
+
+\textbf{Beneficios:}
+\begin{itemize}[leftmargin=2em]
+    \item Mayor confiabilidad del código
+    \item Detección temprana de regresiones
+    \item Refactorización más segura
+\end{itemize}
+
+\subsubsection{Sistema de Puntuación}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Agregar clase \texttt{Puntuacion} que guarde score actual
+    \item Puntos por enemigo destruido (escalado por dificultad)
+    \item Bonificación por tipo de disparo (ej. rombo da más puntos)
+    \item Pantalla de resultados finales
+\end{itemize}
+
+\textbf{Impacto en Arquitectura:}
+\begin{itemize}[leftmargin=2em]
+    \item Mínimo: Solo agregar atributo a \texttt{Espacio} y notificación de tipo 10
+    \item Consistente con arquitectura MVC existente
+\end{itemize}
+
+\subsubsection{Logging}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Agregar \textbf{Log4j} o \textbf{SLF4J} para logging
+    \item Logs de eventos importantes (inicialización, colisiones, game over)
+    \item Niveles de log (DEBUG, INFO, WARN, ERROR)
+    \item Archivo de log para análisis posterior
+\end{itemize}
+
+\subsubsection{Mejoras de UI}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Mostrar munición disponible de cada tipo de disparo
+    \item Indicador visual del tipo de disparo activo
+    \item Contador de enemigos eliminados
+    \item Temporizador del juego
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Mejoras de Mediano Plazo}
+
+Estas requieren más trabajo pero ofrecen mejoras significativas:
+
+\subsubsection{Niveles de Dificultad}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Fácil:} Movimiento lento, enemigos lentos, munición abundante
+    \item \textbf{Normal:} Parámetros equilibrados (actual)
+    \item \textbf{Difícil:} Movimiento rápido, enemigos agresivos, munición limitada
+    \item Selección en pantalla de inicio
+\end{itemize}
+
+\textbf{Cambios Requeridos:}
+\begin{itemize}[leftmargin=2em]
+    \item Clase \texttt{Dificultad} o enum
+    \item Parámetros configurables de velocidad y munición
+    \item Modificar timers según dificultad
+\end{itemize}
+
+\subsubsection{Múltiples Niveles}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Nivel 1: 4-8 enemigos (actual)
+    \item Nivel 2: 8-12 enemigos, más rápidos
+    \item Nivel 3+: Variaciones temáticas, enemigos especiales
+    \item Progresión automática al completar nivel
+\end{itemize}
+
+\subsubsection{Sistema de Vidas}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Jugador comienza con 3 vidas
+    \item Pierde una vida al ser tocado por enemigo
+    \item Game Over solo cuando se agotan vidas
+    \item Pantalla de vida en UI
+\end{itemize}
+
+\subsubsection{Enemigos Especiales}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Crear subclases de \texttt{Enemigo} con comportamientos distintos:
+        \begin{itemize}[leftmargin=1.5em]
+            \item \texttt{EnemigoBuscador}: Se mueve hacia la nave
+            \item \texttt{EnemigoZigzag}: Patrón de movimiento diagonal
+            \item \texttt{EnemigoPesado}: Requiere múltiples impactos
+        \end{itemize}
+    \item Usar patrón \textbf{Strategy} para movimiento de enemigos
+\end{itemize}
+
+% --------------------------------------------------
+\subsection{Mejoras de Largo Plazo}
+
+Extensiones ambiciosas que transformarían el proyecto:
+
+\subsubsection{Enemigos que Disparan}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Agregar disparos de enemigos hacia abajo
+    \item Reutilizar \texttt{StrategyDisparo} para enemigos
+    \item Sistema de colisión de disparos enemigos con nave
+    \item Necesaria clase \texttt{DisparoEnemigo} separada
+\end{itemize}
+
+\textbf{Complejidad:} Media a Alta
+
+\subsubsection{Boss Final}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Jefe al final de cada nivel con:
+        \begin{itemize}[leftmargin=1.5em]
+            \item Múltiples píxeles (estructura grande)
+            \item Barra de salud
+            \item Patrones de ataque complejos
+            \item Caza al jugador
+        \end{itemize}
+    \item Clase \texttt{Jefe} que extiende \texttt{Enemigo}
+    \item Recompensa especial al vencer
+\end{itemize}
+
+\textbf{Complejidad:} Alta
+
+\subsubsection{Power-ups}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Caen de enemigos destruidos
+    \item Tipos:
+        \begin{itemize}[leftmargin=1.5em]
+            \item \texttt{PowerUpMunicion}: Recarga munición
+            \item \texttt{PowerUpVida}: Añade vida
+            \item \texttt{PowerUpVelocidad}: Aumenta velocidad nave
+            \item \texttt{PowerUpEscudo}: Escudo temporal
+        \end{itemize}
+    \item Patrón \textbf{Composite} para mantener en pantalla
+\end{itemize}
+
+\subsubsection{Sonidos y Música}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Usar \textbf{Java Sound API} o biblioteca externa
+    \item Sonidos para:
+        \begin{itemize}[leftmargin=1.5em]
+            \item Disparo
+            \item Colisión
+            \item Game Over
+            \item Victoria
+        \end{itemize}
+    \item Música de fondo
+    \item Control de volumen
+\end{itemize}
+
+\subsubsection{Gráficos Mejorados}
+
+\textbf{Opciones:}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{JavaFX}: Framework gráfico moderno con animaciones
+    \item \textbf{LibGDX}: Framework de juegos profesional
+    \item \textbf{Processing}: Visualización creativa y simple
+    \item Sprites personalizados en lugar de píxeles de color
+    \item Animaciones de explosión y movimiento suave
+\end{itemize}
+
+\subsubsection{Persistencia de Datos}
+
+\textbf{Implementación:}
+\begin{itemize}[leftmargin=2em]
+    \item Guardar puntuaciones en archivo o base de datos
+    \item Ranking de mejores jugadores
+    \item Cargar/guardar partidas
+    \item Configuración de usuario (dificultad preferida, etc.)
+\end{itemize}
+
+\textbf{Tecnologías:}
+\begin{itemize}[leftmargin=2em]
+    \item JSON con \textbf{Gson} o \textbf{Jackson}
+    \item Base de datos SQLite o H2
+    \item XML para configuración
+\end{itemize}
+
+% ==================================================
+\section{Evolución Arquitectónica}
+
+% --------------------------------------------------
+\subsection{Posibles Cambios Arquitectónicos}
+
+\subsubsection{Transición a JavaFX o LibGDX}
+
+\textbf{Situación Actual:}
+\begin{itemize}[leftmargin=2em]
+    \item Arquitectura MVC con Swing para rendering
+    \item Matriz de JLabel para visualización
+    \item Límite de rendimiento en cantidad de elementos
+\end{itemize}
+
+\textbf{Evolución Propuesta:}
+\begin{itemize}[leftmargin=2em]
+    \item Separar completamente lógica gráfica
+    \item Usar LibGDX para rendering profesional
+    \item Mantener MVC + Observer con cambios mínimos
+    \item Mejor performance y capacidad gráfica
+\end{itemize}
+
+\subsubsection{Sistema de Eventos Más Avanzado}
+
+\textbf{Propuesta:}
+\begin{itemize}[leftmargin=2em]
+    \item En lugar de arrays de enteros, usar \textbf{clases de evento}
+    \item Ejemplo: \texttt{event.NaveMovedEvent}, \texttt{event.CollisionEvent}
+    \item Sistema más type-safe y extensible
+    \item Fácil agregar nuevos tipos de eventos
+\end{itemize}
+
+\textbf{Ejemplo:}
+\begin{lstlisting}[language=Java]
+public class CollisionEvent {
+    private final Disparo disparo;
+    private final Enemigo enemigo;
+    
+    public CollisionEvent(Disparo d, Enemigo e) {
+        this.disparo = d;
+        this.enemigo = e;
+    }
+    // getters...
+}
+\end{lstlisting}
+
+\subsubsection{Inyección de Dependencias}
+
+\textbf{Propuesta:}
+\begin{itemize}[leftmargin=2em]
+    \item Usar Spring Framework o Guice para DI
+    \item Facilita testing y desacoplamiento
+    \item Configuración centralizada de dependencias
+    \item Inyección de recursos externos
+\end{itemize}
+
+% ==================================================
+\section{Oportunidades de Investigación}
+
+% --------------------------------------------------
+\subsection{Investigación Académica}
+
+El proyecto ofrece oportunidades para explorar temas avanzados:
+
+\subsubsection{Inteligencia Artificial para Enemigos}
+
+\textbf{Tema:} Algoritmos de búsqueda y decisión para enemigos inteligentes
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Búsqueda A*}: Ruta óptima hacia el jugador
+    \item \textbf{Máquinas de Estados}: Comportamientos complejos (patrullar, perseguir, atacar)
+    \item \textbf{Algoritmos Genéticos}: Evolución de enemigos más desafiantes
+    \item \textbf{Redes Neuronales}: Enemigos que aprenden del jugador
+\end{itemize}
+
+\subsubsection{Optimización y Performance}
+
+\textbf{Tema:} Técnicas avanzadas de optimización
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Spatial Partitioning}: Árbol cuadrático para detección eficiente de colisiones
+    \item \textbf{Object Pooling}: Reutilización de objetos para reducir garbage collection
+    \item \textbf{Profiling}: Análisis de performance con JProfiler o YourKit
+    \item \textbf{Parallelización}: Uso de multithreading para cálculos paralelos
+\end{itemize}
+
+\subsubsection{Análisis de Patrones de Diseño}
+
+\textbf{Tema:} Evaluación empírica de patrones aplicados
+
+\begin{itemize}[leftmargin=2em]
+    \item Comparación: con vs. sin Factory (métricas de mantenibilidad)
+    \item Medición: impacto de Strategy en flexibilidad
+    \item Estudio: cómo Composite afecta rendimiento
+    \item Análisis: código duplicado reducido por patrones
+\end{itemize}
+
+% ==================================================
+\section{Visión Futura del Proyecto}
+
+% --------------------------------------------------
+\subsection{Roadmap 2026-2027}
+
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Q2 2026 (Actual)}]
+        Entrega de Sprint 3 con documentación completa y arquitectura sólida.
+    
+    \item[\textbf{Q3 2026}]
+        Implementación de mejoras corto plazo: testing, puntuación, logging.
+    
+    \item[\textbf{Q4 2026}]
+        Extensiones mediano plazo: niveles, dificultad, enemigos especiales.
+    
+    \item[\textbf{Q1 2027}]
+        Migración a framework gráfico avanzado (LibGDX o JavaFX).
+    
+    \item[\textbf{Q2 2027}]
+        Características avanzadas: IA enemigos, boss, power-ups.
+    
+    \item[\textbf{Q3 2027}]
+        Pulido final, sonidos, gráficos profesionales, lanzamiento como juego funcional.
+\end{description}
+
+% --------------------------------------------------
+\subsection{Potencial del Proyecto}
+
+El proyecto Space Invaders tiene potencial para evolucionar en varios direcciones:
+
+\subsubsection{Herramienta Educativa}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Uso en Cursos:} Enseñanza de OOP, patrones de diseño, arquitectura
+    \item \textbf{Portafolio:} Demostración de habilidades en entrevistas
+    \item \textbf{Publicación:} Artículos sobre arquitectura o patrones
+    \item \textbf{Comunidad:} Compartir con otros estudiantes y desarrolladores
+\end{itemize}
+
+\subsubsection{Juego Casual}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Itch.io:} Publicar juego gratuito en plataforma indie
+    \item \textbf{GitHub Pages:} Versión web con applet compilado a JavaScript
+    \item \textbf{Comunidad Gaming:} Participar en game jams
+    \item \textbf{Monetización:} Versión premium con características adicionales
+\end{itemize}
+
+\subsubsection{Framework Reutilizable}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Motor de Juego:} Extraer componentes para crear motor genérico
+    \item \textbf{Librería:} Sistema MVC + Observer como librería Java
+    \item \textbf{Ejemplos:} Otros juegos similares (Galaga, Centipede, etc.)
+    \item \textbf{Contribución Open Source:} Publicar en GitHub para comunidad
+\end{itemize}
+
+% ==================================================
+\section{Lecciones Finales y Recomendaciones}
+
+% --------------------------------------------------
+\subsection{Lecciones para Futuros Proyectos}
+
+\begin{enumerate}[leftmargin=2em]
+    \item \textbf{Planificación Arquitectónica:} Invertir tiempo en diseño inicial ahorra problemas después. Los patrones no son opcionales sino necesarios.
+    
+    \item \textbf{Documentación Temprana:} Documentar mientras se desarrolla es más eficiente que documentar al final.
+    
+    \item \textbf{Testing Continuo:} Los tests no son lujo sino necesidad. Implementarlos desde el inicio.
+    
+    \item \textbf{Comunicación en Equipo:} La claridad de comunicación es más importante que herramientas. Git es imprescindible.
+    
+    \item \textbf{Iteración y Feedback:} Ciclos cortos con feedback del usuario son más valiosos que desarrollo largo sin validación.
+    
+    \item \textbf{Gestión de Complejidad:} Mantener código simple. La complejidad prematura es el enemigo del desarrollo.
+    
+    \item \textbf{Refactorización Continua:} El código no es estático. La mejora continua es parte natural del desarrollo.
+\end{enumerate}
+
+% --------------------------------------------------
+\subsection{Recomendaciones para el Equipo}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Continuar Aprendiendo:} Los patrones y arquitectura son campos en evolución constante. Explorar nuevas tecnologías y enfoques.
+    
+    \item \textbf{Mantener el Código:} Código abandonado se oxida. Considerar mantener Space Invaders actualizado y documentado.
+    
+    \item \textbf{Compartir Conocimiento:} Documentar lo aprendido y compartir con otros. Blogs, charlas o artículos.
+    
+    \item \textbf{Contribuir a Comunidad:} Considerar open source. Contribuciones a proyectos comunitarios enriquecen a todos.
+    
+    \item \textbf{Experimentar:} El proyecto es base sólida para experimentos. No temer a refactorización o cambios mayores.
+\end{itemize}
+
+% ==================================================
+\section{Conclusión Final}
+
+El proyecto \textbf{Space Invaders} ha sido más que la implementación de un videojuego. Ha sido un \textbf{vehículo educativo} para aprender:
+
+\begin{itemize}[leftmargin=2em]
+    \item Arquitectura de software sólida y escalable
+    \item Patrones de diseño aplicados a problemas reales
+    \item Colaboración efectiva en equipos de desarrollo
+    \item Metodología ágil y desarrollo iterativo
+    \item Importancia de la documentación y comunicación
+    \item Responsabilidad en calidad del código
+\end{itemize}
+
+Aunque el proyecto está funcionando correctamente ahora, los caminos descritos en este documento ofrecen oportunidades infinitas para mejora, aprendizaje y evolución. La arquitectura base es sólida, el código es limpio, y la documentación es completa.
+
+El siguiente paso no es necesariamente agregar nuevas características, sino reflexionar sobre lo aprendido, considerar cómo aplicar estas lecciones a futuros proyectos, y mantener el código como referencia de buenas prácticas.
+
+\vspace{2em}
+
+\begin{center}
+    \textcolor{verdeexito}{\textbf{El viaje continúa... 🚀}}\\[0.5em]
+    {\textit{Space Invaders no es una conclusión sino un comienzo.}}
+\end{center}
+
+\end{document}
