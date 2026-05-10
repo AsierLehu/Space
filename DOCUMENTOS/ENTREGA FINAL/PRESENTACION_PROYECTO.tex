@@ -1,0 +1,267 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{array}% antes de xcolor[table]/colortbl (necesario para columnas p{...})
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{float} % entorno figure con [H]
+\usepackage{fancyhdr}
+\usepackage{hyperref}% casi el último paquete
+
+\geometry{margin=2.5cm}
+
+\definecolor{azulprincipal}{RGB}{30, 90, 160}
+\definecolor{verdeexito}{RGB}{76, 175, 80}
+\definecolor{tabheadfill}{RGB}{232, 196, 160}
+\definecolor{tabheadtext}{RGB}{120, 70, 30}
+% Sin columnas p{...}: en algunas instalaciones babel español + colortbl rompe \@mkpream (\insert@pcolumn).
+\newcommand{\celdarep}[2]{\parbox[t]{#1}{\raggedright #2}}
+
+\titleformat{\section}{\Large\bfseries\color{azulprincipal}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{azulprincipal}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{azulprincipal}}{}{0em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textit{Space Invaders — Documentación final}}
+\lhead{\textit{Grupo Cachopin}}
+\cfoot{\thepage}
+
+\hypersetup{colorlinks=true, linkcolor=azulprincipal, urlcolor=azulprincipal}
+
+\begin{document}
+
+% ---------- PORTADA ----------
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+
+    {\LARGE \textbf{SPACE INVADERS}}\\[0.4em]
+    {\large Programación Orientada a Objetos (Java)}\\[2em]
+
+    {\large \textbf{Sprint: Demo Day + entrega en eGela}}\\[0.3em]
+    {\large \textit{Documentación final}}\\[2.5em]
+
+    {\textbf{Grupo: Cachopin}}\\[0.5em]
+    {\large \today}
+
+    \vfill
+
+    {\normalsize Estructura según entrega final (Apartados a, b, c, f, g, h).}\\[0.5em]
+    {\small Los informes de MVC/patrones y de uso de LLM se entregan como documentos aparte.}
+
+    \vspace{1.5cm}
+
+    \includegraphics[width=3.2cm]{../PORTADA.png}
+
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ============================================================
+% a. Introducción → Presentación y objetivos
+% ============================================================
+\section{Introducción: presentación y objetivos}
+
+\subsection{Presentación del proyecto}
+
+\textit{Space Invaders} es un proyecto académico en Java que reproduce el juego clásico: el jugador controla una nave en una cuadrícula y debe eliminar enemigos que descienden, sin ser alcanzado ni dejando que lleguen al borde inferior.
+
+El trabajo se ha organizado en \textbf{tres sprints}, con reuniones con el cliente al cierre de cada uno, uso de \textbf{Git} para el código y entregas en \textbf{eGela}, culminando en el \textbf{Demo Day} y esta documentación final.
+
+\subsection{Objetivos}
+
+\subsubsection{Objetivos de aprendizaje}
+
+\begin{itemize}[leftmargin=2em]
+    \item Aplicar \textbf{programación orientada a objetos} en un proyecto de tamaño medio.
+    \item Trabajar en \textbf{equipo} con reparto de tareas, responsabilidades claras y integración frecuente.
+    \item Practicar \textbf{metodología ágil} (planificación por sprints, demo y retroalimentación).
+    \item Entregar un producto \textbf{jugable}, estable y alineado con los requisitos hasta la última historia de usuario obligatoria acordada con el cliente.
+\end{itemize}
+
+\subsubsection{Objetivos de la entrega final}
+
+\begin{itemize}[leftmargin=2em]
+    \item Demostrar en el \textbf{Demo Day} el estado final del juego y la participación de todo el equipo.
+    \item Aportar la \textbf{documentación} requerida en eGela de forma completa y revisada.
+    \item Dejar constancia del \textbf{diseño}, la \textbf{evolución por sprint} y las \textbf{conclusiones} del proyecto.
+\end{itemize}
+
+% ============================================================
+% b. Gestión → Reparto de tareas, reuniones y recursos
+% ============================================================
+\section{Gestión: reparto de tareas, reuniones y recursos}
+
+\subsection{Metodología y reuniones}
+
+Se ha seguido un esquema tipo \textbf{SCRUM}: sprints con entrega incremental, lista de tareas priorizada y revisión con el \textbf{cliente} (profesorado) al final de cada sprint.
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Reuniones de sprint:} demostración del incremento (qué funciona), revisión del avance y nota de mejoras para el siguiente ciclo.
+    \item \textbf{Comunicación interna:} acuerdos de qué módulos toca cada persona, avisos de bloqueos y integración del código en el repositorio compartido.
+\end{itemize}
+
+\subsection{Recursos}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Repositorio:} código versionado en Git (p.\,ej.\ GitHub), con historial visible para acreditar la aportación de cada miembro.
+    \item \textbf{Entorno:} Java y herramienta de desarrollo acordada por el equipo (IDE, convenciones de estilo, build del proyecto).
+    \item \textbf{Documentación interna:} notas de diseño, diagramas y repartos de tareas por sprint (ver también sección~\ref{sec:reparto}).
+\end{itemize}
+
+\subsection{Reparto general de responsabilidades}
+
+\textit{Ajustar esta lista al reparto real del equipo (nombres y roles).}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Coordinación / cliente:} preparar demos, asegurar entregas en fecha y calidad mínima del conjunto.
+    \item \textbf{Modelo y lógica de juego:} reglas, entidades, colisiones y bucle de juego.
+    \item \textbf{Interfaz y control:} pantallas, entrada de teclado, integración con el modelo.
+    \item \textbf{Integración y calidad:} pruebas manuales, resolución de conflictos en Git, homogeneidad del código.
+\end{itemize}
+
+
+% ============================================================
+% f. Desarrollo → Para cada Sprint objetivos y decisiones
+% ============================================================
+\section{Desarrollo: objetivos y decisiones por sprint}
+
+\subsection{Sprint 1}
+
+\textbf{Objetivos principales:}
+\begin{itemize}[leftmargin=2em]
+    \item Tener un \textbf{juego jugable mínimo}: nave, enemigo(s), disparo y condiciones de fin de partida.
+    \item Establecer la \textbf{arquitectura base} del código y la división en capas de forma coherente.
+    \item Fijar convenciones de paquetes, nombres y flujo de trabajo en Git.
+\end{itemize}
+
+\textbf{Decisiones destacadas:}
+\begin{itemize}[leftmargin=2em]
+    \item \textit{Completar:} decisiones concretas (p.\,ej.\ tamaño de matriz, timers, representación de entidades).
+\end{itemize}
+
+\subsection{Sprint 2}
+
+\textbf{Objetivos principales:}
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Ampliar} funcionalidad: distintas naves, enemigos y disparos según requisitos del backlog.
+    \item Refactorizar donde haga falta para mantener el código \textbf{mantenible} sin romper lo ya entregado.
+\end{itemize}
+
+\textbf{Decisiones destacadas:}
+\begin{itemize}[leftmargin=2em]
+    \item \textit{Completar:} cómo se encapsuló la variación de comportamiento (estrategias, fábricas, composición de figuras, etc.) sin duplicar documentación del informe técnico adjunto.
+\end{itemize}
+
+\subsection{Sprint 3}
+
+\textbf{Objetivos principales:}
+\begin{itemize}[leftmargin=2em]
+    \item Cerrar \textbf{historias de usuario} pendientes, pulir la experiencia de juego y la estabilidad.
+    \item Completar \textbf{documentación final}, preparar \textbf{Demo Day} y entrega en eGela.
+    \item Opcional: extensiones acordadas para la nota máxima (HU adicional), si aplica.
+\end{itemize}
+
+\textbf{Decisiones destacadas:}
+\begin{itemize}[leftmargin=2em]
+    \item \textit{Completar:} últimas mejoras, priorización entre ``pulido'' y ``nueva funcionalidad''.
+\end{itemize}
+
+% ============================================================
+% g. Reparto de tareas* → Para cada Sprint
+% ============================================================
+\section{Reparto de tareas por sprint}
+\label{sec:reparto}
+
+En paralelo a la gestión global (sección~2), el equipo documenta el reparto mediante tablas como la siguiente (\textbf{Sprint}, \textbf{tarea}, \textbf{responsables}, tiempo planificado \emph{vs.} real y \textbf{comentarios}). Añadir una fila por cada tarea. Los PDFs en \texttt{DOCUMENTOS/REPARTO TAREAS/} pueden ampliar el detalle.
+
+% Cabeceras de tabla (columnas sólo |c|c|...|; texto largo con \celdarep{ancho}{...})
+\newcommand{\CabeceraReparto}{%
+    \hline
+    \rowcolor{tabheadfill}%
+    \textbf{\textcolor{tabheadtext}{Sprint}} &
+    \textbf{\textcolor{tabheadtext}{Tarea}} &
+    \textbf{\textcolor{tabheadtext}{Responsables}} &
+    \textbf{\textcolor{tabheadtext}{\shortstack{Tiempo\\planificado}}} &
+    \textbf{\textcolor{tabheadtext}{\shortstack{Tiempo\\real}}} &
+    \textbf{\textcolor{tabheadtext}{Comentarios}} \\ \hline
+}
+
+\subsection{Sprint 1}
+
+\subsubsection*{*\ Reparto de tareas}
+
+\begin{table}[H]
+    \centering
+    {\renewcommand{\arraystretch}{1.25}%
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \CabeceraReparto
+        1 & \celdarep{3.8cm}{Mover la nave} & \celdarep{2.6cm}{Ander} & 1h & 4h & \celdarep{3.9cm}{Parecía fácil\dots} \\
+        \hline
+    \end{tabular}}
+\end{table}
+
+\subsection{Sprint 2}
+
+\subsubsection*{*\ Reparto de tareas}
+
+\begin{table}[H]
+    \centering
+    {\renewcommand{\arraystretch}{1.25}%
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \CabeceraReparto
+        2 & \celdarep{3.8cm}{\textit{(sustituir por tareas reales)}} & \celdarep{2.6cm}{} &  &  & \celdarep{3.9cm}{} \\
+        \hline
+        2 & \celdarep{3.8cm}{} & \celdarep{2.6cm}{} &  &  & \celdarep{3.9cm}{} \\
+        \hline
+    \end{tabular}}
+\end{table}
+
+\subsection{Sprint 3}
+
+\subsubsection*{*\ Reparto de tareas}
+
+\begin{table}[H]
+    \centering
+    {\renewcommand{\arraystretch}{1.25}%
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \CabeceraReparto
+        3 & \celdarep{3.8cm}{\textit{(sustituir por tareas reales)}} & \celdarep{2.6cm}{} &  &  & \celdarep{3.9cm}{} \\
+        \hline
+    \end{tabular}}
+\end{table}
+
+% ============================================================
+% h. Conclusiones → reflexión y cambios futuros
+% ============================================================
+\section{Conclusiones: reflexión y cambios futuros}
+
+\subsection{Reflexión}
+
+\textit{Completar con la reflexión del grupo:} qué se ha aprendido trabajando con POO en equipo, qué ha costado más (integración, diseño, plazos), y cómo se ha mejorado la coordinación a lo largo de los sprints.
+
+\subsection{Cambios y mejoras futuras}
+
+Ideas razonables para continuidad del proyecto (sin obligación de implementarlas):
+
+\begin{itemize}[leftmargin=2em]
+    \item Pruebas automatizadas (p.\,ej.\ JUnit) sobre lógica del modelo.
+    \item Puntuación, niveles o dificultad configurable.
+    \item Mejoras de interfaz o contenido audiovisual.
+    \item Optimización de colisiones o de refresco de la vista si el crecimiento del código lo hace necesario.
+\end{itemize}
+
+\vspace{2em}
+
+\begin{center}
+    \textcolor{verdeexito}{\textbf{Fin del documento (entrega documentación final + Demo Day).}}
+\end{center}
+
+\end{document}
