@@ -1,0 +1,217 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+\geometry{margin=2.5cm}
+
+\definecolor{cabecera}{RGB}{30, 90, 160}
+
+\titleformat{\section}{\large\bfseries\color{cabecera}}{}{0em}{}[\titlerule]
+
+% --------------------------------------------------
+\begin{document}
+
+\begin{center}
+    {\LARGE \textbf{Reparto de Tareas}}\\[0.4em]
+    {\large \textit{Space Invaders — Mejoras y Funcionalidades Adicionales}}\\[0.3em]
+    {\small \textit{Equipo: Cachopín}}\\[0.2em]
+    {\small Fecha: \today}
+\end{center}
+
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Miembros del equipo}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Miembro 1:} Unai Urrutia
+    \item \textbf{Miembro 2:} Ekain Ortega
+    \item \textbf{Miembro 3:} Eder Lorenzo
+    \item \textbf{Miembro 4:} Asier López
+\end{itemize}
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Planificación inicial}
+
+\textit{Tareas adicionales previstas y su tiempo estimado:}
+
+\begin{enumerate}[leftmargin=2em]
+    \item Implementar sistema de puntuación visible en pantalla — \phantom{00} horas
+    \item Crear pantalla final mejorada (FinalFrame) con victoria/game over — \phantom{00} horas
+    \item Implementar opción de reiniciar juego desde FinalFrame — \phantom{00} horas
+    \item Añadir imágenes de fondo para todas las pantallas — \phantom{00} horas
+    \item Crear estrategia de disparo doble (DisparoDoble) — \phantom{00} horas
+    \item Crear cuarta nave jugable (Nave4) con disparo doble — \phantom{00} horas
+\end{enumerate}
+
+\textbf{Tiempo total estimado:} \phantom{00} horas.
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Resumen de tareas realizadas}
+
+\textit{Tareas efectivamente completadas y su tiempo real:}
+
+\begin{enumerate}[leftmargin=2em]
+    \item Implementar sistema de puntuación visible en pantalla — \phantom{00} horas
+    \item Crear pantalla final mejorada (FinalFrame) con victoria/game over — \phantom{00} horas
+    \item Implementar opción de reiniciar juego desde FinalFrame — \phantom{00} horas
+    \item Añadir imágenes de fondo para todas las pantallas — \phantom{00} horas
+    \item Crear estrategia de disparo doble (DisparoDoble) — \phantom{00} horas
+    \item Crear cuarta nave jugable (Nave4) con disparo doble — \phantom{00} horas
+\end{enumerate}
+
+\textbf{Tiempo total real:} \phantom{00} horas.
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Detalle de tareas}
+
+% ---- Tarea 1 ----
+\subsection*{Tarea 1 — Implementar sistema de puntuación visible en pantalla}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Desarrollo de un sistema de puntuación que se muestra en tiempo real durante el juego en \texttt{MainFrame}. Implementación de \texttt{JLabel labelPuntuacion} que se actualiza cuando el modelo notifica cambios. La puntuación se muestra con fuente \texttt{Monospaced} en blanco y tamaño 16, posicionada en la esquina superior izquierda del tablero.
+    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
+    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — \phantom{00} horas
+            \item Ekain Ortega — \phantom{00} horas
+            \item Eder Lorenzo — \phantom{00} horas
+            \item Asier López — \phantom{00} horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 2 ----
+\subsection*{Tarea 2 — Crear pantalla final mejorada (FinalFrame) con victoria/game over}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Desarrollo de la clase \texttt{FinalFrame} que implementa la pantalla de fin del juego. Muestra un título dinámico en color verde (\texttt{VICTORIA}) o rojo (\texttt{GAME OVER}) según el resultado. Incluye la puntuación final del jugador con fuente grande (28pt). La pantalla utiliza \texttt{GridBagLayout} para alineación centrada de elementos.
+    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
+    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — \phantom{00} horas
+            \item Ekain Ortega — \phantom{00} horas
+            \item Eder Lorenzo — \phantom{00} horas
+            \item Asier López — \phantom{00} horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 3 ----
+\subsection*{Tarea 3 — Implementar opción de reiniciar juego desde FinalFrame}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Implementación del método \texttt{volverAlMenu()} que permite al usuario regresar al menú inicial presionando la tecla SPACE desde \texttt{FinalFrame}. El controlador \texttt{KeyListener} captura el evento de tecla. Se implementa la lógica para cerrar la ventana actual, detener la observación del modelo y crear una nueva instancia de \texttt{StartFrame}.
+    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
+    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — \phantom{00} horas
+            \item Ekain Ortega — \phantom{00} horas
+            \item Eder Lorenzo — \phantom{00} horas
+            \item Asier López — \phantom{00} horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 4 ----
+\subsection*{Tarea 4 — Añadir imágenes de fondo para todas las pantallas}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Creación e integración de tres imágenes de fondo PNG para las diferentes pantallas del juego. Se utiliza \texttt{ImageIcon} y \texttt{getScaledInstance(900, 700, Image.SCALE\_SMOOTH)} para escalar las imágenes al tamaño de pantalla. Las imágenes se cargan desde el directorio \texttt{/images/} mediante \texttt{getClass().getResource()}. Las tres imágenes son: \texttt{fondo1.png} para \texttt{StartFrame}, \texttt{fondo2.png} para \texttt{MainFrame}, y \texttt{fondo.png} para \texttt{FinalFrame}.
+    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
+    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — \phantom{00} horas
+            \item Ekain Ortega — \phantom{00} horas
+            \item Eder Lorenzo — \phantom{00} horas
+            \item Asier López — \phantom{00} horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 5 ----
+\subsection*{Tarea 5 — Crear estrategia de disparo doble (DisparoDoble)}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Implementación de la clase \texttt{DisparoDoble} que implementa la interfaz \texttt{StrategyDisparo}. Esta estrategia lanza dos píxeles de forma simultánea y paralela (en posiciones $x-1$ y $x+1$ de la misma fila). Dispone de munición limitada a 25 disparos. El método \texttt{crearDisparo()} crea un \texttt{Composite} que contiene dos \texttt{Pixel} como componentes. Integración con el sistema existente de estrategias de disparo.
+    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
+    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — \phantom{00} horas
+            \item Ekain Ortega — \phantom{00} horas
+            \item Eder Lorenzo — \phantom{00} horas
+            \item Asier López — \phantom{00} horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% ---- Tarea 6 ----
+\subsection*{Tarea 6 — Crear cuarta nave jugable (Nave4) con disparo doble}
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Descripción:}] Desarrollo de la clase \texttt{Nave4} que extiende \texttt{Naves}. Implementación de una geometría única para esta nave compuesta por 5 píxeles en una configuración pentagonal simétrica. Integración de las estrategias de disparo \texttt{DisparoPixel} y \texttt{DisparoDoble} permitiendo al jugador cambiar entre ambos tipos de disparo. La nave incluye métodos \texttt{origenDisparoX()} y \texttt{origenDisparoY()} para definir el punto desde el que se lanzan los proyectiles. Registro automático en \texttt{NaveFactory} para ser accesible mediante el patrón Factory.
+    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
+    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Responsables y dedicación:}]~
+        \begin{itemize}[leftmargin=1em, nosep]
+            \item Unai Urrutia — \phantom{00} horas
+            \item Ekain Ortega — \phantom{00} horas
+            \item Eder Lorenzo — \phantom{00} horas
+            \item Asier López — \phantom{00} horas
+        \end{itemize}
+\end{description}
+
+\vspace{0.8em}
+
+% --------------------------------------------------
+\section{Notas y observaciones}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Desviaciones significativas:} \phantom{00000000}
+    \item \textbf{Problemas encontrados:} \phantom{00000000}
+    \item \textbf{Lecciones aprendidas:} \phantom{00000000}
+    \item \textbf{Sugerencias para futuros proyectos:} \phantom{00000000}
+\end{itemize}
+
+\vspace{1.5em}
+
+% --------------------------------------------------
+\section{Resumen estadístico}
+
+\begin{center}
+    \begin{tabular}{|l|r|r|}
+        \hline
+        \textbf{Miembro} & \textbf{Horas estimadas} & \textbf{Horas reales} \\
+        \hline
+        Unai Urrutia & \phantom{00} & \phantom{00} \\
+        \hline
+        Ekain Ortega & \phantom{00} & \phantom{00} \\
+        \hline
+        Eder Lorenzo & \phantom{00} & \phantom{00} \\
+        \hline
+        Asier López & \phantom{00} & \phantom{00} \\
+        \hline
+        \textbf{TOTAL} & \textbf{\phantom{00}} & \textbf{\phantom{00}} \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\end{document}
