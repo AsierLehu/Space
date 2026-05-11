@@ -1,5 +1,6 @@
 \documentclass[12pt, a4paper]{article}
 
+\usepackage{xurl}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
 \usepackage{geometry}
@@ -13,21 +14,30 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning}
-
+ 
 \geometry{margin=2.5cm}
-
+ 
 % Colores
 \definecolor{azulprincipal}{RGB}{30, 90, 160}
 \definecolor{amarillopendiente}{RGB}{255, 200, 0}
+\definecolor{verdesprintold}{RGB}{0, 140, 60}
+\definecolor{azulsprintnew}{RGB}{0, 80, 180}
+\definecolor{rojocambio}{RGB}{180, 30, 30}
 \definecolor{grisclaro}{RGB}{245, 245, 245}
 \definecolor{codigofondo}{RGB}{240, 244, 250}
 \definecolor{codigoborde}{RGB}{30, 90, 160}
-
+\definecolor{fondoverde}{RGB}{230, 255, 235}
+\definecolor{fondobordoverde}{RGB}{0, 140, 60}
+\definecolor{fondoazul}{RGB}{230, 240, 255}
+\definecolor{fondobordoazul}{RGB}{0, 80, 180}
+\definecolor{fondoamarillo}{RGB}{255, 252, 220}
+\definecolor{fondobordoamarillo}{RGB}{180, 140, 0}
+ 
 % Estilo de secciones
 \titleformat{\section}{\large\bfseries\color{azulprincipal}}{}{0em}{}[\titlerule]
 \titleformat{\subsection}{\normalsize\bfseries\color{azulprincipal}}{}{0em}{}
-
-% Estilo de código inline
+ 
+% Estilo de código
 \lstset{
     basicstyle=\ttfamily\small,
     backgroundcolor=\color{codigofondo},
@@ -39,513 +49,612 @@
     commentstyle=\color{gray},
     stringstyle=\color{teal},
 }
-
-% Caja de "pendiente"
+ 
+% Caja Sprint 1 (verde)
 \newmdenv[
-    backgroundcolor=amarillopendiente!25,
-    linecolor=amarillopendiente!80!black,
+    backgroundcolor=fondoverde,
+    linecolor=fondobordoverde,
     leftmargin=0, rightmargin=0,
-    innerleftmargin=8pt, innerrightmargin=8pt,
-    innertopmargin=6pt, innerbottommargin=6pt,
-    roundcorner=4pt
-]{pendiente}
-
+    innerleftmargin=10pt, innerrightmargin=10pt,
+    innertopmargin=8pt, innerbottommargin=8pt,
+    roundcorner=4pt,
+    frametitle={\color{verdesprintold}\bfseries Sprint 1 --- Versi\'{o}n inicial},
+    frametitleaboveskip=4pt,
+    frametitlebelowskip=4pt
+]{cajasprint1}
+ 
+% Caja Sprint 2 (amarillo)
+\newmdenv[
+    backgroundcolor=fondoamarillo,
+    linecolor=fondobordoamarillo,
+    leftmargin=0, rightmargin=0,
+    innerleftmargin=10pt, innerrightmargin=10pt,
+    innertopmargin=8pt, innerbottommargin=8pt,
+    roundcorner=4pt,
+    frametitle={\color{fondobordoamarillo}\bfseries Sprint 2 --- Actualizaci\'{o}n},
+    frametitleaboveskip=4pt,
+    frametitlebelowskip=4pt
+]{cajasprint2}
+ 
+% Caja versión final (azul)
+\newmdenv[
+    backgroundcolor=fondoazul,
+    linecolor=fondobordoazul,
+    leftmargin=0, rightmargin=0,
+    innerleftmargin=10pt, innerrightmargin=10pt,
+    innertopmargin=8pt, innerbottommargin=8pt,
+    roundcorner=4pt,
+    frametitle={\color{azulsprintnew}\bfseries Versi\'{o}n Final},
+    frametitleaboveskip=4pt,
+    frametitlebelowskip=4pt
+]{cajafinal}
+ 
 % --------------------------------------------------
 \begin{document}
-
+ 
 \begin{center}
-    {\LARGE \textbf{Documentación: Arquitectura y Patrones de Diseño}}\\[0.4em]
-    {\large \textit{Space Invaders — Proyecto de Programación}}\\[0.3em]
-    {\small Fecha: \today}
-    {\small Grupo: Cachopin}
+    {\LARGE \textbf{Documentaci\'{o}n: Arquitectura y Patrones de Dise\~{n}o}}\\[0.4em]
+    {\large \textit{Space Invaders --- Proyecto de Programaci\'{o}n}}\\[0.3em]
+    {\small Fecha: \today \quad | \quad Grupo: Cachopin}
 \end{center}
-
+ 
 \vspace{0.5em}
 \hrule
 \vspace{1.5em}
-
-% ==================================================
+ 
 \tableofcontents
 \newpage
-
+ 
 % ==================================================
-\section{Introducción General}
-
-En este proyecto se ha implementado una arquitectura sólida basada en dos enfoques complementarios: el patrón arquitectónico MVC (Modelo-Vista-Controlador) combinado con el patrón Observer para la sincronización entre componentes, y la aplicación de tres patrones de diseño fundamentales (Factory, Strategy y Composite) para resolver problemas específicos de flexibilidad y mantenibilidad.
-
-Esta documentación completa describe tanto la arquitectura general del sistema como los patrones de diseño utilizados, proporcionando una visión global de cómo Space Invaders está estructurado y por qué se tomaron estas decisiones de diseño.
-
+\section{Introducci\'{o}n General}
+ 
+En este proyecto se ha implementado una arquitectura basada en dos enfoques complementarios: el patr\'{o}n arquitect\'{o}nico \textbf{MVC (Modelo-Vista-Controlador)} combinado con el patr\'{o}n \textbf{Observer} para la sincronizaci\'{o}n entre componentes, y la aplicaci\'{o}n de tres patrones de dise\~{n}o (\textbf{Factory}, \textbf{Strategy} y \textbf{Composite}) para resolver problemas espec\'{i}ficos de flexibilidad y mantenibilidad.
+ 
+El proyecto ha pasado por una evoluci\'{o}n clara entre el \textbf{Sprint 1}, donde se implement\'{o} una versi\'{o}n funcional pero b\'{a}sica, el \textbf{Sprint 2}, donde se refactoriz\'{o} profundamente el modelo para soportar m\'{u}ltiples naves, disparos compuestos, flota de enemigos y detecci\'{o}n de colisiones a nivel de p\'{i}xel, y la \textbf{versi\'{o}n final}, la versi\'{o}n actual y definitiva del juego. Esta documentaci\'{o}n refleja todas las etapas y el razonamiento detr\'{a}s de cada cambio.
+ 
 \newpage
-
+ 
 % ==================================================
 \part*{Parte I: Arquitectura MVC + Observer}
 \addcontentsline{toc}{section}{Parte I: Arquitectura MVC + Observer}
-
-% ==================================================
-\section{Introducción al Patrón MVC + Observer}
-
-El patrón \textbf{Modelo-Vista-Controlador (MVC)} es una arquitectura de diseño utilizada en programación orientada a objetos que permite organizar una aplicación separando sus componentes en tres partes principales: \textit{Modelo}, \textit{Vista} y \textit{Controlador}. Esta separación facilita el mantenimiento del código, mejora su organización y permite que cada componente tenga una responsabilidad clara dentro del sistema.
-
-\begin{description}[leftmargin=2em, style=nextline]
-    \item[\textbf{Modelo}]
-        Se encarga de gestionar los datos y la lógica del programa. Contiene toda la lógica de negocio, del juego en este caso, y las operaciones necesarias para modificarla o consultarla. El modelo no depende de la interfaz gráfica ni de cómo se muestran los datos al usuario.
-
-    \item[\textbf{Vista}]
-        Es la parte encargada de presentar la información al usuario. Su función principal es mostrar los datos que proporciona el modelo y actualizarse cuando estos cambian. La vista no contiene la lógica principal del programa, sino únicamente la representación visual de la información.
-
-    \item[\textbf{Controlador}]
-        Actúa como intermediario entre el usuario y el sistema. Recibe las acciones del usuario (por ejemplo, clics, entradas de teclado, etc.), interpreta estas acciones y solicita al modelo que realice las operaciones correspondientes.
-\end{description}
-
-A este modelo de arquitectura se le añade el patrón \textbf{Observer (Observador)} para que la vista se mantenga actualizada cuando cambian los datos del modelo. Este \textbf{patrón de diseño} establece una relación entre un objeto denominado \textit{observable} (el modelo) y uno o varios \textit{observadores} (las vistas). Cuando el estado del observable cambia, todos los observadores registrados son notificados automáticamente y pueden actualizar su información.
-
-La combinación de MVC y Observer permite desarrollar aplicaciones más modulares, donde la lógica del programa, la presentación de los datos y la interacción con el usuario están claramente separadas. Esto facilita la reutilización del código, la ampliación del sistema y el mantenimiento a largo plazo de la aplicación.
-
-% ==================================================
-\section{Implementación en Space Invaders}
-
-% --------------------------------------------------
-\subsection{Arquitectura MVC del proyecto}
-
-En el proyecto Space Invaders, las tres capas del patrón MVC se distribuyen de la siguiente manera:
-
-\begin{description}[leftmargin=2em, style=nextline]
-    \item[\textbf{Modelo}]
-        La clase central del modelo es \texttt{Espacio}, que está implementado como \textbf{Singleton} y extiende de la clase \texttt{Observable}. Contiene toda la lógica del juego: la instancia del \texttt{Jugador}, la lista de \texttt{Enemigo}s y el objeto \texttt{Disparo} asociado al jugador. Además, \texttt{Espacio} alberga el bucle principal del juego (\textit{game loop} con un \texttt{Timer} de 50 ms), la detección de colisiones entre el disparo y los enemigos, y las condiciones de fin de partida (\textit{game over} y victoria).
-
-        Las clases auxiliares del modelo definen la estructura de las naves y los disparos del juego:
-        \begin{itemize}[leftmargin=2em]
-            \item \texttt{Naves} — clase abstracta que encapsula el comportamiento común de todas las naves. Define atributos: \texttt{x} (posición horizontal), \texttt{y} (posición vertical), \texttt{velocidad} (píxeles por actualización, por defecto 1) y \texttt{vivo} (estado actual). Incluye el método abstracto \texttt{mover()}, que cada subclase implementa según su lógica de movimiento. \textbf{Nota:} El atributo \texttt{velocidad} solo lo utiliza la clase \texttt{Jugador}; la clase \texttt{Enemigo} no lo usa.
-            \item \texttt{Jugador} — extiende \texttt{Naves} y representa la nave controlable. Implementa \texttt{mover()} multiplicando los desplazamientos por \texttt{velocidad}, permitiendo movimiento dentro de los límites del tablero visible (0-99 en x, 0-59 en y). Posee un objeto \texttt{Disparo} que se dispara cuando el usuario presiona la tecla espacio. Solo hay una instancia del jugador simultáneamente y solo un disparo activo por jugador.
-            \item \texttt{Enemigo} — extiende \texttt{Naves} y representa un enemigo del juego. Implementa \texttt{mover()} sumando directamente los desplazamientos sin usar \texttt{velocidad}. Se crean inicialmente en una posición aleatoria en la fila superior (y entre 0-4) y descienden verticalmente. Se eliminan al ser impactados por un disparo. El juego comienza con un único enemigo.
-            \item \texttt{Disparo} — representa el proyectil disparado por el jugador. Almacena su posición actual (\texttt{x}, \texttt{y}) y un booleano (\texttt{activo}) para saber si está en vuelo. Se crea un nuevo \texttt{Disparo} cada vez que el jugador presiona espacio, con posición inicial \texttt{(x\_jugador, y\_jugador - 1)}, reemplazando el anterior. Asciende un píxel por tick (cada 50ms) mediante el método \texttt{subir()}. Se desactiva automáticamente cuando alcanza y<0 (sale del tablero).
-        \end{itemize}
-
-        Ninguna de estas clases conoce la interfaz gráfica ni sabe cómo se dibuja el juego; solo gestionan datos y reglas de juego.
-
-    \item[\textbf{Vista}]
-        Las vistas son \texttt{StartFrame} y \texttt{MainFrame}, ambas subclases de \texttt{JFrame} e implementan la interfaz \texttt{Observer}. Su función es capturar el estado del modelo y representarlo visualmente sin contener lógica de negocio:
-        \begin{itemize}[leftmargin=2em]
-            \item \texttt{StartFrame} es la pantalla inicial del juego. Se encarga de mostrar el título ("SPACE INVADERS"), el subtítulo ("Sprint 1"), las instrucciones básicas de control, y el mensaje «Pulsa SPACE para jugar». No dibuja ningún elemento del juego ni gestiona la lógica de juego. Su responsabilidad es permitir que el usuario active el inicio de la partida.
-            \item \texttt{MainFrame} es la pantalla de juego principal y gestiona toda la representación gráfica. Usa una matriz de \texttt{JLabel}s para representar el tablero como cuadrícula negra de $100 \times 60$ celdas (cada celda de $10 \times 10$ píxeles). Los elementos se representan con colores: el jugador como celdas magenta, los enemigos como celdas rojas, y el disparo como celda amarilla. También muestra un mensaje de victoria o derrota cuando la partida termina.
-        \end{itemize}
-
-        El mecanismo clave es que ambas vistas se registran automáticamente como observadoras de \texttt{Espacio} al construirse, mediante la llamada \lstinline|Espacio.getEspacio().addObserver(this)| en sus constructores. Esto garantiza que recibirán notificaciones automáticas de cualquier cambio en el estado del juego.
-
-    \item[\textbf{Controlador}]
-        Los controladores son clases internas privadas llamadas \texttt{Controller} definidas dentro de \texttt{StartFrame} y \texttt{MainFrame}. Ambas implementan \texttt{KeyListener}, lo que requiere implementar obligatoriamente los tres métodos de la interfaz: \texttt{keyPressed}, \texttt{keyReleased} y \texttt{keyTyped}. En la práctica, solo \texttt{keyPressed} contiene lógica (los otros dos están vacíos). Esto permite que el controlador reciba los eventos del teclado, interprete las teclas pulsadas y traduzca en llamadas concretas al modelo:
-        \begin{itemize}[leftmargin=2em]
-            \item El \texttt{Controller} de \texttt{StartFrame} escucha la pulsación de \texttt{SPACE} para llamar a \lstinline|Espacio.getEspacio().cambiarAMain()|, indicando al modelo que inicie la partida.
-            \item El \texttt{Controller} de \texttt{MainFrame} atiende las cuatro flechas direccionales (llamando a \lstinline|espacio.moverJugador(dx, dy)| con los desplazamientos) y la barra espaciadora (llamando a \lstinline|espacio.disparar()|). La verificación de si la partida ha terminado \textbf{no está en el Controller}, sino en el \textbf{modelo} (en los métodos \texttt{moverJugador()} y \texttt{disparar()}).
-        \end{itemize}
-\end{description}
-
-La relación entre las tres capas queda así: el usuario interactúa con la \textbf{Vista} (ventana con foco de teclado), el \textbf{Controlador} captura esa interacción y llama al \textbf{Modelo}, y el Modelo notifica a la Vista para que se hagan los cambios necesarios. En ningún momento la vista accede directamente a la lógica del juego, ni el modelo sabe cómo se representa gráficamente.
-
-% --------------------------------------------------
-\subsection{Diagramas UML}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1.0\textwidth]{Vista y Controller.png}
-    \caption{Diagrama UML de la arquitectura MVC y relación Observer entre las clases del proyecto Space Invaders.}
-    \label{fig:mvc_observer}
-\end{figure}
-
-% ==================================================
-\section{El Controlador en Detalle}
-
-El controlador es el intermediario entre el usuario y el sistema. Recibe las acciones del usuario (eventos de teclado), las interpreta según la lógica de control definida, y solicita al modelo que ejecute las operaciones correspondientes. No contiene datos del juego ni se encarga de mostrarlos; simplemente traduce entrada en acciones del modelo.
-
-En ambas clases (\texttt{StartFrame} y \texttt{MainFrame}), los controladores están definidos como clases internas privadas llamadas \texttt{Controller} que implementan \texttt{KeyListener}. Esto requiere implementar obligatoriamente los tres métodos de la interfaz: \texttt{keyPressed}, \texttt{keyReleased} y \texttt{keyTyped}. En la práctica, solo \texttt{keyPressed} contiene lógica (los otros dos están vacíos).
-
-El flujo común de funcionamiento es el siguiente:
-
-\begin{enumerate}[leftmargin=2em]
-    \item En el constructor de cada frame se crea una instancia del controlador e inmediatamente se registra con \lstinline|addKeyListener(controller)|.
-    \item La ventana solicita el foco del sistema con \lstinline|requestFocusInWindow()|. Esto es crucial porque solo la ventana que tiene el foco puede recibir eventos del teclado.
-    \item Cuando el usuario pulsa una tecla, el sistema operativo detecta el evento y lo envía automáticamente al método \texttt{keyPressed} del \texttt{Controller} registrado. Este método recibe un objeto \texttt{KeyEvent} que contiene información sobre qué tecla fue pulsada.
-\end{enumerate}
-
-\subsubsection*{En la clase \texttt{StartFrame}}
-
-En esta clase, su única función es detectar si el usuario pulsa la barra espaciadora, en tal caso llama a \lstinline|cambiarAMain()| que veremos posteriormente qué hace.
-
-\subsubsection*{Clase \texttt{MainFrame}}
-
-El \texttt{Controller} de esta clase traduce las teclas del usuario en acciones del juego. En \texttt{keyPressed} se implementa la lógica específica:
-
-\begin{itemize}[leftmargin=2em]
-    \item Lee qué tecla se pulsó con \lstinline|e.getKeyCode()|.
-    \item Según la tecla, llama al modelo \texttt{Espacio}:
-    \begin{itemize}[leftmargin=2em]
-        \item \textbf{Flechas direccionales:} ejecutan \lstinline|espacio.moverJugador(dx, dy)| con los desplazamientos correspondientes (izquierda: -1,0; derecha: 1,0; arriba: 0,-1; abajo: 0,1).
-        \item \textbf{Espacio:} ejecuta \lstinline|espacio.disparar()|.
-    \end{itemize}
-\end{itemize}
-
-\textbf{IMPORTANTE:}  El \texttt{Controller} \textbf{no verifica} si la partida ha terminado. Esa validación ocurre dentro del modelo en los métodos \texttt{moverJugador()} y \texttt{disparar()}, que comprueban internamente con \lstinline|isGameOver()| y \lstinline|isGameWon()| antes de ejecutar. Este fue uno de los muchos cambios que se hicieron tras el feedback del profesor.
-
-% ==================================================
-\section{Patrón Observer: Notificación y Actualización}
-
-Dentro del patrón Observer, los métodos \texttt{notify} y \texttt{update} permiten que los objetos que observan a otro objeto puedan mantenerse informados cuando su estado cambia.
-
-% --------------------------------------------------
-\subsection{Método \texttt{notify}}
-
-El método \texttt{notify} pertenece al objeto \textbf{observable}, que es el objeto que contiene los datos o el estado que puede cambiar. En muchas aplicaciones que siguen la arquitectura MVC, el observable suele ser el modelo, ya que es el componente que gestiona la información y la lógica del sistema.
-
-La función del método \texttt{notify} es avisar a todos los observadores registrados de que el estado del observable ha cambiado. Para ello, el observable mantiene normalmente una lista o colección de observadores que se han registrado previamente para recibir notificaciones.
-
-Cuando ocurre un cambio relevante en el estado del observable (por ejemplo, una modificación de datos), el método \texttt{notify} recorre esta lista de observadores y llama al método \texttt{update} de cada uno de ellos. De esta manera, todos los observadores reciben la notificación del cambio y pueden reaccionar en consecuencia.
-
-Una característica importante del método \texttt{notify} es que el observable \textbf{no necesita conocer los detalles internos de los observadores}. Simplemente se encarga de avisarlos de que ha ocurrido un cambio. Esto permite mantener un bajo acoplamiento entre las clases, lo que facilita la reutilización del código y el mantenimiento del sistema.
-
-En Java, este método se implementa mediante \texttt{setChanged()} seguido de \texttt{notifyObservers(datos)}, que siempre deben ir juntos.
-
-% --------------------------------------------------
-\subsection{Método \texttt{update}}
-
-El método \texttt{update} pertenece a los \textbf{observadores}. Cada observador debe implementar este método para definir cómo reaccionará cuando el observable le notifique un cambio.
-
-En muchos casos, el método \texttt{update} se utiliza para que el observador reciba el nuevo estado del observable y adapte su comportamiento o su representación visual. 
-
-Cada observador puede implementar su propio comportamiento en el método \texttt{update}, lo que permite que diferentes componentes reaccionen de distintas formas ante el mismo cambio en el observable. En este proyecyo, de momento, no se ha implementado.
-
-A continuación se muestra un ejemplo concreto con el movimiento del jugador en nuestro proyecto:
  
-\begin{enumerate}[leftmargin=2em]
-    \item El jugador pulsa la flecha derecha.
-    \item \texttt{Controller} llama a \texttt{Espacio.moverJugador(1, 0)}.
-    \item \texttt{Espacio} actualiza la posición y ejecuta \texttt{setChanged()} y \texttt{notifyObservers(new int[]\{0, oldX, oldY, newX, newY\})}.
-    \item Java recorre la lista de observadores registrados y llama a \texttt{update()} de \texttt{MainFrame}.
-    \item \texttt{MainFrame.update()} recibe el array, entra en \texttt{case 0}, borra la celda anterior y pinta la nueva en su nueva posición.
-\end{enumerate}
-
-\textcolor{blue}{\textbf{El funcionamiento coordinado de estos dos métodos permite mantener sincronizados los distintos componentes de un sistema que utiliza el patrón Observer.}}
-
-\textbf{Gracias a este mecanismo, los cambios en el sistema se propagan automáticamente a los objetos que dependen de ellos, sin necesidad de que exista una dependencia directa entre todas las clases.}
-
-% --------------------------------------------------
-\subsection{Sistema de notificaciones en Space Invaders}
-
-\subsubsection{Quién notifica y cuándo}
-
-En el proyecto, el observable es \texttt{Espacio}. Las notificaciones a los observadores se realizan directamente con la secuencia:
-
-\begin{lstlisting}[language=Java]
-setChanged();
-notifyObservers(new int[] {tipo, datos...});
-\end{lstlisting}
-
-La llamada a \lstinline|setChanged()| es obligatoria antes de \lstinline|notifyObservers()|: sin ella, la clase \texttt{Observable} no propagaría nada. \texttt{notifyObservers()} recorre internamente la lista de observers registrados y llama al \texttt{update} de cada uno, pasando un array de enteros con información específica sobre el cambio.
-
-Las notificaciones se invocan desde varios puntos del modelo, cada vez que el estado del juego cambia y la pantalla debe reflejarlo. Los tipos de notificación (primer elemento del array) son:
-
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Tipo 0: Movimiento del jugador} — Array: \lstinline|{0, oldX, oldY, newX, newY}|
-    \item \textbf{Tipo 1: Nuevo disparo} — Array: \lstinline|{1, newX, newY}|
-    \item \textbf{Tipo 2: Movimiento del disparo} — Array: \lstinline|{2, oldX, oldY, newX, newY}|
-    \item \textbf{Tipo 3: Disparo sale del tablero} — Array: \lstinline|{3, oldX, oldY}|
-    \item \textbf{Tipo 4: Movimiento de enemigo} — Array: \lstinline|{4, oldX, oldY, newX, newY}|
-    \item \textbf{Tipo 5: Colisión disparo-enemigo} — Array: \lstinline|{5, disparoX, disparoY, enemigoX, enemigoY}|
-    \item \textbf{Tipo 6: Inicialización del juego} — Array: \lstinline|{6, jugadorX, jugadorY, enemigoX, enemigoY}|
-    \item \textbf{Tipo 7: Game Over} — Array: \lstinline|{7}|
-    \item \textbf{Tipo 8: Victoria} — Array: \lstinline|{8}|
-    \item \textbf{Tipo 9: Cambio a MainFrame} — Array: \lstinline|{9}|
-\end{itemize}
-
-\subsubsection{Estructura de datos en las notificaciones}
-
-Cada notificación es un array de enteros que comienza con un identificador de tipo (0-9) seguido de parámetros específicos:
-
+% ==================================================
+\section{Introducci\'{o}n al Patr\'{o}n MVC + Observer}
+ 
+El patr\'{o}n \textbf{Modelo-Vista-Controlador (MVC)} es una arquitectura de dise\~{n}o utilizada en programaci\'{o}n orientada a objetos que permite organizar una aplicaci\'{o}n separando sus componentes en tres partes principales. Esta separaci\'{o}n facilita el mantenimiento del c\'{o}digo, mejora su organizaci\'{o}n y permite que cada componente tenga una responsabilidad clara dentro del sistema.
+ 
 \begin{description}[leftmargin=2em, style=nextline]
-    \item[\textbf{Primer elemento (índice 0)}]
-        Siempre es el tipo de notificación (0-9). Define qué acción ocurrió en el modelo.
-        
-        \textbf{IMPORTANTE:} El hecho de que exista un identificador de tipo en la vista, y que esta distinga entre varias acciones, no implica que la vista implemente lógica de negocio. La vista simplemente recibe el array de datos, y según el caso que se esté dando, se pinta la celda o celdas del color correspondiente.
-
-    \item[\textbf{Elementos posteriores}]
-        Dependen del tipo. Pueden ser coordenadas (x, y), posiciones anteriores y nuevas, o una combinación de ambas. 
-        Como la vista conoce el tipo de notificación a procesar, no surgirán errores de índice.
+    \item[\textbf{Modelo}]
+        Se encarga de gestionar los datos y la l\'{o}gica del programa. Contiene toda la l\'{o}gica de negocio del juego y las operaciones necesarias para modificarla o consultarla. El modelo no depende de la interfaz gr\'{a}fica ni de c\'{o}mo se muestran los datos al usuario.
+ 
+    \item[\textbf{Vista}]
+        Es la parte encargada de presentar la informaci\'{o}n al usuario. Su funci\'{o}n principal es mostrar los datos que proporciona el modelo y actualizarse cuando estos cambian. La vista no contiene la l\'{o}gica principal del programa, sino \'{u}nicamente la representaci\'{o}n visual de la informaci\'{o}n.
+ 
+    \item[\textbf{Controlador}]
+        Act\'{u}a como intermediario entre el usuario y el sistema. Recibe las acciones del usuario (clics, entradas de teclado, etc.), interpreta estas acciones y solicita al modelo que realice las operaciones correspondientes.
 \end{description}
-
-\textbf{Ejemplo práctico:} Cuando el jugador se mueve de (50, 55) a (51, 55) presionando flecha derecha, el modelo ejecuta:
-
-\begin{lstlisting}[language=Java]
-setChanged();
-notifyObservers(new int[] {0, 50, 55, 51, 55});
-\end{lstlisting}
-
-Esta notificación es recibida por el Observer (\texttt{MainFrame}), que la procesará y pintará la celda (50, 55) de color negro y la celda (51, 55) de color magenta.
-
-% --------------------------------------------------
-\subsection{Transición de StartFrame a MainFrame}
-
-El cambio de la pantalla de inicio al juego principal es uno de los procesos críticos que debe respetar el patrón MVC y Observer. El flujo completo es el siguiente:
-
-\begin{enumerate}[leftmargin=2em]
-    \item \textbf{Usuario presiona SPACE en StartFrame}: El controlador de \texttt{StartFrame} detecta la pulsación y llama directamente a \lstinline|Espacio.getEspacio().cambiarAMain()|.
-    
-    \item \textbf{Ejecución de cambiarAMain()}: Este método realiza cuatro acciones en secuencia:
-    \begin{itemize}[leftmargin=2em]
-        \item Inicializa el juego creando jugador y primer enemigo (\lstinline|inicializar()|)
-        \item Inicia el timer del game loop (50ms) (\lstinline|iniciarJuegoLoop()|)
-        \item \textcolor{blue}{Notifica tipo 9 para cambiar de pantalla, algo que es recibido por StartFrame}
-        \item \textcolor{red}{Una vez se gestiona ese update, llama a \lstinline|notificarInicializacion()| para enviar las posiciones iniciales del jugador y primer enemigo}
-    \end{itemize}
-    
-    \item \textcolor{blue}{\textbf{StartFrame gestiona notificación tipo 9}}: Su método \lstinline|update()| procesa esta notificación específica:
-    \begin{itemize}[leftmargin=2em]
-        \item Se desregistra como observer: \lstinline|deleteObserver(this)|
-        \item Se oculta: \lstinline|setVisible(false)|
-        \item \textcolor{purple}{Crea el nuevo \texttt{MainFrame}}
-    \end{itemize}
-    
-    \item \textcolor{purple}{\textbf{MainFrame se inicializa}}: En su constructor:
-    \begin{itemize}[leftmargin=2em]
-        \item Se registra como observer de Espacio: \lstinline|addObserver(this)|
-    \end{itemize}
-    
-    \item \textcolor{red}{\textbf{notificarInicializacion genera notificación tipo 6}}: Este método envía las posiciones iniciales del jugador y primer enemigo, haciendo que \texttt{MainFrame} pinte el estado inicial del juego.
-\end{enumerate}
-
-Este mecanismo garantiza una transición fluida sin dependencias directas entre las vistas, manteniendo la separación de responsabilidades del patrón MVC.
-Además, separamos la lógica que notifica a StartFrame la transición y la que notifica a MainFrame que debe pintar las posiciones iniciales del jugador y primer enemigo.
-
-\newpage
-
+ 
+A esta arquitectura se le a\~{n}ade el patr\'{o}n \textbf{Observer (Observador)} para que la vista se mantenga actualizada cuando cambian los datos del modelo. Este patr\'{o}n establece una relaci\'{o}n entre un objeto denominado \textit{observable} (el modelo) y uno o varios \textit{observadores} (las vistas). Cuando el estado del observable cambia, todos los observadores registrados son notificados autom\'{a}ticamente y pueden actualizar su informaci\'{o}n.
+ 
+La combinaci\'{o}n de MVC y Observer permite desarrollar aplicaciones m\'{a}s modulares, donde la l\'{o}gica del programa, la presentaci\'{o}n de los datos y la interacci\'{o}n con el usuario est\'{a}n claramente separadas. Esto facilita la reutilizaci\'{o}n del c\'{o}digo, la ampliaci\'{o}n del sistema y el mantenimiento a largo plazo.
+ 
 % ==================================================
-\part*{Parte II: Patrones de Diseño}
-\addcontentsline{toc}{section}{Parte II: Patrones de Diseño}
-
-% ==================================================
-\section{Introducción a los Patrones de Diseño}
-
-En este proyecto se han utilizado tres patrones de diseño fundamentales para que el código sea más mantenible y fácil de extender. Como cualquier proyecto grande, fue necesario tomar decisiones de arquitectura que permitieran agregar nuevas naves, nuevos tipos de disparo y nuevas funcionalidades sin tener que reescribir todo desde cero.
-
-Los tres patrones principales son: \textbf{Factory}, \textbf{Strategy} y \textbf{Composite}. Factory centraliza la creación de naves, Strategy permite tener diferentes tipos de disparos intercambiables, y Composite proporciona una estructura unificada para representar tanto naves como disparos de cualquier complejidad. Cada uno resuelve un problema específico dentro del sistema.
-
-% ==================================================
-\section{Factory: La Fábrica de Naves}
-
-\subsection{La Idea}
-
-En lugar de crear naves esparcidas por todo el código, toda la lógica de creación vive en un único lugar. Así, si un día necesitas cambiar cómo se inicializa una nave, solo cambias en un lugar.
-
-En la práctica esto significa:
+\section{Implementaci\'{o}n en Space Invaders}
+ 
+\subsection{La Capa Modelo}
+ 
+La capa modelo es la que mayor evoluci\'{o}n ha sufrido entre sprints. A continuaci\'{o}n se describe c\'{o}mo era en cada etapa y qu\'{e} motiv\'{o} cada cambio.
+ 
+% ---- SPRINT 1 ----
+\begin{cajasprint1}
+La clase central era \texttt{Espacio} (Singleton y Observable). Dentro de ella viv\'{i}a toda la l\'{o}gica: el \texttt{game loop} con un \texttt{Timer} de 50ms, la detecci\'{o}n de colisiones, y las condiciones de victoria y derrota.
+ 
+Las clases auxiliares eran simples y directas:
 \begin{itemize}
-    \item No duplicas código de inicialización en varios lugares
-    \item Cambios centralizados: si la velocidad inicial cambia, lo cambias una sola vez
-    \item Agregar nuevas naves es simple y sin afectar código existente
+    \item \texttt{Naves} --- clase abstracta con \texttt{x}, \texttt{y}, \texttt{velocidad} y \texttt{vivo}. Defin\'{i}a el m\'{e}todo abstracto \texttt{mover(int dx, int dy)}.
+    \item \texttt{Jugador} --- extend\'{i}a \texttt{Naves}. Ten\'{i}a un \'{u}nico objeto \texttt{Disparo} asociado. Al disparar, creaba un nuevo \texttt{Disparo} en la posici\'{o}n \texttt{(x, y-1)}. Solo un disparo activo a la vez.
+    \item \texttt{Enemigo} --- extend\'{i}a \texttt{Naves}. Implementaba \texttt{mover()} sumando directamente el desplazamiento. Un \'{u}nico enemigo inicial en posici\'{o}n aleatoria de la fila superior.
+    \item \texttt{Disparo} --- clase simple con \texttt{x}, \texttt{y} y \texttt{activo}. El m\'{e}todo \texttt{subir()} decrementaba Y un p\'{i}xel por tick. Se desactivaba al salir del tablero.
 \end{itemize}
+ 
+La detecci\'{o}n de colisiones en \texttt{Espacio} comparaba la posici\'{o}n del disparo con la del enemigo con una ventana de 2 p\'{i}xeles para compensar la discretizaci\'{o}n:
+\begin{lstlisting}
+if (e.isVivo() && d.getX() == e.getX()
+        && d.getY() <= e.getY() && d.getY() >= e.getY() - 1) {
+    e.setVivo(false);
+    d.setActivo(false);
+    ...
+}
+\end{lstlisting}
+ 
+Todo era sencillo y funcionaba, pero el modelo estaba muy acoplado: \texttt{Espacio} sab\'{i}a demasiado sobre \texttt{Jugador}, \texttt{Enemigo} y \texttt{Disparo}, y cualquier extensi\'{o}n requer\'{i}a modificar directamente \texttt{Espacio}.
+\end{cajasprint1}
+ 
+\vspace{0.8em}
+\textbf{¿Qu\'{e} limitaciones motivaron el cambio al Sprint 2?} Al finalizar el primer Sprint y despu\'{e}s de la reuni\'{o}n con el profesor, buscamos arreglar los fallos comentados, como que solo apareciese un enemigo. Adem\'{a}s, al querer a\~{n}adir m\'{u}ltiples tipos de nave, disparos con formas distintas, varios enemigos simult\'{a}neos con movimiento independiente y colisiones precisas p\'{i}xel a p\'{i}xel, el modelo del Sprint 1 no escalaba. Cada nueva funcionalidad obligaba a tocar \texttt{Espacio}, rompiendo el principio de responsabilidad \'{u}nica.
+ 
+\vspace{0.5em}
+ 
+% ---- SPRINT 2 ----
+\begin{cajasprint2}
+En este nuevo Sprint se produjo un cambio profundo en la arquitectura. El controlador transmitir\'{i}a los cambios del juego a una nueva clase \texttt{JugadorBueno}, y se introdujeron nuevos patrones que modificaron el dise\~{n}o de las clases:
+ 
+\begin{itemize}
+    \item \texttt{Espacio} (Singleton + Observable) --- Evolucion\'{o} su papel en el proyecto: pas\'{o} de ser la clase que gest\'{i}onaba toda la l\'{o}gica a ser la que notificar\'{i}a a la vista de los cambios l\'{o}gicos del juego. En este Sprint se mantuvieron algunos aspectos clave como el Timer de 50ms y las condiciones de victoria/derrota, y segu\'{i}a siendo la encargada de inicializar la nave y los enemigos mediante llamadas directas a \texttt{JugadorBueno} y \texttt{FlotaEnemigos}.
+    \item \texttt{JugadorBueno} (Singleton + Observer) --- Nueva clase encargada de recibir la informaci\'{o}n del controlador y enviar se\~{n}ales a las diferentes clases para cambiar la l\'{o}gica del juego. Se responsabilizaba de la construcci\'{o}n de la nave inicial y los cambios de disparo, aunque todav\'{i}a no enviaba se\~{n}ales de inicializaci\'{o}n propias.
+    \item \texttt{FlotaEnemigos} (Singleton) --- Nueva clase encargada de almacenar a todos los enemigos del juego, gestionando su movimiento y las colisiones con los disparos del jugador.
+    \item \textbf{\texttt{Naves}} --- Sigue siendo abstracta, pero ahora gestiona un \texttt{Composite} (\'{a}rbol de p\'{i}xeles que forma la nave) y un \texttt{Disparo} (gestor de estrategias). Define el m\'{e}todo abstracto \texttt{construir()} con el template method para que cada subclase dibuje su propia geometr\'{i}a.
+    \item \textbf{\texttt{Nave1}, \texttt{Nave2}, \texttt{Nave3}} --- Subclases concretas de \texttt{Naves}. Cada una define su geometr\'{i}a de p\'{i}xeles en \texttt{construir()} y sus estrategias de disparo disponibles.
+    \item \textbf{\texttt{Enemigo}} --- Ahora es multip\'{i}xel (tambi\'{e}n usa el \texttt{Composite}).
+    
+\end{itemize}
+\end{cajasprint2}
+ 
+\vspace{0.8em}
+\textbf{¿Qu\'{e} limitaciones motivaron el cambio al Sprint 2?} 
+Al finalizar el segundo Sprint, enocntramos el siguiente problema: Espacio no podia comunicarse directamente con otras clases. Sin embargo, nos interesaba que se comunicase con FlotaEnemigos y JuagdorBueno, por lo que decidimos implementar el patron Observer y, de esa forma, puedan comunicarse. Además, esto significaba que la inicialización se haria mediante notificaciones, y que desde Espacio necesitariamos conocer en todo momento las posiciones de todas las naves y disparos, de ahi surgio la idea de crear una matriz que guardase dichas posiciones.
+ 
+\vspace{0.5em}
 
-\subsection{Cómo está implementado}
-
-La clase \texttt{NaveFactory} es un Singleton, lo que significa que existe una única instancia durante todo el juego. Todas las naves se crean a través de este punto centralizado, con posiciones y velocidades iniciales definidas aquí.
-
-\subsection{Cómo Funciona en Práctica}
-
-La clase NaveFactory es bastante sencilla. Tiene un atributo privado que guarda la única instancia de la fábrica. Su constructor es privado, lo que impide que se cree directamente con \texttt{new}. La única forma de obtenerla es llamando a un método estático que verifica si ya existe; si no, la crea, y si ya existe, la devuelve directamente.
-
-Tiene otro método que recibe un string indicando qué tipo de nave se quiere. Aquí es donde pasa la magia: dependiendo del nombre recibido, devuelve una nueva instancia de Nave1, Nave2 o Nave3. Todos los parámetros iniciales como la posición (50, 55) y la velocidad (1) están definidos aquí de forma centralizada.
-
-Cuando el juego necesita crear una nave, primero obtiene la fábrica llamando al método estático. La primera vez que se llama, se crea la única instancia que existirá durante toda la ejecución. Las siguientes veces, simplemente devuelve la que ya existe.
-
-Luego, se le pide que genere una nave específica indicando su nombre. La fábrica entonces crea la nave con los parámetros predeterminados, devolviendo un objeto del tipo base Naves. Internally, cada nave configura sus propias estrategias de disparo permitidas y construye su estructura interna de píxeles.
-
-\subsection{Ventajas del Patron Factory}
-
+% ---- VERSIÓN FINAL ----
+\begin{cajafinal}
+La versi\'{o}n final redistribuye las responsabilidades de forma mucho m\'{a}s granular:
+ 
+\begin{itemize}
+    \item \textbf{\texttt{Espacio}} (Singleton + Observable) --- Sigue siendo el n\'{u}cleo observable, pero ya no contiene el game loop ni la l\'{o}gica de movimiento. Su funci\'{o}n principal es mantener una \textbf{matriz espejo} (\texttt{int[100][60]}) que registra qu\'{e} celda est\'{a} ocupada y por qu\'{e} entidad (id de enemigo, id de disparo, id de jugador). Es el \'{a}rbitro de colisiones: cuando un disparo se mueve, \texttt{Espacio} consulta la matriz y, si hay colisi\'{o}n, notifica a los observadores. Tambi\'{e}n gestiona la puntuaci\'{o}n y las condiciones de victoria/derrota.
+ 
+    \item \textbf{\texttt{JugadorBueno}} (Singleton + Observer) --- Delega la creaci\'{o}n de la nave a NaveFactory y act\'{u}a como intermediario entre los eventos de teclado y la nave. Observa a \texttt{Espacio} para recibir la se\~{n}al de eliminaci\'{o}n de un proyectil (mensaje tipo 19).
+ 
+    \item \textbf{\texttt{Nave4}} --- Subclase concreta de \texttt{Naves}. Crea una nave distinta de las 3 anteriores, pero el funcionamiento y construccion es idéntico.
+ 
+    \item \textbf{\texttt{Enemigo}} --- Tiene un \texttt{id} \'{u}nico para identificarlo en la matriz y en la vista.
+ 
+    \item \textbf{\texttt{FlotaEnemigos}} (Singleton + Observer) --- Gestiona la lista de enemigos activos. Observa a \texttt{Espacio} para recibir la se\~{n}al de eliminaci\'{o}n de un enemigo (mensaje tipo 18) y la de inicializaci\'{o}n de la flota (mensaje tipo 20).
+ 
+    \item \textbf{\texttt{TimerDisparo}} (Singleton) --- Tick cada 50ms, llama a \url{JugadorBueno.actualizarDisparos()}.
+    \item \textbf{\texttt{TimerEnemigo}} (Singleton) --- Tick cada 200ms, llama a \url{FlotaEnemigos.moverEnemigos()}.
+\end{itemize}
+ 
+Con esta distribuci\'{o}n, \texttt{Espacio} ya no necesita conocer los detalles de c\'{o}mo se mueven las naves ni c\'{o}mo se crean los disparos. Cada clase tiene una responsabilidad clara y acotada.
+\end{cajafinal}
+ 
+% --------------------------------------------------
+\subsection{La Capa Vista}
+ 
+\begin{cajasprint1}
+Solo exist\'{i}an dos vistas: \texttt{StartFrame} (pantalla de inicio con fondo negro, t\'{i}tulo en verde y mensaje \guillemotleft Pulsa SPACE para jugar\guillemotright) y \texttt{MainFrame} (cuadr\'{i}cula 100x60 con fondo negro). Cada celda era un \texttt{JLabel} con color de fondo: magenta para el jugador, rojo para el enemigo, amarillo para el disparo. El fin de partida se mostraba con un \texttt{JLabel} superpuesto en la parte inferior del propio \texttt{MainFrame}, sin cambiar de pantalla.
+\end{cajasprint1}
+ 
+\vspace{0.5em}
+\textbf{¿Qu\'{e} motiv\'{o} el cambio?} La pantalla de fin de partida integrada en \texttt{MainFrame} era poco elegante y no permit\'{i}a mostrar la puntuaci\'{o}n ni ofrecer al jugador la opci\'{o}n de volver al men\'{u} de forma limpia. Por ello, se decidi\'{o} a\~{n}adir un frame nuevo al acabar la partida en la versi\'{o}n final. Cabe destacar que esta idea solo se implemento en el Sprint 3, donde se nos ocurrio la idea de la puntuación.
+ 
+\vspace{0.5em}
+ 
+\begin{cajafinal}
+Se a\~{n}ade una tercera vista, \texttt{FinalFrame}, y se enriquecen las existentes:
+ 
+\begin{itemize}
+    \item \textbf{\texttt{StartFrame}} --- A\~{n}ade selecci\'{o}n de nave (teclas 1/2/3/4), imagen de fondo con \texttt{JLayeredPane} e instrucciones detalladas. La nave elegida se almacena localmente como \texttt{tipoNavePendiente} y solo se confirma al pulsar SPACE, momento en que se llama a JugadorBueno.getJugadorBueno().inicializar(tipoNavePendiente).
+ 
+    \item \textbf{\texttt{MainFrame}} --- El fondo pasa a ser una imagen escalada con \texttt{JLayeredPane}. Los colores de las celdas ya no son \'{u}nicos: cada tipo de nave tiene su propio color (verde para Nave1, azul para Nave2, morado para Nave3, amarillo para Nave4). Se a\~{n}ade un \texttt{JLabel} de puntuaci\'{o}n actualizado por el mensaje tipo 22. Al recibir los mensajes tipo 7 (Game Over) u 8 (Victoria), se desregistra como observer, se oculta y crea un \texttt{FinalFrame}.
+ 
+    \item \textbf{\texttt{FinalFrame}} --- Nueva pantalla de fin con imagen de fondo, mensaje \guillemotleft VICTORIA\guillemotright{} o \guillemotleft GAME OVER\guillemotright{} en color diferente, puntuaci\'{o}n obtenida y opci\'{o}n de volver al men\'{u} pulsando SPACE.
+\end{itemize}
+ 
+\textbf{Nota importante:} el hecho de que \texttt{MainFrame} distinga entre m\'{a}s de veinte tipos de mensaje no implica que contenga l\'{o}gica de negocio. La vista simplemente recibe un array de enteros y, seg\'{u}n el tipo, pinta o borra celdas. No toma ninguna decisi\'{o}n sobre el estado del juego.
+\end{cajafinal}
+ 
+% --------------------------------------------------
+\subsection{La Capa Controlador}
+ 
+En todas las versiones los controladores son clases internas privadas llamadas \texttt{Controller} dentro de cada frame, implementando \texttt{KeyListener}. Esto es correcto desde el punto de vista del patr\'{o}n MVC: el controlador pertenece a la vista pero no es la vista. El flujo com\'{u}n es: el frame crea una instancia del controlador, la registra con \texttt{addKeyListener(controller)} y solicita el foco con \texttt{requestFocusInWindow()}. Solo \texttt{keyPressed} contiene l\'{o}gica real; \texttt{keyReleased} y \texttt{keyTyped} quedan vac\'{i}os.
+ 
+\begin{cajasprint1}
+\begin{itemize}
+    \item \textbf{Controller de \texttt{StartFrame}}: solo detectaba SPACE y llamaba a
+    \url{Espacio.getEspacio().cambiarAMain()}.
+    Controller de \texttt{MainFrame}: traduc\'{i}a las cuatro flechas en llamadas a
+    \url{Espacio.getEspacio().moverJugador(dx, dy)} y SPACE en
+    \texttt{Espacio.getEspacio().disparar()}.
+\end{itemize}
+El controlador hablaba directamente con \texttt{Espacio}, que era el \'{u}nico punto de entrada al modelo.
+\end{cajasprint1}
+ 
+\vspace{0.5em}
+\textbf{¿Qu\'{e} motiv\'{o} el cambio?} Al introducir \texttt{JugadorBueno} como singleton que encapsula la nave y sus acciones, \texttt{Espacio} dej\'{o} de ser el punto de entrada para las acciones del jugador. El controlador deb\'{i}a actualizarse para reflejar esta nueva distribuci\'{o}n de responsabilidades. El controlador solo fue cambiado en el segundo Sprint, debido al cambio de rol de la clase Espacio y la creación de la nueva clase JugadorBueno. De tal forma, la versión del segundo Sprint, en cuanto al Controller respecta, es la versión final de nuestro proyecto.
+ 
+\vspace{0.5em}
+ 
+\begin{cajafinal}
+\begin{itemize}
+    \item \textbf{Controller de \texttt{StartFrame}}: detecta las teclas 1/2/3/4 para actualizar \url{tipoNavePendiente} (solo en la vista, sin tocar el modelo) y SPACE para llamar a \url{JugadorBueno.getJugadorBueno().inicializar(tipoNavePendiente)}. El modelo ya no necesita saber de la transici\'{o}n de pantalla.
+    \item \textbf{Controller de \texttt{MainFrame}}: las flechas llaman a \url{JugadorBueno.getJugadorBueno().mover(dx, dy)}, SPACE llama a \url{JugadorBueno.getJugadorBueno().disparar()}, y la tecla M llama a \url{JugadorBueno.getJugadorBueno().cambiarTipoDisparo()}. El controlador ya no llama a \texttt{Espacio} directamente para las acciones de juego.
+    \item \textbf{Controller de \texttt{FinalFrame}}: detecta SPACE y llama al m\'{e}todo privado \url{volverAlMenu()}, que desregistra el observer, oculta la ventana y crea un nuevo \texttt{StartFrame}.
+\end{itemize}
+ 
+\textbf{Importante:} en ninguna versi\'{o}n el controlador verifica si la partida ha terminado. Esa validaci\'{o}n ocurre en el modelo (\texttt{Espacio}), que es quien tiene autoridad sobre el estado del juego.
+\end{cajafinal}
+ 
+% --------------------------------------------------
+\subsection{Diagrama UML}
+ 
+% (Insertar aqu\'{i} el diagrama UML cuando est\'{e} disponible)
+ 
+% ==================================================
+\subsection{Patr\'{o}n Observer: Notificaci\'{o}n y Actualizaci\'{o}n}
+ 
+\subsection{M\'{e}todo \texttt{notify}}
+ 
+El m\'{e}todo \texttt{notify} pertenece al \textbf{observable} (el modelo). Su funci\'{o}n es avisar a todos los observadores registrados de que el estado ha cambiado. El observable no necesita conocer los detalles internos de sus observadores: simplemente los recorre y llama a su \texttt{update}, manteniendo un bajo acoplamiento entre las clases.
+ 
+En Java, se implementa siempre con la secuencia obligatoria:
+\begin{lstlisting}
+setChanged();                            // Marca el observable como modificado
+notifyObservers(new int[]{tipo, ...});   // Notifica y pasa datos
+\end{lstlisting}
+ 
+Sin \texttt{setChanged()}, \texttt{notifyObservers()} no propaga nada.
+ 
+\subsection{M\'{e}todo \texttt{update}}
+ 
+El m\'{e}todo \texttt{update} pertenece a los \textbf{observadores} (las vistas y ciertos componentes del modelo). Cada observador define aqu\'{i} c\'{o}mo reacciona al cambio. Recibe el objeto observable y el argumento pasado por \texttt{notifyObservers}.
+ 
+En este proyecto, el argumento es siempre un \texttt{int[]}: el primer elemento identifica el tipo de notificaci\'{o}n y los siguientes contienen los datos necesarios (coordenadas, ids, puntuaci\'{o}n). 
+ 
+\subsection{Sistema de notificaciones en Space Invaders}
+ 
+\begin{cajasprint1}
+El sistema de mensajes era simple: 10 tipos (0--9), todos gestionados directamente en \texttt{Espacio}. Cada tipo correspond\'{i}a a una acci\'{o}n concreta y visible en la cuadr\'{i}cula:
+ 
+\begin{itemize}
+    \item \textbf{Tipo 0} --- Movimiento del jugador: \texttt{\{0, oldX, oldY, newX, newY\}}
+    \item \textbf{Tipo 1} --- Nuevo disparo: \texttt{\{1, newX, newY\}}
+    \item \textbf{Tipo 2} --- Movimiento del disparo: \texttt{\{2, oldX, oldY, newX, newY\}}
+    \item \textbf{Tipo 3} --- Disparo sale del tablero: \texttt{\{3, oldX, oldY\}}
+    \item \textbf{Tipo 4} --- Movimiento de enemigo: \texttt{\{4, oldX, oldY, newX, newY\}}
+    \item \textbf{Tipo 5} --- Colisi\'{o}n disparo-enemigo: \texttt{\{5, disparoX, disparoY, enemigoX, enemigoY\}}
+    \item \textbf{Tipo 6} --- Inicializaci\'{o}n del juego: 
+    \texttt{\{6, jugadorX, jugadorY, enemigoX, enemigoY\}}
+    \item \textbf{Tipo 7} --- Game Over: \texttt{\{7\}}
+    \item \textbf{Tipo 8} --- Victoria: \texttt{\{8\}}
+    \item \textbf{Tipo 9} --- Cambio a MainFrame: \texttt{\{9\}}
+\end{itemize}
+ 
+Cada notificaci\'{o}n correspond\'{i}a a una \'{u}nica celda (o par de celdas), lo que era suficiente para representar un jugador de un p\'{i}xel y un enemigo de un p\'{i}xel.
+\end{cajasprint1}
+ 
+\vspace{0.5em}
+\textbf{¿Qu\'{e} motiv\'{o} el cambio?} Al pasar a naves multip\'{i}xel, un solo par de coordenadas ya no era suficiente. Adem\'{a}s, los disparos compuestos (flecha, rombo) ocupan varias celdas simult\'{a}neamente. Fue necesario ampliar el protocolo de mensajes y separar la notificaci\'{o}n de la vista de la notificaci\'{o}n interna de gesti\'{o}n.
+ 
+\vspace{0.5em}
+ 
+\begin{cajafinal}
+El sistema de mensajes se ampl\'{i}a a m\'{a}s de veinte tipos. Una distinci\'{o}n clave es entre mensajes \textbf{de vista} (tipos 1--3, 10, 12, 14--17, 21, 22), que \texttt{MainFrame} procesa para pintar o borrar celdas, y mensajes \textbf{de modelo} (tipos 18, 19, 20), que \texttt{FlotaEnemigos} y \texttt{JugadorBueno} procesan para actualizar sus listas internas. Los tipos 7, 8 y 9 son recibidos tanto por la vista como por el modelo.
+ 
+\begin{itemize}
+    \item \textbf{Tipo 1} --- Nuevo p\'{i}xel de disparo: \texttt{\{1, x, y\}}
+    \item \textbf{Tipo 2} --- Movimiento de p\'{i}xel de disparo: \texttt{\{2, oldX, oldY, newX, newY\}}
+    \item \textbf{Tipo 3} --- P\'{i}xel de disparo sale del tablero: \texttt{\{3, oldX, oldY\}}
+    \item \textbf{Tipo 7} --- Game Over: \texttt{\{7, puntuacion\}}
+    \item \textbf{Tipo 8} --- Victoria: \texttt{\{8, puntuacion\}}
+    \item \textbf{Tipo 9} --- Cambio a MainFrame: \texttt{\{9\}}
+    \item \textbf{Tipo 10} --- Borrar celda de nave jugadora: \texttt{\{10, x, y\}}
+    \item \textbf{Tipo 12} --- Borrar p\'{i}xel de enemigo: \texttt{\{12, x, y\}}
+    \item \textbf{Tipo 14} --- Pintar p\'{i}xel de enemigo (color gen\'{e}rico): \texttt{\{14, x, y\}}
+    \item \textbf{Tipo 15} --- Pintar p\'{i}xel de Nave1 (verde): \texttt{\{15, x, y\}}
+    \item \textbf{Tipo 16} --- Pintar p\'{i}xel de Nave2 (azul): \texttt{\{16, x, y\}}
+    \item \textbf{Tipo 17} --- Pintar p\'{i}xel de Nave3 (morado): \texttt{\{17, x, y\}}
+    \item \textbf{Tipo 18} --- Eliminar enemigo de la flota (solo modelo): \texttt{\{18, enemigoId\}}
+    \item \textbf{Tipo 19} --- Eliminar disparo (solo modelo): \texttt{\{19, disparoId\}}
+    \item \textbf{Tipo 20} --- Inicializar flota de enemigos: \texttt{\{20, n\_enemigos\}}
+    \item \textbf{Tipo 21} --- Pintar p\'{i}xel de Nave4 (amarillo): \texttt{\{21, x, y\}}
+    \item \textbf{Tipo 22} --- Puntuaci\'{o}n actualizada: \texttt{\{22, puntuacion\}}
+\end{itemize}
+ 
+N\'{o}tese que en la versi\'{o}n final ya no existe el tipo 4 (movimiento de enemigo como celda \'{u}nica) ni el tipo 6 (inicializaci\'{o}n como dos celdas): ahora el movimiento y la inicializaci\'{o}n de enemigos multip\'{i}xel se notifican p\'{i}xel a p\'{i}xel mediante los tipos 12 y 14.
+\end{cajafinal}
+ 
+\subsection{Transici\'{o}n de pantallas}
+ 
+\begin{cajasprint1}
+El flujo era lineal y sencillo:
 \begin{enumerate}
-    \item \textbf{Encapsulacion:} La logica de creacion queda centralizada. Cambios en parametros iniciales se hacen en un único lugar.
-    
-    \item \textbf{Bajo acoplamiento:} El cliente solo depende de la interfaz \texttt{Naves}, no de las clases concretas.
-    
-    \item \textbf{Extensibilidad:} Agregar una nueva nave requiere solo agregar un nuevo tipo y su creación en la fábrica, sin afectar el código existente.
-    
-    \item \textbf{Singleton integrado:} Garantiza una única instancia de fábrica durante toda la ejecución.
-    
-    \item \textbf{Control global:} Los parámetros de inicialización se pueden ajustar fácilmente en un único lugar.
+    \item Usuario pulsa SPACE en \texttt{StartFrame}.
+    \item Controller llama a \texttt{Espacio.getEspacio().cambiarAMain()}.
+    \item \texttt{cambiarAMain()} inicializa jugador y enemigo, arranca el timer, notifica tipo 9 y luego tipo 6.
+    \item \texttt{StartFrame.update()} recibe tipo 9: se desregistra, se oculta y crea \texttt{MainFrame}.
+    \item \texttt{MainFrame} recibe tipo 6 y pinta las posiciones iniciales.
+    \item Al acabar la partida (tipo 7 u 8), \texttt{MainFrame} muestra un \texttt{JLabel} con el resultado. No hay nueva pantalla.
 \end{enumerate}
-
+\end{cajasprint1}
+ 
+\vspace{0.5em}
+\textbf{¿Qu\'{e} motiv\'{o} el cambio?} Mostrar el resultado como texto superpuesto era una soluci\'{o}n provisional que no permit\'{i}a mostrar la puntuaci\'{o}n final ni ofrecer al usuario la opci\'{o}n de volver al men\'{u} de forma limpia.
+ 
+\vspace{0.5em}
+ 
+\begin{cajafinal}
+El flujo completo de transiciones queda as\'{i}:
+ 
+\textbf{StartFrame \textrightarrow{} MainFrame:}
+\begin{enumerate}
+    \item Usuario elige nave (teclas 1/2/3/4); solo se actualiza \texttt{tipoNavePendiente} en la vista.
+    \item Usuario pulsa SPACE: Controller llama a \url{JugadorBueno.getJugadorBueno().inicializar(tipoNavePendiente)}.
+    \item \texttt{JugadorBueno.inicializar()} crea la nave v\'{i}a \texttt{NaveFactory}, llama a \url{nave.inicializar()} que propaga hasta \texttt{Espacio.cambiarAMain()}.
+    \item \texttt{Espacio.cambiarAMain()} notifica tipo 9.
+    \item \texttt{StartFrame.update()} recibe tipo 9: se desregistra, se oculta y crea \texttt{MainFrame}.
+    \item \texttt{JugadorBueno} registra la posici\'{o}n inicial en la matriz y la vista (notificaciones tipo 15/16/17/21).
+    \item \texttt{Espacio} notifica tipo 20 para que \texttt{FlotaEnemigos} inicialice la flota.
+\end{enumerate}
+ 
+\textbf{MainFrame \textrightarrow{} FinalFrame:}
+\begin{enumerate}
+    \item \texttt{Espacio} detecta game over o victoria y notifica tipo 7 u 8 con la puntuaci\'{o}n.
+    \item \texttt{MainFrame.update()} recibe el tipo: se desregistra como observer, se oculta y crea \texttt{new FinalFrame(victoria, puntuacion)}.
+\end{enumerate}
+ 
+\textbf{FinalFrame \textrightarrow{} StartFrame:}
+\begin{enumerate}
+    \item Usuario pulsa SPACE.
+    \item Controller llama a \texttt{volverAlMenu()}: desregistra observer, oculta y crea StartFrame.
+\end{enumerate}
+ 
+En ninguna de estas transiciones una vista conoce directamente a otra. Todas se comunican a trav\'{e}s de \texttt{Espacio} (v\'{i}a Observer) o de singletons del modelo (\texttt{JugadorBueno}).
+\end{cajafinal}
+ 
+\newpage
+ 
+% ==================================================
+\part*{Parte II: Patrones de Dise\~{n}o}
+\addcontentsline{toc}{section}{Parte II: Patrones de Dise\~{n}o}
+ 
+% ==================================================
+\section{Introducci\'{o}n a los Patrones de Dise\~{n}o}
+ 
+En este proyecto se han utilizado tres patrones de dise\~{n}o para que el c\'{o}digo sea m\'{a}s mantenible y extensible: \textbf{Factory}, \textbf{Strategy} y \textbf{Composite}. Cada uno resuelve un problema concreto, y los tres coexisten y se complementan. La mayor\'{i}a de los patrones ya estaban presentes en concepto desde el Sprint 1, pero se consolidaron y ampliaron al a\~{n}adir nuevas funcionalidades en los sprints posteriores.
+ 
+% ==================================================
+\section{Factory: La F\'{a}brica de Naves}
+ 
+\subsection{La Idea}
+ 
+Centralizar la creaci\'{o}n de naves en un \'{u}nico lugar. Si los par\'{a}metros de inicializaci\'{o}n cambian (posici\'{o}n, velocidad), solo hay que modificar un fichero. El resto del c\'{o}digo trabaja con la abstracci\'{o}n \texttt{Naves}, sin conocer las clases concretas.
+ 
+\subsection{Evoluci\'{o}n del patr\'{o}n}
+ 
+\begin{cajasprint1}
+No exist\'{i}a \texttt{NaveFactory}. La nave se creaba directamente en \texttt{Espacio.inicializar()}:
+\begin{lstlisting}
+private void inicializar() {
+    jugador = new Jugador(50, 55);
+    ...
+}
+\end{lstlisting}
+Solo hab\'{i}a un tipo de nave (\texttt{Jugador}), por lo que no hab\'{i}a necesidad de una f\'{a}brica. Sin embargo, esta l\'{o}gica estaba acoplada a \texttt{Espacio}, y a\~{n}adir una segunda nave habr\'{i}a requerido modificar el modelo central.
+\end{cajasprint1}
+ 
+\vspace{0.5em}
+\textbf{¿Qu\'{e} motiv\'{o} el cambio?} Al introducir cuatro tipos de nave con geometr\'{i}as y arsenales distintos, era imprescindible un punto centralizado de creaci\'{o}n que desacoplara la elecci\'{o}n del tipo (decisi\'{o}n del usuario en \texttt{StartFrame}) de la instanciaci\'{o}n concreta (responsabilidad de la f\'{a}brica).
+ 
+\vspace{0.5em}
+ 
+\begin{cajafinal}
+\texttt{NaveFactory} es un Singleton con un \'{u}nico m\'{e}todo p\'{u}blico \texttt{generate(String pNave)}. Todos los par\'{a}metros de inicializaci\'{o}n (posici\'{o}n inicial x=50, y=55, velocidad=1) est\'{a}n definidos aqu\'{i} de forma centralizada.
+ 
+\begin{lstlisting}
+public Naves generate(String pNave) {
+    int x = 50, y = 55, velocidad = 1;
+    switch (pNave) {
+        case "Nave1": return new Nave1(x, y, velocidad);
+        case "Nave2": return new Nave2(x, y, velocidad);
+        case "Nave3": return new Nave3(x, y, velocidad);
+        case "Nave4": return new Nave4(x, y, velocidad);
+        default:      return null;
+    }
+}
+\end{lstlisting}
+ 
+El cliente (\texttt{JugadorBueno}) solo depende de \texttt{Naves}. Si se a\~{n}ade una \texttt{Nave5}, solo hay que crear la clase y a\~{n}adir un caso en la f\'{a}brica; ning\'{u}n otro fichero cambia. Esto ya lo demostramos al a\~{n}adir la Nave4 en el Sprint~3.
+\end{cajafinal}
+ 
+\subsection{Ventajas del patr\'{o}n Factory}
+ 
+\begin{enumerate}
+    \item \textbf{Encapsulaci\'{o}n:} La l\'{o}gica de creaci\'{o}n queda centralizada.
+    \item \textbf{Bajo acoplamiento:} El cliente depende solo de la interfaz \texttt{Naves}.
+    \item \textbf{Extensibilidad:} A\~{n}adir \texttt{Nave5} no afecta al c\'{o}digo existente.
+    \item \textbf{Singleton integrado:} Una \'{u}nica instancia de f\'{a}brica durante toda la ejecuci\'{o}n.
+    \item \textbf{Control global:} Posici\'{o}n y velocidad iniciales en un \'{u}nico lugar.
+\end{enumerate}
+ 
 % ==================================================
 \section{Strategy: Disparos Intercambiables}
-
+ 
 \subsection{La Idea}
-
-Cada nave tiene acceso a diferentes tipos de disparo. Unos tienen munición infinita, otros limitada. Unos son un pixel, otros forman figuras más complejas. Strategy permite que cada nave tenga sus armas propias sin duplicar código.
-
-\subsection{Cómo está implementado}
-
-Todas las estrategias de disparo implementan la misma interfaz \texttt{StrategyDisparo}. Cada una sabe cómo crear su disparo característico y gestionar su propia munición.
-
-\subsection{Implementacion en el Proyecto}
-
-En \textit{Space Invaders}, el patron Strategy se emplea para gestionar los distintos tipos de disparo disponibles. Se define una interfaz común \texttt{StrategyDisparo} que todas las estrategias deben implementar, incluida la creacion del disparo con su forma correspondiente.
-
-Todas las estrategias de disparo implementan la misma interfaz. Cada una sabe cuánta munición tiene, si aún le quedan tiros disponibles, y cómo crear un nuevo disparo en una posición específica.
-
-\subsection{Tres Tipos de Disparos}
-
-\subsubsection{Pixel - El Clásico}
-
-Simple, sin límite. Siempre disponible. Coloca un punto en el espacio.
-
-\textbf{Características:}
-\begin{itemize}
-    \item Infinita
-    \item Un pixel
-    \item Siempre funciona
-\end{itemize}
-
-\subsubsection{Flecha - El Medium}
-
-30 tiros de munición. Forma de V invertida (3 píxeles). El punto medio entre poder y costo.
-
-\textbf{Características:}
-\begin{itemize}
-    \item 30 tiros
-    \item Forma de V
-    \item Se acaba
-\end{itemize}
-
-\subsubsection{Rombo - El Pesado}
-
-20 tiros. Forma de rombo (5 píxeles). Potente pero se acaba rápido.
-
-\textbf{Características:}
-\begin{itemize}
-    \item 20 tiros
-    \item Forma de rombo
-    \item Más poder, menos sobrantes
-\end{itemize}
-
-\subsection{La Clase Disparo - Orquestadora}
-
-La clase Disparo actúa como orquestadora de todas las estrategias. Mantiene una lista de qué estrategias están disponibles y cuál es la actualmente seleccionada. Cuando se quiere disparar, consulta la estrategia actual, le pide que cree un disparo, y lo añade a la lista de disparos activos. También maneja el cambio entre tipos de disparo, asegurándose de seleccionar solo aquellos que tienen munición disponible.
-
-\subsection{Diferencias entre Naves}
-
-Cada nave tiene un arsenal diferente. La Nave1 puede usar píxeles y flechas. La Nave2 puede usar píxeles y rombos. La Nave3, siendo la más potente, tiene acceso a los tres tipos de disparo. Esto hace que la elección de nave no sea solo estética, sino que afecte estratégicamente al juego.
-
-\subsection{¿Qué Ocurre cuando Disparas?}
-
-Cuando el jugador presiona el botón de disparo, el sistema chequea cuál es la estrategia actualmente seleccionada. Si tiene munición disponible, le pide a esa estrategia que cree el disparo con su forma característica. El nuevo disparo se añade a la lista de disparos activos. Cada frame, todos los disparos se mueven hacia arriba, y si salen de la pantalla, simplemente desaparecen. Es un proceso simple y limpio gracias a que cada estrategia sabe cómo se ve su disparo.
-
-\subsection{Ventajas del Patron Strategy}
-
+ 
+Cada nave tiene acceso a diferentes tipos de disparo. Unos tienen munici\'{o}n infinita, otros limitada. Unos son un p\'{i}xel, otros forman figuras compuestas. Strategy permite que cada nave tenga su propio arsenal sin duplicar c\'{o}digo y sin condicionales complejos, y adem\'{a}s permite cambiar de tipo de disparo en tiempo de ejecuci\'{o}n.
+ 
+\subsection{Evoluci\'{o}n del patr\'{o}n}
+ 
+\begin{cajasprint1}
+No exist\'{i}a el patr\'{o}n Strategy. El disparo era un objeto \texttt{Disparo} simple (un \'{u}nico p\'{i}xel, municion infinita impl\'{i}cita) creado directamente en \texttt{Jugador}. Solo hab\'{i}a un tipo de disparo posible y no era intercambiable en tiempo de ejecuci\'{o}n.
+ 
+\begin{lstlisting}
+public void disparar() {
+    if (!disparo.isActivo()) {
+        disparo = new Disparo(x, y - 1);
+        disparo.setActivo(true);
+    }
+}
+\end{lstlisting}
+ 
+A\~{n}adir un segundo tipo de disparo habr\'{i}a requerido \texttt{if-else} dentro de \texttt{Jugador}, acoplando el comportamiento del disparo con la clase de la nave.
+\end{cajasprint1}
+ 
+\vspace{0.5em}
+\textbf{¿Qu\'{e} motiv\'{o} el cambio?} Al dise\~{n}ar cuatro naves con arsenales diferentes y la posibilidad de cambiar de tipo de disparo en tiempo de ejecuci\'{o}n (tecla M), era necesario encapsular cada comportamiento de disparo en una clase propia e intercambiable.
+ 
+\vspace{0.5em}
+ 
+\begin{cajafinal}
+Se define la interfaz \texttt{StrategyDisparo} con el contrato com\'{u}n:
+\begin{lstlisting}
+public interface StrategyDisparo {
+    String getTipo();
+    int getMunicion();   // -1 = infinita
+    boolean gastar();
+    boolean tieneMunicion();
+    Component crearDisparo(int x, int y);
+}
+\end{lstlisting}
+ 
+Las cuatro estrategias concretas son:
+ 
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{DisparoPixel}] Municion infinita. Crea un \'{u}nico \texttt{Pixel} en la posici\'{o}n de origen. Disponible en todas las naves como disparo base.
+    \item[\textbf{DisparoFlecha}] 30 disparos. Crea un \texttt{Composite} con tres \texttt{Pixel} en forma de V invertida: punta en \texttt{(x, y)}, alas en \texttt{(x-1, y+1)} y \texttt{(x+1, y+1)}. Disponible en Nave1 y Nave3.
+    \item[\textbf{DisparoRombo}] 20 disparos. Crea un \texttt{Composite} con cinco \texttt{Pixel} en forma de rombo. Disponible en Nave2 y Nave3.
+    \item[\textbf{DisparoDoble}] 25 disparos. Crea un \texttt{Composite} con dos \texttt{Pixel} en paralelo: \texttt{(x-1, y)} y \texttt{(x+1, y)}. Disponible en Nave4.
+\end{description}
+ 
+La clase \texttt{Disparo} act\'{u}a como \textbf{contexto} del patr\'{o}n: mantiene la lista de estrategias disponibles para la nave actual y el \'{i}ndice de la estrategia activa. Al cambiar de tipo (m\'{e}todo \texttt{cambiarTipoDisparo()}), recorre la lista en orden circular saltando las que no tienen municion.
+ 
+El arsenal de cada nave se configura en su constructor:
+\begin{lstlisting}
+// Nave3 tiene los tres tipos de disparo
+ArrayList<StrategyDisparo> estrategias = new ArrayList<>();
+estrategias.add(new DisparoPixel());
+estrategias.add(new DisparoFlecha());
+estrategias.add(new DisparoRombo());
+setGestorDisparos(new Disparo(estrategias));
+\end{lstlisting}
+\end{cajafinal}
+ 
+\subsection{Ventajas del patr\'{o}n Strategy}
+ 
 \begin{enumerate}
-    \item \textbf{Intercambiabilidad en tiempo de ejecucion:} El jugador puede cambiar entre disparos dinamicamente.
-    
-    \item \textbf{Encapsulacion de comportamientos:} Cada estrategia gestiona su municion y crea su forma especifica.
-    
-    \item \textbf{Eliminacion de condicionales complejos:} Sin Strategy habría complejos \texttt{if-else} esparcidos por el codigo.
-    
-    \item \textbf{Extensibilidad:} Nueva estrategia (ej. \texttt{DisparoLaser}) solo requiere implementar la interfaz.
-    
-    \item \textbf{Testabilidad:} Cada estrategia se prueba independientemente.
+    \item \textbf{Intercambiabilidad en tiempo de ejecuci\'{o}n:} El jugador cambia entre disparos con la tecla M sin reiniciar nada.
+    \item \textbf{Encapsulaci\'{o}n:} Cada estrategia gestiona su propia municion y crea su propia forma.
+    \item \textbf{Eliminaci\'{o}n de condicionales:} Sin Strategy habr\'{i}a \texttt{if-else} en cada m\'{e}todo de disparo.
+    \item \textbf{Extensibilidad:} Un nuevo disparo (p.ej.\ \texttt{DisparoLaser}) solo requiere implementar la interfaz y a\~{n}adirlo al constructor de la nave que lo use.
+    \item \textbf{Diferenciaci\'{o}n de naves:} El arsenal es parte de la identidad de cada nave, no un a\~{n}adido externo.
 \end{enumerate}
-
+ 
 % ==================================================
-\section{Composite: Armando Todo junto}
-
+\section{Composite: P\'{i}xeles, Naves y Disparos}
+ 
 \subsection{La Idea}
-
-Una nave está hecha de píxeles. Un disparo complejo también está hecho de píxeles. Composite permite tratar ambos de forma uniforme: un píxel individual se comporta como cualquier grupo de píxeles. Cuando le dices a una nave que se mueva, automáticamente todos sus píxeles se mueven.
-
-Lo práctico de esto:
-\begin{itemize}
-    \item Naves y disparos complejos se construyen de forma flexible
-    \item El movimiento es automático: mueves el contenedor y el contenido se mueve junto
-    \item Detección de colisiones: simplemente comparas píxeles
-\end{itemize}
-
-\subsection{Cómo está implementado}
-
-Todas las estructuras (píxeles, naves, disparos) implementan la interfaz \texttt{Component}. Un \texttt{Pixel} es la unidad más básica. Un \texttt{Composite} es un contenedor que puede tener píxeles u otros Composites dentro, permitiendo una jerarquía arbitraria.
-
-\subsection{La Interfaz Component}
-
-Todas las estructuras, sean píxeles individuales o composites complejos, implementan la interfaz Component. Esta interfaz establece operaciones comunes: moverse, obtener la posición de referencia, verificar si el componente sigue activo, y notificar eventos importantes al tablero. De esta manera, sin importar si trabajas con un píxel individual o con una estructura compleja, los métodos funcionan igual.
-
-\subsection{Pixel - La Unidad Básica}
-
-Un píxel es simplemente una celda en el tablero. Tiene una posición (X, Y). Puede estar activo o inactivo. Lo interesante es que existen dos tipos: píxeles que forman parte de una nave, y píxeles que forman parte de un disparo. Se comportan diferente. Los de disparo notifican cada movimiento para detectar colisiones, mientras que los de nave solo se mueven. Los de disparo además se desactivan automáticamente si salen de la pantalla.
-
-\subsection{Composite - El Contenedor}
-
-Composite es simplemente un contenedor. Dentro puede tener píxeles individuales, u otros Composites. Eso permite jerarquías arbitrarias. Lo poderoso es que Composite también implementa Component, así que se comporta igual que un píxel. Cuando le dices que se mueva, él se mueve y automáticamente mueve todo lo que tiene dentro.
-
-Existen dos modos de funcionamiento. En modo "nave", valida que todos los píxeles quepan dentro del tablero antes de permitir el movimiento. En modo "disparo", se mueve libremente pero sus píxeles se desactivan si salen del límite superior.
-
-Cuando una nave se mueve, notifica el movimiento de todos sus píxeles en bloque al sistema. Esto es más eficiente que notificar cada píxel por separado.
-
-\subsection{Construyendo Formas}
-
-Cada nave tiene una geometría diferente. Nave1 es como una T invertida (10 píxeles). Nave2 es más rectangular (8 píxeles). Nave3 es compacta, solo 4 píxeles. Simplemente se llena el Composite con los píxeles en las posiciones necesarias.
-
-Con los disparos es lo mismo. Pixel simple = un punto. Flecha = 3 puntos en forma de V. Rombo = 5 puntos en forma de rombo. Cada estrategia de disparo crea su forma adicionando píxeles al Composite.
-
-\subsection{Moviendo una Nave}
-
-Cuando el jugador presiona una tecla, la nave intenta moverse. Primero valida que los píxeles quepan. Si alguien se saldría del borde, no se mueve nada. Si está bien, mueve todos los píxeles automáticamente. Notifica al sistema los cambios para que pueda chequear colisiones. Todo ocurre de forma transparente.
-
+ 
+Una nave est\'{a} hecha de p\'{i}xeles. Un disparo compuesto tambi\'{e}n est\'{a} hecho de p\'{i}xeles. Composite permite tratarlos de forma uniforme: mover una nave mueve autom\'{a}ticamente todos sus p\'{i}xeles; comprobar una colisi\'{o}n es simplemente comparar posiciones de p\'{i}xeles.
+ 
+\subsection{Evoluci\'{o}n del patr\'{o}n}
+ 
+\begin{cajasprint1}
+No exist\'{i}a el patr\'{o}n Composite. Cada nave y cada disparo era un \'{u}nico p\'{i}xel representado por coordenadas \texttt{x} e \texttt{y}. La detecci\'{o}n de colisiones comparaba directamente esas coordenadas con una ventana de tolerancia de 2 p\'{i}xeles para compensar la discreci\'{o}n del movimiento.
+ 
+Esto funcionaba perfectamente para el dise\~{n}o del Sprint 1, pero no era extensible: representar una nave de 10 p\'{i}xeles con este modelo habr\'{i}a requerido gestionar 10 pares de coordenadas manualmente en cada operaci\'{o}n.
+\end{cajasprint1}
+ 
+\vspace{0.5em}
+\textbf{¿Qu\'{e} motiv\'{o} el cambio?} Al dise\~{n}ar naves con formas geom\'{e}tricas propias (entre 4 y 10 p\'{i}xeles) y disparos con formas distintas (1, 3 o 5 p\'{i}xeles), era necesario una estructura que permitiera tratar un conjunto de p\'{i}xeles como una \'{u}nica entidad manejable.
+ 
+\vspace{0.5em}
+ 
+\begin{cajafinal}
+Se define la interfaz \texttt{Component} con el contrato com\'{u}n para todos los elementos del tablero:
+\begin{lstlisting}
+public interface Component {
+    void mover(int dx, int dy, int tipoNave);
+    int getRefX();
+    int getRefY();
+    boolean isActivo();
+    void setActivo(boolean b);
+    // + metodos default para notificaciones
+}
+\end{lstlisting}
+ 
+La jerarqu\'{i}a tiene dos implementaciones:
+ 
+\begin{description}[leftmargin=2em, style=nextline]
+    \item[\textbf{Pixel}] La hoja del \'{a}rbol. Representa una \'{u}nica celda del tablero con posici\'{o}n \texttt{(x,y)} y un flag \texttt{esProyectil}. Los p\'{i}xeles de nave solo registran su posici\'{o}n al moverse. Los p\'{i}xeles de proyectil notifican a \texttt{Espacio} en cada movimiento para que la matriz espejo detecte colisiones, y se desactivan si \texttt{y < 0}.
+ 
+    \item[\textbf{Composite}] El nodo interno. Contiene una lista de \texttt{Component} (normalmente \texttt{Pixel}). Tiene dos modos:
+    \begin{itemize}
+        \item \textbf{Modo nave} (\texttt{esProyectil = false}): antes de mover, valida que ning\'{u}n p\'{i}xel se saldr\'{i}a del tablero. Si alguno se saldr\'{i}a, no mueve nada. Al mover, desplaza todos los p\'{i}xeles y notifica el movimiento en bloque a \texttt{Espacio}.
+        \item \textbf{Modo disparo} (\texttt{esProyectil = true}): se mueve libremente; se considera activo mientras al menos un p\'{i}xel hijo est\'{e} activo.
+    \end{itemize}
+\end{description}
+ 
+Cada nave define su geometr\'{i}a en el m\'{e}todo abstracto \texttt{construir()}:
+\begin{lstlisting}
+// Nave1: forma de T invertida, 10 pixeles
+@Override
+public void construir() {
+    anadirComponente(new Pixel(x,     y,     false, -1));
+    anadirComponente(new Pixel(x + 2, y,     false, -1));
+    anadirComponente(new Pixel(x,     y + 1, false, -1));
+    anadirComponente(new Pixel(x + 1, y + 1, false, -1));
+    anadirComponente(new Pixel(x + 2, y + 1, false, -1));
+    anadirComponente(new Pixel(x - 1, y + 2, false, -1));
+    anadirComponente(new Pixel(x,     y + 2, false, -1));
+    anadirComponente(new Pixel(x + 1, y + 2, false, -1));
+    anadirComponente(new Pixel(x + 2, y + 2, false, -1));
+    anadirComponente(new Pixel(x + 3, y + 2, false, -1));
+}
+\end{lstlisting}
+ 
+Del mismo modo, cada estrategia de disparo construye su forma a\~{n}adiendo p\'{i}xeles a un \texttt{Composite}:
+\begin{lstlisting}
+// DisparoFlecha: forma de V invertida, 3 pixeles
+Composite comp = new Composite(true, idDisparo);
+comp.addComponent(new Pixel(x,     y,     true, idDisparo)); // punta
+comp.addComponent(new Pixel(x - 1, y + 1, true, idDisparo)); // ala izq
+comp.addComponent(new Pixel(x + 1, y + 1, true, idDisparo)); // ala der
+\end{lstlisting}
+ 
+La detecci\'{o}n de colisiones ya no usa ventana de tolerancia. La \textbf{matriz espejo} de \texttt{Espacio} registra el \texttt{id} del ocupante de cada celda. Cuando un \texttt{Pixel} proyectil se mueve a \texttt{(newX, newY)}, \texttt{Espacio} consulta \texttt{matriz[newX][newY]}: si hay un enemigo ah\'{i}, genera la notificaci\'{o}n de colisi\'{o}n (tipos 12, 18, 19) con precisi\'{o}n absoluta de un p\'{i}xel.
+\end{cajafinal}
+ 
+\subsection{Ventajas del patr\'{o}n Composite}
+ 
+\begin{enumerate}
+    \item \textbf{Uniformidad:} P\'{i}xeles individuales y grupos de p\'{i}xeles se tratan exactamente igual.
+    \item \textbf{Movimiento autom\'{a}tico:} Mover un \texttt{Composite} mueve todos sus hijos recursivamente.
+    \item \textbf{Colisiones precisas:} Al trabajar a nivel de p\'{i}xel, no hace falta ventana de tolerancia.
+    \item \textbf{Geometr\'{i}as flexibles:} Cada nave y cada disparo define su forma a\~{n}adiendo p\'{i}xeles; no hay l\'{i}mite de forma ni de tama\~{n}o.
+    \item \textbf{Extensibilidad:} A\~{n}adir una nueva forma solo requiere definir los p\'{i}xeles en \texttt{construir()} o en \texttt{crearDisparo()}.
+\end{enumerate}
+ 
 % ==================================================
-\section{Cómo Todo Funciona Junto}
-
-\subsection{El Flujo Completo}
-
-Al iniciar el juego, Factory crea la nave elegida. Esa nave tiene su estructura de píxeles (Composite) y sus disparos disponibles (Strategies). Durante el juego, todo se automatiza: movimientos de naves, disparos volando, colisiones. Los tres patrones trabajan juntos de forma transparente, cada uno resolviendo exactamente su problema.
-
-\subsection{SOLID sin Ser Complicado}
-
-La buena noticia es que al usar estos patrones correctamente, naturalmente terminas teniendo:
+\section{C\'{o}mo Todo Funciona Junto}
+ 
+Los tres patrones se complementan y forman un sistema cohesionado:
+ 
 \begin{itemize}
-    \item Responsabilidades claras: cada clase hace una cosa
-    \item Fácil de extender sin romper lo existente
-    \item Componentes intercambiables
-    \item Dependencias limpias
-    \item Código testable
+    \item \textbf{Factory} decide \textit{qu\'{e}} nave se crea y con qu\'{e} par\'{a}metros iniciales.
+    \item \textbf{Composite} define \textit{c\'{o}mo} se representa esa nave (y sus disparos) en el tablero.
+    \item \textbf{Strategy} determina \textit{qu\'{e}} tipos de disparo puede usar esa nave y c\'{o}mo se construye cada uno.
 \end{itemize}
-
-\subsection{Beneficios Prácticos}
-
-\begin{itemize}
-    \item Agregar una nueva nave: copiar, renombrar, cambiar formas
-    \item Agregar un nuevo disparo: implementar Strategy, listo
-    \item Cambiar velocidades o posiciones: edita Factory
-    \item Detectar colisiones: simple, solo comparas píxeles
-    \item Futuras características: la arquitectura aguanta fácilmente
-\end{itemize}
-
-Es un diseño que deja espacio para crecer sin colapsar bajo su propio peso.
-
+ 
+El flujo completo de una partida ilustra c\'{o}mo interact\'{u}an: el usuario elige nave en \texttt{StartFrame} y pulsa SPACE. El Controller llama a \texttt{JugadorBueno.inicializar("Nave3")}. \texttt{JugadorBueno} llama a \texttt{NaveFactory.generate("Nave3")} (\textbf{Factory}), que devuelve una \texttt{Nave3} con su \texttt{Composite} de 4 p\'{i}xeles (\textbf{Composite}) y sus tres estrategias de disparo (\textbf{Strategy}). Al disparar, la estrategia activa crea un \texttt{Composite} de disparo con los p\'{i}xeles correspondientes; cada p\'{i}xel, al moverse, notifica a \texttt{Espacio}; \texttt{Espacio} consulta la matriz espejo y, si hay colisi\'{o}n, notifica a todos los observers. \texttt{MainFrame} actualiza la vista; \texttt{FlotaEnemigos} elimina al enemigo; \texttt{JugadorBueno} elimina el proyectil.
+ 
+Todo esto ocurre de forma transparente, con cada clase cumpliendo exactamente su responsabilidad.
+ 
 % ==================================================
 \section{Conclusiones Finales}
-
-La implementación del patrón MVC junto con Observer en el proyecto Space Invaders demuestra las ventajas de una arquitectura bien estructurada:
-
+ 
+La evoluci\'{o}n de este proyecto entre el Sprint 1 y la versi\'{o}n final ilustra de forma pr\'{a}ctica c\'{o}mo los patrones de dise\~{n}o emergen como respuesta a necesidades reales de extensibilidad:
+ 
 \begin{itemize}[leftmargin=2em]
-    \item \textbf{Separación clara de responsabilidades}: El modelo (\texttt{Espacio}) gestiona exclusivamente la lógica del juego, las vistas (\texttt{StartFrame}, \texttt{MainFrame}) se encargan únicamente de la presentación, y los controladores traducen la interacción del usuario en acciones del modelo.
-    
-    \item \textbf{Bajo acoplamiento}: Las clases no dependen directamente unas de otras. El modelo no conoce las vistas, y las vistas no contienen lógica de negocio.
-    
-    \item \textbf{Sincronización automática}: El patrón Observer garantiza que cualquier cambio en el modelo se refleje inmediatamente en todas las vistas registradas, sin necesidad de llamadas explícitas.
-    
-    \item \textbf{Facilidad de mantenimiento}: Los cambios en la lógica del juego solo afectan al modelo, los cambios en la interfaz solo afectan a las vistas, y las modificaciones en los controles solo afectan a los controladores.
-    
-    \item \textbf{Extensibilidad}: Es fácil añadir nuevas vistas (por ejemplo, una pantalla de puntuaciones) o nuevos tipos de interacción sin modificar el código existente.
+    \item El Sprint 1 era funcional pero monolit\'{i}co: \texttt{Espacio} concentraba demasiadas responsabilidades y el modelo no escalaba a m\'{u}ltiples naves ni disparos compuestos.
+    \item El Sprint 2 introdujo \texttt{JugadorBueno} y \texttt{FlotaEnemigos} como clases, y los tres patrones fundamentales del proyecto: Factory (creaci\'{o}n), Strategy (comportamiento) y Composite (estructura).
+    \item La versi\'{o}n final distribuye todas las responsabilidades entre clases con roles bien definidos, conectadas mediante el patron Observer (sincronizaci\'{o}n).
+    \item \textbf{MVC + Observer} garantiza que el modelo no conoce las vistas y que las vistas no contienen l\'{o}gica de negocio. Además, el Observer permite la comunicación entre clases internas del modelo sin necesidad de llamadas innecesarias.
+    \item \textbf{Factory} centraliza la creaci\'{o}n de naves, facilitando la adici\'{o}n de nuevos tipos sin modificar el resto del sistema.
+    \item \textbf{Strategy} encapsula los comportamientos de disparo, permitiendo que sean intercambiables en tiempo de ejecuci\'{o}n.
+    \item \textbf{Composite} unifica la representaci\'{o}n de naves y disparos a nivel de p\'{i}xel, habilitando colisiones precisas y geometr\'{i}as arbitrarias.
 \end{itemize}
-
-Los tres patrones de diseño (Factory, Strategy y Composite) complementan perfecto la arquitectura MVC, resolviendo problemas específicos de flexibilidad y mantenibilidad:
-
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Factory} centraliza la creación de objetos complejos.
-    \item \textbf{Strategy} permite comportamientos intercambiables sin condicionales complejos.
-    \item \textbf{Composite} proporciona una estructura unificada y recursiva para objetos complejos.
-\end{itemize}
-
-Juntos, todos estos patrones crean una base sólida para el desarrollo de aplicaciones interactivas, facilitando tanto el desarrollo inicial como el mantenimiento y la evolución futura del software. La arquitectura resultante es flexible, escalable y fácil de entender, permitiendo que el equipo de desarrollo continúe agregando nuevas funcionalidades sin comprometer la calidad del código.
-
+ 
+El resultado es una arquitectura que no solo funciona, sino que est\'{a} preparada para crecer: a\~{n}adir una nueva nave, un nuevo tipo de disparo o una nueva pantalla son cambios localizados que no afectan al resto del sistema.
+ 
 \end{document}
