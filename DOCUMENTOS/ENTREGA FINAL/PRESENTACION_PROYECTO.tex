@@ -95,9 +95,49 @@ El trabajo se ha organizado en \textbf{tres sprints}, con reuniones con el clien
 \end{itemize}
 
 % ============================================================
+% Uso de LLM (resumen alineado con el informe LLM)
+% ============================================================
+\section{Herramientas LLM y asistentes de IA}
+
+En el desarrollo moderno de software, los \textbf{modelos de lenguaje de gran escala (LLM)} son herramientas que pueden mejorar la productividad y la velocidad de desarrollo. Durante \textit{Space Invaders} se utilizaron varias herramientas de este tipo.
+
+Es importante aclarar que la \textbf{responsabilidad final del código y del diseño recae en el equipo de desarrollo}: los LLM y los asistentes del IDE fueron \textbf{complementarios}, no sustitutos del criterio humano ni de la implementación supervisada.
+
+\subsection{Herramientas utilizadas}
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{Visual Studio Code} con GitHub Copilot
+    \item \textbf{Cursor} (IDE con IA integrada)
+    \item \textbf{Gemini} (consultas en línea)
+    \item \textbf{Claude} (pruebas y preguntas de mejora de código)
+\end{itemize}
+
+\subsection{Uso en el proyecto}
+
+Las herramientas más usadas fueron los \textbf{IDE con asistente de IA}. Por un lado, el \textbf{autocompletado} ayudó a generar código repetitivo (cabeceras de clases, bucles, esqueletos de métodos, etc.) y sugerencias alineadas con el archivo abierto. Por otro, los \textbf{agentes} del IDE (modelos de distintas compañías, p.\,ej.\ Anthropic o OpenAI) sirvieron para localizar métodos obsoletos sin borrar, comentar código (revisado después), duplicar o adaptar clases, dar formato a informes \LaTeX{} y, puntualmente, añadir \texttt{println} de depuración para localizar fallos.
+
+Aun así, \textbf{la lógica del juego y las condiciones complejas} requirieron trabajo del equipo; \textbf{todo} lo generado o sugerido por estos modelos fue \textbf{supervisado} antes de integrarlo.
+
+\subsection{Generación de imágenes y gráficos}
+
+Se ha utilizado la herramienta de generación de imágenes de Gemini (Google) para 2 cuestiones. 
+Esta herramienta se ha utilizado para la generación de las imágenes del fondo del juego en las que el cachopo es una nave.
+
+Se probó también su uso para generar gráficos que explicarán de forma visual y simple la secuencia y la relación entre las diferentes clases al mover al jugador, al hacer tick algún timer y demás (JugadorBueno, Nave, Composite, Espacio...) 
+El resultado no fue muy bueno, por lo que al final estos resúmenes se hicieron en escrito.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.72\textwidth]{imgs/fondo2.png}
+    \caption{Fondo del juego generado con Gemini: temática \textit{cachopo-nave} en estilo pixel art.}
+    \label{fig:fondo2-gemini}
+\end{figure}
+
+% ============================================================
 % b. Gestión → Reparto de tareas, reuniones y recursos
 % ============================================================
 \section{Gestión: reparto de tareas, reuniones y recursos}
+\label{sec:gestion}
 
 \subsection{Metodología y reuniones}
 
@@ -180,7 +220,7 @@ Se ha seguido un esquema tipo \textbf{SCRUM}: sprints con entrega incremental, l
 \section{Reparto de tareas por sprint}
 \label{sec:reparto}
 
-En paralelo a la gestión global (sección~2), el equipo documenta el reparto mediante tablas como la siguiente (\textbf{Sprint}, \textbf{tarea}, \textbf{responsables}, tiempo planificado \emph{vs.} real y \textbf{comentarios}). Añadir una fila por cada tarea. Los PDFs en \texttt{DOCUMENTOS/REPARTO TAREAS/} pueden ampliar el detalle.
+En paralelo a la gestión global (sección~\ref{sec:gestion}), el equipo documenta el reparto mediante tablas como la siguiente (\textbf{Sprint}, \textbf{tarea}, \textbf{responsables}, tiempo planificado \emph{vs.} real y \textbf{comentarios}). Añadir una fila por cada tarea. Los PDFs en \texttt{DOCUMENTOS/REPARTO TAREAS/} pueden ampliar el detalle.
 
 % Cabeceras de tabla (columnas sólo |c|c|...|; texto largo con \celdarep{ancho}{...})
 \newcommand{\CabeceraReparto}{%
