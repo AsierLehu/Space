@@ -71,29 +71,11 @@
 
 \subsection{Presentación del proyecto}
 
-\textit{Space Invaders} es un proyecto académico en Java que reproduce el juego clásico: el jugador controla una nave en una cuadrícula y debe eliminar enemigos que descienden, sin ser alcanzado ni dejando que lleguen al borde inferior.
-
-El trabajo se ha organizado en \textbf{tres sprints}, con conversaciones periódicas con el profesor y documentaciónd de cada entrega. Se ha hecho uso de \textbf{Git} para el código y repositorio compartido, culminando el trabajo de estos meses en el \textbf{Demo Day} y esta documentación final.
+Space Invaders es un proyecto académico en Java que reproduce el juego clásico: una nave en una cuadrícula debe eliminar enemigos que descienden sin ser alcanzada. El trabajo se ha organizado en tres sprints con entregas incrementales y revisión tras cada uno.
 
 \subsection{Objetivos}
 
-\subsubsection{Objetivos de aprendizaje}
-
-\begin{itemize}[leftmargin=2em]
-    \item Aplicar \textbf{programación orientada a objetos} en un proyecto de tamaño medio.
-    \item Trabajar en \textbf{equipo} con reparto de tareas, responsabilidades claras y integración frecuente.
-    \item Practicar \textbf{metodología ágil} (planificación por sprints, demo y retroalimentación).
-    \item Entregar un producto \textbf{jugable}, estable y alineado con los requisitos hasta la última historia de usuario obligatoria acordada con el cliente.
-    \item Y sobretodo, respetar las normas de programación y de diseño de la asignatura. Especialmente los patrones de diseño y el modelo MVC+Observer, que detallamaos en otro documento.
-\end{itemize}
-
-\subsubsection{Objetivos de la entrega final}
-
-\begin{itemize}[leftmargin=2em]
-    \item Demostrar en el \textbf{Demo Day} el estado final del juego y su correcto funcionamiento.
-    \item Aportar la \textbf{documentación} requerida en eGela de forma completa y revisada.
-    \item Dejar constancia del \textbf{diseño}, la \textbf{evolución por sprint} y las \textbf{conclusiones} del proyecto.
-\end{itemize}
+Aplicar POO en equipo, implementar patrones de diseño (MVC+Observer, Factory, Strategy, Composite), trabajar con metodología ágil y entregar un producto jugable y bien documentado.
 
 % ============================================================
 % Uso de LLM (resumen alineado con el informe LLM)
@@ -106,26 +88,15 @@ Es importante aclarar que la \textbf{responsabilidad final del código y del dis
 
 \subsection{Herramientas utilizadas}
 
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Visual Studio Code} con GitHub Copilot
-    \item \textbf{Cursor} (IDE con IA integrada)
-    \item \textbf{Gemini} (consultas en línea)
-    \item \textbf{Claude} (pruebas y preguntas de mejora de código)
-\end{itemize}
+Visual Studio Code + GitHub Copilot, Cursor, Gemini y Claude para asistencia durante el desarrollo.
 
 \subsection{Uso en el proyecto}
 
-Las herramientas más usadas fueron los \textbf{IDE con asistente de IA}. Por un lado, el \textbf{autocompletado} ayudó a generar código repetitivo (cabeceras de clases, bucles, esqueletos de métodos, etc.) y sugerencias alineadas con el archivo abierto. Por otro, los \textbf{agentes} del IDE (modelos de distintas compañías, p.\,ej.\ Anthropic o OpenAI) sirvieron para localizar métodos obsoletos sin borrar, comentar código (revisado después), duplicar o adaptar clases, dar formato a informes \LaTeX{} y, puntualmente, añadir \texttt{println} de depuración para localizar fallos.
+Las herramientas más usadas fueron los IDE con asistente de IA: autocompletado para código repetitivo, adaptación de clases, formato de documentos. La lógica compleja del juego y todas las sugerencias fueron supervisadas antes de integrar.
 
-Aun así, \textbf{la lógica del juego y las condiciones complejas} requirieron trabajo del equipo; \textbf{todo} lo generado o sugerido por estos modelos fue \textbf{supervisado} antes de integrarlo.
+\subsection{Generación de imágenes}
 
-\subsection{Generación de imágenes y gráficos}
-
-Se ha utilizado la herramienta de generación de imágenes de Gemini (Google) para 2 cuestiones. 
-Esta herramienta se ha utilizado para la generación de las imágenes del fondo del juego en las que el cachopo es una nave.
-
-Se probó también su uso para generar gráficos que explicarán de forma visual y simple la secuencia y la relación entre las diferentes clases al mover al jugador, al hacer tick algún timer y demás (JugadorBueno, Nave, Composite, Espacio...) 
-El resultado no fue muy bueno, por lo que al final estos resúmenes se hicieron en escrito.
+Se utilizó Gemini para generar los fondos del juego con temática cachopo-nave en estilo pixel art.
 
 \begin{figure}[H]
     \centering
@@ -140,33 +111,13 @@ El resultado no fue muy bueno, por lo que al final estos resúmenes se hicieron 
 \section{Gestión: reparto de tareas, reuniones y recursos}
 \label{sec:gestion}
 
-\subsection{Metodología y reuniones}
+\subsection{Metodología}
 
-Se ha seguido un esquema tipo \textbf{SCRUM}: sprints con entrega incremental, lista de tareas priorizada y revisión con el \textbf{cliente} (profesorado) al final de cada sprint.
+Se ha seguido un esquema ágil: sprints de 2-3 semanas, demos y revisión con el cliente (profesorado) tras cada entrega. Uso de Git para versionado del código, reuniones de equipo y integración frecuente.
 
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Reuniones de sprint:} demostración del incremento (qué funciona), revisión del avance y nota de mejoras para el siguiente ciclo.
-    \item \textbf{Comunicación interna:} acuerdos de qué módulos toca cada persona, avisos de bloqueos y integración del código en el repositorio compartido.
-\end{itemize}
+\subsection{Equipo}
 
-\subsection{Recursos}
-
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Repositorio:} código versionado en Git (p.\,ej.\ GitHub), con historial visible para acreditar la aportación de cada miembro.
-    \item \textbf{Entorno:} Java y herramienta de desarrollo acordada por el equipo (IDE, convenciones de estilo, build del proyecto).
-    \item \textbf{Documentación interna:} notas de diseño, diagramas y repartos de tareas por sprint (ver también sección~\ref{sec:reparto}).
-\end{itemize}
-
-\subsection{Reparto general de responsabilidades}
-
-\textit{Ajustar esta lista al reparto real del equipo (nombres y roles).}
-
-\begin{itemize}[leftmargin=2em]
-    \item \textbf{Coordinación / cliente:} preparar demos, asegurar entregas en fecha y calidad mínima del conjunto.
-    \item \textbf{Modelo y lógica de juego:} reglas, entidades, colisiones y bucle de juego.
-    \item \textbf{Interfaz y control:} pantallas, entrada de teclado, integración con el modelo.
-    \item \textbf{Integración y calidad:} pruebas manuales, resolución de conflictos en Git, homogeneidad del código.
-\end{itemize}
+El trabajo se ha distribuido entre cuatro miembros: \textbf{Unai Urrutia}, \textbf{Ekain Ortega}, \textbf{Eder Lorenzo} y \textbf{Asier López}. Cada uno ha contribuido en modelo, vista, controlador, integración y documentación según las necesidades de cada sprint.
 
 
 % ============================================================
@@ -183,9 +134,11 @@ Se ha seguido un esquema tipo \textbf{SCRUM}: sprints con entrega incremental, l
     \item Fijar convenciones de paquetes, nombres y flujo de trabajo en Git.
 \end{itemize}
 
-\textbf{Decisiones destacadas:}
+\textbf{Decisiones clave:}
 \begin{itemize}[leftmargin=2em]
-    \item \textit{Completar:} decisiones concretas (p.\,ej.\ tamaño de matriz, timers, representación de entidades).
+    \item Matriz de $10 \times 10$ píxeles como tamaño del tablero de juego.
+    \item Uso de \texttt{Timer} para movimiento de enemigos y disparos.
+    \item Naves y enemigos como entidades multipixel usando Composite.
 \end{itemize}
 
 \subsection{Sprint 2}
@@ -196,9 +149,11 @@ Se ha seguido un esquema tipo \textbf{SCRUM}: sprints con entrega incremental, l
     \item Refactorizar donde haga falta para mantener el código \textbf{mantenible} sin romper lo ya entregado.
 \end{itemize}
 
-\textbf{Decisiones destacadas:}
+\textbf{Decisiones clave:}
 \begin{itemize}[leftmargin=2em]
-    \item \textit{Completar:} cómo se encapsuló la variación de comportamiento (estrategias, fábricas, composición de figuras, etc.) sin duplicar documentación del informe técnico adjunto.
+    \item Patrón \textbf{Factory} para creación centralizada de naves (Nave1, Nave2, Nave3, Nave4).
+    \item Patrón \textbf{Strategy} para tipos de disparo (Pixel, Flecha, Rombo, Doble).
+    \item Patrón \textbf{Composite} para geometría variable de naves y enemigos.
 \end{itemize}
 
 \subsection{Sprint 3}
@@ -210,9 +165,11 @@ Se ha seguido un esquema tipo \textbf{SCRUM}: sprints con entrega incremental, l
     \item Opcional: extensiones acordadas para la nota máxima (HU adicional), si aplica.
 \end{itemize}
 
-\textbf{Decisiones destacadas:}
+\textbf{Decisiones clave:}
 \begin{itemize}[leftmargin=2em]
-    \item \textit{Completar:} últimas mejoras, priorización entre ``pulido'' y ``nueva funcionalidad''.
+    \item Sistema de puntuación visible en pantalla.
+    \item Pantalla final (FinalFrame) con opción de reinicio desde menú.
+    \item Fondos de imagen para todas las pantallas.
 \end{itemize}
 
 % ============================================================
@@ -221,63 +178,19 @@ Se ha seguido un esquema tipo \textbf{SCRUM}: sprints con entrega incremental, l
 \section{Reparto de tareas por sprint}
 \label{sec:reparto}
 
-En paralelo a la gestión global (sección~\ref{sec:gestion}), el equipo documenta el reparto mediante tablas como la siguiente (\textbf{Sprint}, \textbf{tarea}, \textbf{responsables}, tiempo planificado \emph{vs.} real y \textbf{comentarios}). Añadir una fila por cada tarea. Los PDFs en \texttt{DOCUMENTOS/REPARTO TAREAS/} pueden ampliar el detalle.
-
-% Cabeceras de tabla (columnas sólo |c|c|...|; texto largo con \celdarep{ancho}{...})
-\newcommand{\CabeceraReparto}{%
-    \hline
-    \rowcolor{tabheadfill}%
-    \textbf{\textcolor{tabheadtext}{Sprint}} &
-    \textbf{\textcolor{tabheadtext}{Tarea}} &
-    \textbf{\textcolor{tabheadtext}{Responsables}} &
-    \textbf{\textcolor{tabheadtext}{\shortstack{Tiempo\\planificado}}} &
-    \textbf{\textcolor{tabheadtext}{\shortstack{Tiempo\\real}}} &
-    \textbf{\textcolor{tabheadtext}{Comentarios}} \\ \hline
-}
+El equipo ha documentado el reparto de tareas en cada sprint. Ver archivos \texttt{REPARTO TAREAS SPRINT1.tex}, \texttt{REPARTO TAREAS SPRINT2.tex} y \texttt{REPARTO TAREAS SPRINT3.tex} en \texttt{DOCUMENTOS/} para detalle completo.
 
 \subsection{Sprint 1}
 
-\subsubsection*{*\ Reparto de tareas}
-
-\begin{table}[H]
-    \centering
-    {\renewcommand{\arraystretch}{1.25}%
-    \begin{tabular}{|c|c|c|c|c|c|}
-        \CabeceraReparto
-        1 & \celdarep{3.8cm}{Mover la nave} & \celdarep{2.6cm}{Ander} & 1h & 4h & \celdarep{3.9cm}{Parecía fácil\dots} \\
-        \hline
-    \end{tabular}}
-\end{table}
+\textbf{Sprint 1:} 50 horas reales de desarrollo. Tareas clave: patrón MVC+Observer, clases principales del modelo, lógica de colisiones, interfaz gráfica.
 
 \subsection{Sprint 2}
 
-\subsubsection*{*\ Reparto de tareas}
-
-\begin{table}[H]
-    \centering
-    {\renewcommand{\arraystretch}{1.25}%
-    \begin{tabular}{|c|c|c|c|c|c|}
-        \CabeceraReparto
-        2 & \celdarep{3.8cm}{\textit{(sustituir por tareas reales)}} & \celdarep{2.6cm}{} &  &  & \celdarep{3.9cm}{} \\
-        \hline
-        2 & \celdarep{3.8cm}{} & \celdarep{2.6cm}{} &  &  & \celdarep{3.9cm}{} \\
-        \hline
-    \end{tabular}}
-\end{table}
+\textbf{Sprint 2:} 50 horas reales de desarrollo. Tareas clave: Factory, Strategy, Composite; 3 naves iniciales; 3 tipos de disparos; diagramas UML.
 
 \subsection{Sprint 3}
 
-\subsubsection*{*\ Reparto de tareas}
-
-\begin{table}[H]
-    \centering
-    {\renewcommand{\arraystretch}{1.25}%
-    \begin{tabular}{|c|c|c|c|c|c|}
-        \CabeceraReparto
-        3 & \celdarep{3.8cm}{\textit{(sustituir por tareas reales)}} & \celdarep{2.6cm}{} &  &  & \celdarep{3.9cm}{} \\
-        \hline
-    \end{tabular}}
-\end{table}
+\textbf{Sprint 3:} Desarrollo de funcionalidades adicionales (Nave4, DisparoDoble, sistema de puntuación, fondos, pantalla final mejorada) y documentación final.
 
 % ============================================================
 % h. Conclusiones → reflexión y cambios futuros
@@ -286,17 +199,17 @@ En paralelo a la gestión global (sección~\ref{sec:gestion}), el equipo documen
 
 \subsection{Reflexión}
 
-\textit{Completar con la reflexión del grupo:} qué se ha aprendido trabajando con POO en equipo, qué ha costado más (integración, diseño, plazos), y cómo se ha mejorado la coordinación a lo largo de los sprints.
+El proyecto ha permitido al equipo experimentar con programación orientada a objetos en un entorno colaborativo, aplicando patrones de diseño reales y metodología ágil. Los mayores desafíos fueron la integración entre patrones (Composite + Strategy), la coordinación de cambios simultáneos en Git y mantener la calidad del código conforme crecía en complejidad.
 
 \subsection{Cambios y mejoras futuras}
 
-Ideas razonables para continuidad del proyecto (sin obligación de implementarlas):
+Líneas de mejora futuras:
 
 \begin{itemize}[leftmargin=2em]
-    \item Pruebas automatizadas (p.\,ej.\ JUnit) sobre lógica del modelo.
-    \item Puntuación, niveles o dificultad configurable.
-    \item Mejoras de interfaz o contenido audiovisual.
-    \item Optimización de colisiones o de refresco de la vista si el crecimiento del código lo hace necesario.
+    \item Pruebas unitarias (JUnit) para la lógica del modelo.
+    \item Niveles de dificultad progresiva.
+    \item Sonido y animaciones.
+    \item Optimización de rendimiento si la complejidad del juego aumenta significativamente.
 \end{itemize}
 
 \vspace{2em}

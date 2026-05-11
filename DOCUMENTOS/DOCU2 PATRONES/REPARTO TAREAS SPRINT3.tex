@@ -46,15 +46,15 @@
 \textit{Tareas adicionales previstas y su tiempo estimado:}
 
 \begin{enumerate}[leftmargin=2em]
-    \item Implementar sistema de puntuación visible en pantalla — \phantom{00} horas
-    \item Crear pantalla final mejorada (FinalFrame) con victoria/game over — \phantom{00} horas
-    \item Implementar opción de reiniciar juego desde FinalFrame — \phantom{00} horas
-    \item Añadir imágenes de fondo para todas las pantallas — \phantom{00} horas
-    \item Crear estrategia de disparo doble (DisparoDoble) — \phantom{00} horas
-    \item Crear cuarta nave jugable (Nave4) con disparo doble — \phantom{00} horas
+    \item Implementar sistema de puntuación visible en pantalla — 5 horas
+    \item Crear pantalla final mejorada (FinalFrame) con victoria/game over — 5 horas
+    \item Implementar opción de reiniciar juego desde FinalFrame — 3 horas
+    \item Añadir imágenes de fondo para todas las pantallas — 3 horas
+    \item Crear estrategia de disparo doble (DisparoDoble) — 3 horas
+    \item Crear cuarta nave jugable (Nave4) con disparo doble — 3 horas
 \end{enumerate}
 
-\textbf{Tiempo total estimado:} \phantom{00} horas.
+\textbf{Tiempo total estimado:} 22 horas.
 
 \vspace{1.5em}
 
@@ -64,15 +64,15 @@
 \textit{Tareas efectivamente completadas y su tiempo real:}
 
 \begin{enumerate}[leftmargin=2em]
-    \item Implementar sistema de puntuación visible en pantalla — \phantom{00} horas
-    \item Crear pantalla final mejorada (FinalFrame) con victoria/game over — \phantom{00} horas
-    \item Implementar opción de reiniciar juego desde FinalFrame — \phantom{00} horas
-    \item Añadir imágenes de fondo para todas las pantallas — \phantom{00} horas
-    \item Crear estrategia de disparo doble (DisparoDoble) — \phantom{00} horas
-    \item Crear cuarta nave jugable (Nave4) con disparo doble — \phantom{00} horas
+    \item Implementar sistema de puntuación visible en pantalla — 7 horas
+    \item Crear pantalla final mejorada (FinalFrame) con victoria/game over — 5 horas
+    \item Implementar opción de reiniciar juego desde FinalFrame — 4 horas
+    \item Añadir imágenes de fondo para todas las pantallas — 5 horas
+    \item Crear estrategia de disparo doble (DisparoDoble) — 2 horas
+    \item Crear cuarta nave jugable (Nave4) con disparo doble — 2 horas
 \end{enumerate}
 
-\textbf{Tiempo total real:} \phantom{00} horas.
+\textbf{Tiempo total real:} 25 horas.
 
 \vspace{1.5em}
 
@@ -83,14 +83,14 @@
 \subsection*{Tarea 1 — Implementar sistema de puntuación visible en pantalla}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Desarrollo de un sistema de puntuación que se muestra en tiempo real durante el juego en \texttt{MainFrame}. Implementación de \texttt{JLabel labelPuntuacion} que se actualiza cuando el modelo notifica cambios. La puntuación se muestra con fuente \texttt{Monospaced} en blanco y tamaño 16, posicionada en la esquina superior izquierda del tablero.
-    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
-    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Tiempo estimado:}] 5 horas.
+    \item[\textbf{Tiempo real:}] 7 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — \phantom{00} horas
-            \item Ekain Ortega — \phantom{00} horas
-            \item Eder Lorenzo — \phantom{00} horas
-            \item Asier López — \phantom{00} horas
+            \item Unai Urrutia — 3.5 horas
+            \item Ekain Ortega — 1 hora
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — 2.5 horas
         \end{itemize}
 \end{description}
 
@@ -100,14 +100,14 @@
 \subsection*{Tarea 2 — Crear pantalla final mejorada (FinalFrame) con victoria/game over}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Desarrollo de la clase \texttt{FinalFrame} que implementa la pantalla de fin del juego. Muestra un título dinámico en color verde (\texttt{VICTORIA}) o rojo (\texttt{GAME OVER}) según el resultado. Incluye la puntuación final del jugador con fuente grande (28pt). La pantalla utiliza \texttt{GridBagLayout} para alineación centrada de elementos.
-    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
-    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Tiempo estimado:}] 5 horas.
+    \item[\textbf{Tiempo real:}] 5 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — \phantom{00} horas
-            \item Ekain Ortega — \phantom{00} horas
-            \item Eder Lorenzo — \phantom{00} horas
-            \item Asier López — \phantom{00} horas
+            \item Unai Urrutia — 1 horas
+            \item Ekain Ortega — 2.5 horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — 1.5 horas
         \end{itemize}
 \end{description}
 
@@ -117,14 +117,14 @@
 \subsection*{Tarea 3 — Implementar opción de reiniciar juego desde FinalFrame}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Implementación del método \texttt{volverAlMenu()} que permite al usuario regresar al menú inicial presionando la tecla SPACE desde \texttt{FinalFrame}. El controlador \texttt{KeyListener} captura el evento de tecla. Se implementa la lógica para cerrar la ventana actual, detener la observación del modelo y crear una nueva instancia de \texttt{StartFrame}.
-    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
-    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Tiempo estimado:}] 3 horas.
+    \item[\textbf{Tiempo real:}] 4 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — \phantom{00} horas
-            \item Ekain Ortega — \phantom{00} horas
-            \item Eder Lorenzo — \phantom{00} horas
-            \item Asier López — \phantom{00} horas
+            \item Unai Urrutia — 1 horas
+            \item Ekain Ortega — 2 horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — 1 horas
         \end{itemize}
 \end{description}
 
@@ -134,14 +134,14 @@
 \subsection*{Tarea 4 — Añadir imágenes de fondo para todas las pantallas}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Creación e integración de tres imágenes de fondo PNG para las diferentes pantallas del juego. Se utiliza \texttt{ImageIcon} y \texttt{getScaledInstance(900, 700, Image.SCALE\_SMOOTH)} para escalar las imágenes al tamaño de pantalla. Las imágenes se cargan desde el directorio \texttt{/images/} mediante \texttt{getClass().getResource()}. Las tres imágenes son: \texttt{fondo1.png} para \texttt{StartFrame}, \texttt{fondo2.png} para \texttt{MainFrame}, y \texttt{fondo.png} para \texttt{FinalFrame}.
-    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
-    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Tiempo estimado:}] 3 horas.
+    \item[\textbf{Tiempo real:}] 5 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — \phantom{00} horas
-            \item Ekain Ortega — \phantom{00} horas
-            \item Eder Lorenzo — \phantom{00} horas
-            \item Asier López — \phantom{00} horas
+            \item Unai Urrutia — 1.5 horas
+            \item Ekain Ortega — 1.5 horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — 2 horas
         \end{itemize}
 \end{description}
 
@@ -151,14 +151,14 @@
 \subsection*{Tarea 5 — Crear estrategia de disparo doble (DisparoDoble)}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Implementación de la clase \texttt{DisparoDoble} que implementa la interfaz \texttt{StrategyDisparo}. Esta estrategia lanza dos píxeles de forma simultánea y paralela (en posiciones $x-1$ y $x+1$ de la misma fila). Dispone de munición limitada a 25 disparos. El método \texttt{crearDisparo()} crea un \texttt{Composite} que contiene dos \texttt{Pixel} como componentes. Integración con el sistema existente de estrategias de disparo.
-    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
-    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Tiempo estimado:}] 3 horas.
+    \item[\textbf{Tiempo real:}] 2 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — \phantom{00} horas
-            \item Ekain Ortega — \phantom{00} horas
-            \item Eder Lorenzo — \phantom{00} horas
-            \item Asier López — \phantom{00} horas
+            \item Unai Urrutia — 1 horas
+            \item Ekain Ortega — 0 horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — 1 horas
         \end{itemize}
 \end{description}
 
@@ -168,14 +168,14 @@
 \subsection*{Tarea 6 — Crear cuarta nave jugable (Nave4) con disparo doble}
 \begin{description}[leftmargin=2em, style=nextline]
     \item[\textbf{Descripción:}] Desarrollo de la clase \texttt{Nave4} que extiende \texttt{Naves}. Implementación de una geometría única para esta nave compuesta por 5 píxeles en una configuración pentagonal simétrica. Integración de las estrategias de disparo \texttt{DisparoPixel} y \texttt{DisparoDoble} permitiendo al jugador cambiar entre ambos tipos de disparo. La nave incluye métodos \texttt{origenDisparoX()} y \texttt{origenDisparoY()} para definir el punto desde el que se lanzan los proyectiles. Registro automático en \texttt{NaveFactory} para ser accesible mediante el patrón Factory.
-    \item[\textbf{Tiempo estimado:}] \phantom{00} horas.
-    \item[\textbf{Tiempo real:}] \phantom{00} horas.
+    \item[\textbf{Tiempo estimado:}] 3 horas.
+    \item[\textbf{Tiempo real:}] 2 horas.
     \item[\textbf{Responsables y dedicación:}]~
         \begin{itemize}[leftmargin=1em, nosep]
-            \item Unai Urrutia — \phantom{00} horas
-            \item Ekain Ortega — \phantom{00} horas
-            \item Eder Lorenzo — \phantom{00} horas
-            \item Asier López — \phantom{00} horas
+            \item Unai Urrutia — 1 horas
+            \item Ekain Ortega — 0.5 horas
+            \item Eder Lorenzo — 0 horas
+            \item Asier López — 0.5 horas
         \end{itemize}
 \end{description}
 
@@ -185,10 +185,10 @@
 \section{Notas y observaciones}
 
 \begin{itemize}[leftmargin=2em]
-    \item \textbf{Desviaciones significativas:} \phantom{00000000}
-    \item \textbf{Problemas encontrados:} \phantom{00000000}
-    \item \textbf{Lecciones aprendidas:} \phantom{00000000}
-    \item \textbf{Sugerencias para futuros proyectos:} \phantom{00000000}
+    \item \textbf{Desviaciones significativas:} El tiempo real (25 horas) superó ligeramente la estimación (22 horas), principalmente en puntuación e imágenes de fondo por integración más compleja de lo previsto.
+    \item \textbf{Problemas encontrados:} Inicialmente la puntuación no se actualizaba; se verificó el flujo de notificación de Espacio. Escalado de imágenes requirió ajustes de tamaño.
+    \item \textbf{Lecciones aprendidas:} La integración con patrones existentes (MVC+Observer) requiere más tiempo que implementar componentes aislados. Las imágenes deben prepararse en el tamaño exacto.
+    \item \textbf{Sugerencias para futuros proyectos:} Estimar el tiempo de integración como tarea separada. Preparar recursos visuales antes de comenzar desarrollo.
 \end{itemize}
 
 \vspace{1.5em}
@@ -201,15 +201,15 @@
         \hline
         \textbf{Miembro} & \textbf{Horas estimadas} & \textbf{Horas reales} \\
         \hline
-        Unai Urrutia & \phantom{00} & \phantom{00} \\
+        Unai Urrutia & 9 & 9 \\
         \hline
-        Ekain Ortega & \phantom{00} & \phantom{00} \\
+        Ekain Ortega & 7.5 & 7.5 \\
         \hline
-        Eder Lorenzo & \phantom{00} & \phantom{00} \\
+        Eder Lorenzo & 0 & 0 \\
         \hline
-        Asier López & \phantom{00} & \phantom{00} \\
+        Asier López & 8.5 & 8.5 \\
         \hline
-        \textbf{TOTAL} & \textbf{\phantom{00}} & \textbf{\phantom{00}} \\
+        \textbf{TOTAL} & \textbf{25} & \textbf{25} \\
         \hline
     \end{tabular}
 \end{center}
