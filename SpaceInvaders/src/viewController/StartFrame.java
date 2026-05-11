@@ -98,7 +98,7 @@ public class StartFrame extends JFrame implements Observer {
         gbc.insets = new Insets(30, 20, 30, 20);
         panelContenido.add(pressSpace, gbc);
 
-        JLabel control1 = new JLabel("1 / 2 / 3  ==  Tipo de nave");
+        JLabel control1 = new JLabel("1 / 2 / 3 / 4  ==  Tipo de nave");
         control1.setForeground(Color.WHITE);
         control1.setFont(new Font("Monospaced", Font.PLAIN, 16));
         gbc.gridy = 3;
