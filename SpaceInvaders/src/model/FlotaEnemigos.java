@@ -28,60 +28,33 @@ public class FlotaEnemigos implements Observer {
         return miFlotaEnemigos;
     }
 
-    /** Arranca el ciclo periódico de movimiento de la flota ({@link TimerEnemigo}). */
-    private void iniciarTimerMovimiento() {
-        TimerEnemigo.getInstancia().iniciar();
-    }
-
     @Override
     public void update(Observable o, Object arg) {
         if (arg == null || !(arg instanceof int[])) {
             return;
         }
-        
+
         int[] datos = (int[]) arg;
-        
-        // Inicializar flota con enemigos aleatorios
+
         if (datos.length >= 2 && datos[0] == 20) {
             inicializar(100, datos[1]);
         }
-        
-        // Solo procesar mensajes de eliminación de enemigos (MSG_ELIMINAR_ENEMIGO = 18)
+
         if (datos.length >= 2 && datos[0] == 18) {
             int enemigoId = datos[1];
             eliminarEnemigoPorId(enemigoId);
         }
     }
 
-    /** Encuentra un enemigo por su ID. */
-    public Enemigo encontrarEnemigoPorId(int id) {
-        return enemigos.stream()
-            .filter(e -> e.isVivo() && e.getId() == id)
-            .findFirst()
-            .orElse(null);
-    }
-
-    /** Elimina enemigo por ID de la lista. */
-    public void eliminarEnemigoPorId(int id) {
-        Enemigo enemigo = encontrarEnemigoPorId(id);
-        if (enemigo != null) {
-            enemigos.remove(enemigo);
-        }
-    }
-
-    
-
-    // ─── Inicialización ───────────────────────────────────────────────────────
-
-    // Limpia la flota y añade n_enemigos enemigos en posiciones aleatorias de la fila superior sin tocarse
-    public void inicializar(int anchura, int n_enemigos) {
+    /** Limpia la flota y añade enemigos en posiciones aleatorias de la fila superior sin solaparse. */
+    public void inicializar(int anchura, int nEnemigos) {
         enemigos.clear();
-        siguienteId = 11; // Reiniciar contador de IDs
+        siguienteId = 11;
         Random rand = new Random();
         ArrayList<Integer> xOcupadas = new ArrayList<>();
 
         int intentos = 0;
-        while (enemigos.size() < n_enemigos && intentos < 100) {
+        while (enemigos.size() < nEnemigos && intentos < 100) {
             int ex = rand.nextInt(anchura - 4);
             int ey = rand.nextInt(4);
 
@@ -114,5 +87,26 @@ public class FlotaEnemigos implements Observer {
                 enemigo.mover(0, 1, 0);
             }
         });
+    }
+
+    /** Busca un enemigo vivo por su id en la flota. */
+    public Enemigo encontrarEnemigoPorId(int id) {
+        return enemigos.stream()
+            .filter(e -> e.isVivo() && e.getId() == id)
+            .findFirst()
+            .orElse(null);
+    }
+
+    /** Quita de la lista al enemigo con el id dado. */
+    public void eliminarEnemigoPorId(int id) {
+        Enemigo enemigo = encontrarEnemigoPorId(id);
+        if (enemigo != null) {
+            enemigos.remove(enemigo);
+        }
+    }
+
+    /** Arranca el ciclo periódico de movimiento de la flota ({@link TimerEnemigo}). */
+    private void iniciarTimerMovimiento() {
+        TimerEnemigo.getInstancia().iniciar();
     }
 }

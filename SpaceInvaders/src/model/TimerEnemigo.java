@@ -9,14 +9,13 @@ import java.awt.event.ActionListener;
  * Usa patrón Singleton y notifica a FlotaEnemigos cada 200ms.
  */
 public class TimerEnemigo {
-    
+
     private static TimerEnemigo instancia;
     private Timer timer;
     private boolean iniciado;
-    
+
     private TimerEnemigo() {
         iniciado = false;
-        // Timer de 200ms (misma frecuencia que antes: 4 ticks de 50ms)
         timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -24,25 +23,20 @@ public class TimerEnemigo {
             }
         });
     }
-    
-    /**
-     * Obtiene la instancia única del TimerEnemigo (Singleton).
-     */
+
+    /** Devuelve la instancia única del timer de enemigos. */
     public static TimerEnemigo getInstancia() {
         if (instancia == null) {
             instancia = new TimerEnemigo();
         }
         return instancia;
     }
-    
-    /**
-     * Inicia el timer de enemigos.
-     */
+
+    /** Inicia el temporizador de movimiento de la flota si aún no estaba activo. */
     public void iniciar() {
         if (!iniciado && timer != null) {
             timer.start();
             iniciado = true;
         }
     }
-    
-    }
+}

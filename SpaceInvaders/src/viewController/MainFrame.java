@@ -10,51 +10,59 @@ import java.util.Observer;
 import model.Espacio;
 import model.JugadorBueno;
 
+/**
+ * Ventana principal del juego: tablero 100×60, escucha del modelo y teclado.
+ */
 @SuppressWarnings("deprecation")
 public class MainFrame extends JFrame implements Observer {
 
-    //private static Color COLOR_JUGADOR = Color.MAGENTA;
     private static Color COLOR_ENEMIGO = Color.RED;
     private static Color COLOR_DISPARO = Color.WHITE;
-    
-    // Colores específicos por tipo de nave
-    private static Color COLOR_NAVE1_VERDE  = Color.GREEN;
-    private static Color COLOR_NAVE2_AZUL   = Color.BLUE;
+
+    private static Color COLOR_NAVE1_VERDE = Color.GREEN;
+    private static Color COLOR_NAVE2_AZUL = Color.BLUE;
     private static Color COLOR_NAVE3_MORADO = Color.MAGENTA;
     private static Color COLOR_NAVE4_AMARILLO = Color.YELLOW;
 
     private JLabel[][] celdas;
     private JLabel labelPuntuacion;
 
+    /** Construye la ventana, se registra como observador de {@link Espacio} y monta el panel en capas. */
     public MainFrame() {
         Espacio.getEspacio().addObserver(this);
 
         setTitle("Space Invaders - Juego");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false); // así no se puede redimensionar la ventana
+        setResizable(false);
 
         initPanel();
 
-        pack(); // ajusta el tamaño de la ventana al contenido, si no la ponemos, no se abre bien
-        setLocationRelativeTo(null); // centra la ventana en la pantalla
+        pack();
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
+    /** Recibe mensajes numéricos del modelo y actualiza celdas o transición de pantalla. */
+    @Override
+    public void update(Observable o, Object arg) {
+        int[] datos = (int[]) arg;
+        procesarNotificacion(datos);
+    }
+
+    /** Construye el grid de etiquetas, fondo y capa de puntuación. */
     private void initPanel() {
         int cols = 100;
         int rows = 60;
-        int ancho = cols * 10; // 1000px
-        int alto  = rows * 10; // 600px
+        int ancho = cols * 10;
+        int alto = rows * 10;
 
         celdas = new JLabel[cols][rows];
 
-        // --- Capa 1: imagen de fondo escalada al tamaño del panel ---
         java.net.URL urlImagen = getClass().getResource("/images/fondo2.png");
         Image imgEscalada = new ImageIcon(urlImagen).getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         JLabel fondoLabel = new JLabel(new ImageIcon(imgEscalada));
         fondoLabel.setBounds(0, 0, ancho, alto);
 
-        // --- Capa 2: grid de celdas transparente encima ---
         JPanel gridPanel = new JPanel(new GridLayout(rows, cols, 0, 0));
         gridPanel.setOpaque(false);
         gridPanel.setBounds(0, 0, ancho, alto);
@@ -69,11 +77,10 @@ public class MainFrame extends JFrame implements Observer {
             }
         }
 
-        // --- JLayeredPane: apila fondoLabel debajo y gridPanel encima ---
         JLayeredPane layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(ancho, alto));
         layeredPane.add(fondoLabel, JLayeredPane.DEFAULT_LAYER);
-        layeredPane.add(gridPanel,  JLayeredPane.PALETTE_LAYER);
+        layeredPane.add(gridPanel, JLayeredPane.PALETTE_LAYER);
 
         labelPuntuacion = new JLabel("Puntuacion: 0");
         labelPuntuacion.setForeground(Color.WHITE);
@@ -83,14 +90,85 @@ public class MainFrame extends JFrame implements Observer {
         addKeyListener(new Controller());
         add(layeredPane);
     }
-    
+
+    /** Despacha por código de mensaje las acciones de pintado, borrado o fin de partida. */
+    private void procesarNotificacion(int[] datos) {
+        int tipo = datos[0];
+
+        switch (tipo) {
+
+            case 1:
+                pintarCelda(datos[1], datos[2], COLOR_DISPARO);
+                break;
+
+            case 2:
+                borrarCelda(datos[1], datos[2]);
+                pintarCelda(datos[3], datos[4], COLOR_DISPARO);
+                break;
+
+            case 3:
+                borrarCelda(datos[1], datos[2]);
+                break;
+
+            case 12:
+                borrarCelda(datos[1], datos[2]);
+                break;
+
+            case 14:
+                pintarCelda(datos[1], datos[2], COLOR_ENEMIGO);
+                break;
+
+            case 7:
+                System.out.println("Game Over");
+                abrirFinalFrame(false, datos[1]);
+                break;
+            case 8:
+                System.out.println("Victoria");
+                abrirFinalFrame(true, datos[1]);
+                break;
+
+            case 10:
+                borrarCelda(datos[1], datos[2]);
+                break;
+
+            case 15:
+                pintarCelda(datos[1], datos[2], COLOR_NAVE1_VERDE);
+                break;
+
+            case 16:
+                pintarCelda(datos[1], datos[2], COLOR_NAVE2_AZUL);
+                break;
+
+            case 17:
+                pintarCelda(datos[1], datos[2], COLOR_NAVE3_MORADO);
+                break;
+
+            case 21:
+                pintarCelda(datos[1], datos[2], COLOR_NAVE4_AMARILLO);
+                break;
+
+            case 22:
+                labelPuntuacion.setText("Puntuacion: " + datos[1]);
+                break;
+        }
+    }
+
+    /** Oculta el juego y abre la pantalla de resultado con la puntuación. */
+    private void abrirFinalFrame(boolean victoria, int puntuacion) {
+        Espacio.getEspacio().deleteObserver(this);
+        this.setVisible(false);
+        new FinalFrame(victoria, puntuacion);
+    }
+
+    /** Deja la celda transparente (sin color de foreground). */
     private void borrarCelda(int x, int y) {
         if (esValido(x, y)) {
             celdas[x][y].setOpaque(false);
             celdas[x][y].repaint();
         }
     }
-    
+
+    /** Rellena la celda con el color indicado y la marca opaca. */
     private void pintarCelda(int x, int y, Color c) {
         if (esValido(x, y)) {
             celdas[x][y].setOpaque(true);
@@ -99,131 +177,33 @@ public class MainFrame extends JFrame implements Observer {
         }
     }
 
-
-    @Override
-    public void update(Observable o, Object arg) {
-    	int[] datos = (int[]) arg;
-    	procesarNotificacion(datos);
-    }
-
-    private void procesarNotificacion(int[] datos) {
-    	int tipo = datos[0];
-    	
-    	switch (tipo) {
-    		//case 0: // jugador se mueve - [tipo, oldX, oldY, newX, newY]
-    			//borrarCelda(datos[1], datos[2]);
-    			//pintarCelda(datos[3], datos[4], COLOR_JUGADOR);
-    			//break;
-        
-    		case 1: // disparo nuevo - [tipo, newX, newY]
-    			pintarCelda(datos[1], datos[2], COLOR_DISPARO);
-    			break;
-    			
-    		case 2: // disparo se mueve - [tipo, oldX, oldY, newX, newY]
-    			borrarCelda(datos[1], datos[2]);
-    			pintarCelda(datos[3], datos[4], COLOR_DISPARO);
-    			break;
-    			
-    		case 3: // disparo salio del tablero - [tipo, oldX, oldY]
-    			borrarCelda(datos[1], datos[2]);
-    			break;
-    		
-    		//case 4: // enemigo baja - [tipo, oldX, oldY, newX, newY]
-    			//borrarCelda(datos[1], datos[2]);
-    			//pintarCelda(datos[3], datos[4], COLOR_ENEMIGO);
-    			//break;
-    		
-    		//case 5: // colision - [tipo, disparoX, disparoY, enemigoX, enemigoY, ]
-    			//borrarCelda(datos[1], datos[2]);
-    			//borrarCelda(datos[3], datos[4]);
-    			//break;
-    			
-    		//case 6: // inicialización del juego - [tipo, jugadorX, jugadorY, enemigoX, enemigoY]
-    			//pintarCelda(datos[1], datos[2], COLOR_JUGADOR);
-    			//pintarCelda(datos[3], datos[4], COLOR_ENEMIGO);
-    			//break;
-    		
-    		case 12: // borrar píxel de enemigo - [tipo, x, y]
-    			borrarCelda(datos[1], datos[2]);
-    			break;
-    		
-    		//case 13: // inicialización de nave - [tipo, x, y]
-    			//pintarCelda(datos[1], datos[2], COLOR_JUGADOR);
-    			//break;
-    		
-    		case 14: // inicialización de enemigo o pintar píxel de enemigo - [tipo, x, y]
-    			pintarCelda(datos[1], datos[2], COLOR_ENEMIGO);
-    			break;
-    			
-    		case 7: 
-            System.out.println("Game Over");
-            abrirFinalFrame(false, datos[1]);
-                break;
-    		case 8: 
-            System.out.println("Victoria");
-            abrirFinalFrame(true, datos[1]);
-                break;
-    		
-    		case 10: // borrar celda de jugador - [tipo, x, y]
-    			borrarCelda(datos[1], datos[2]);
-    			break;
-    		
-    		case 15: // pintar nave verde (Nave1) - [tipo, x, y]
-    			pintarCelda(datos[1], datos[2], COLOR_NAVE1_VERDE);
-    			break;
-    		
-    		case 16: // pintar nave azul (Nave2) - [tipo, x, y]
-    			pintarCelda(datos[1], datos[2], COLOR_NAVE2_AZUL);
-    			break;
-    		
-    		case 17: // pintar nave morada (Nave3) - [tipo, x, y]
-    			pintarCelda(datos[1], datos[2], COLOR_NAVE3_MORADO);
-    			break;
-
-            //case 19: // eliminar enemigo de la flota (modelo); vista ya actualizada con tipos 3 y 12
-                //break;
-                
-            case 21: // pintar nave morada (Nave3) - [tipo, x, y]
-    			pintarCelda(datos[1], datos[2], COLOR_NAVE4_AMARILLO);
-    			break;
-
-            case 22: // puntuacion actualizada - [tipo, puntuacion]
-                labelPuntuacion.setText("Puntuacion: " + datos[1]);
-                break;
-    	}
-    }
-    
+    /** Comprueba límites del tablero lógico 100×60. */
     private boolean esValido(int x, int y) {
-    	return x >= 0 && x < 100 && y >= 0 && y < 60;
+        return x >= 0 && x < 100 && y >= 0 && y < 60;
     }
-    
-    // ==================== TRANSICIÓN DE PANTALLA ====================
-    
-    private void abrirFinalFrame(boolean victoria, int puntuacion) {
-        Espacio.getEspacio().deleteObserver(this);
-        this.setVisible(false);
-        new FinalFrame(victoria, puntuacion);
-    }
-    
+
+    /** Teclado en partida: movimiento, disparo y cambio de estrategia. */
     private class Controller implements KeyListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
 
             switch (e.getKeyCode()) {
-                case KeyEvent.VK_LEFT:  JugadorBueno.getJugadorBueno().mover(-1,  0); break;
-                case KeyEvent.VK_RIGHT: JugadorBueno.getJugadorBueno().mover( 1,  0); break;
-                case KeyEvent.VK_UP:    JugadorBueno.getJugadorBueno().mover( 0, -1); break;
-                case KeyEvent.VK_DOWN:  JugadorBueno.getJugadorBueno().mover( 0,  1); break;
-                case KeyEvent.VK_SPACE: JugadorBueno.getJugadorBueno().disparar();           break;
+                case KeyEvent.VK_LEFT:  JugadorBueno.getJugadorBueno().mover(-1, 0); break;
+                case KeyEvent.VK_RIGHT: JugadorBueno.getJugadorBueno().mover(1, 0); break;
+                case KeyEvent.VK_UP:    JugadorBueno.getJugadorBueno().mover(0, -1); break;
+                case KeyEvent.VK_DOWN:  JugadorBueno.getJugadorBueno().mover(0, 1); break;
+                case KeyEvent.VK_SPACE: JugadorBueno.getJugadorBueno().disparar(); break;
                 case KeyEvent.VK_M:     JugadorBueno.getJugadorBueno().cambiarTipoDisparo(); break;
             }
         }
 
-        @Override public void keyReleased(KeyEvent e) {}
-        @Override public void keyTyped(KeyEvent e) {}
+        @Override
+        public void keyReleased(KeyEvent e) {
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
     }
-
-
-
 }

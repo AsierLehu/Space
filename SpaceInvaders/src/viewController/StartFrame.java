@@ -10,6 +10,9 @@ import java.util.Observer;
 import model.Espacio;
 import model.JugadorBueno;
 
+/**
+ * Pantalla de título: selección de nave y arranque de partida al pulsar SPACE.
+ */
 @SuppressWarnings("deprecation")
 public class StartFrame extends JFrame implements Observer {
 
@@ -18,54 +21,58 @@ public class StartFrame extends JFrame implements Observer {
     /** Selección en pantalla de inicio; solo se copia a JugadorBueno al pulsar SPACE. */
     private String tipoNavePendiente = "Nave1";
 
-	/**
-	 * Create the frame.
-	 */
+    /** Crea la ventana de inicio, el panel con fondo y se registra como observador de {@link Espacio}. */
     public StartFrame() {
         setTitle("Space Invaders");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-        // Panel principal con componentes de estrellas
         Component panel = crearPanelPrincipalConEstrellas();
 
-        add(panel); // Añadir el panel principal al frame
-        pack(); // Ajustar el tamaño del frame al contenido
-        setLocationRelativeTo(null); // Centrar la ventana en la pantalla
-        setVisible(true); // Hacer visible la ventana
+        add(panel);
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
 
-        // Configurar el foco para capturar eventos de teclado
-        setFocusable(true); // Permitir que el frame reciba el foco
-        requestFocusInWindow(); // Solicitar el foco activamente
+        setFocusable(true);
+        requestFocusInWindow();
 
-        Controller controller = new Controller(); 
-        addKeyListener(controller); 
-        
+        Controller controller = new Controller();
+        addKeyListener(controller);
+
         Espacio.getEspacio().addObserver(this);
     }
 
+    /** Ante el mensaje 9 del espacio, cierra esta ventana y abre {@link MainFrame}. */
+    @Override
+    public void update(Observable o, Object arg) {
+        int[] datos = (int[]) arg;
+        int tipo = datos[0];
+        if (tipo == 9) {
+            Espacio.getEspacio().deleteObserver(this);
+            this.setVisible(false);
+            new MainFrame();
+        }
+    }
+
+    /** Actualiza el texto que muestra la nave pendiente de confirmar. */
     private void actualizarTextoNave() {
         etiquetaNave.setText("Nave elegida: " + tipoNavePendiente + "   (pulsa 1, 2, 3 o 4 para cambiar)");
     }
 
-    /**
-     * Crea el panel principal con estrellas como componentes de Swing
-     */
+    /** Monta el fondo, textos de ayuda y la etiqueta de selección de nave. */
     private Component crearPanelPrincipalConEstrellas() {
-        // Fondo con imagen escalada al tamaño del frame
         java.net.URL urlImagen = getClass().getResource("/images/fondo1.png");
         Image imgEscalada = new ImageIcon(urlImagen).getImage().getScaledInstance(900, 700, Image.SCALE_SMOOTH);
         JLabel panelFondo = new JLabel(new ImageIcon(imgEscalada));
         panelFondo.setPreferredSize(new Dimension(900, 700));
 
-        // Panel de contenido con GridBagLayout
         JPanel panelContenido = new JPanel(new GridBagLayout());
-        panelContenido.setOpaque(false); // Transparente para que se vea el fondo
-        
+        panelContenido.setOpaque(false);
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
 
-        // Espacio vertical arriba: absorbe altura extra y baja el bloque de texto
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.VERTICAL;
@@ -76,7 +83,6 @@ public class StartFrame extends JFrame implements Observer {
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.NONE;
 
-        // Selección de nave (1 / 2 / 3 / 4)
         etiquetaNave = new JLabel();
         etiquetaNave.setForeground(new Color(255, 200, 0));
         etiquetaNave.setFont(new Font("Monospaced", Font.BOLD, 20));
@@ -85,7 +91,6 @@ public class StartFrame extends JFrame implements Observer {
         panelContenido.add(etiquetaNave, gbc);
         actualizarTextoNave();
 
-        // Instrucción para iniciar (pulsante)
         JLabel pressSpace = new JLabel(">> PULSA SPACE PARA JUGAR <<");
         pressSpace.setForeground(new Color(0, 255, 150));
         pressSpace.setFont(new Font("Monospaced", Font.BOLD, 26));
@@ -93,7 +98,6 @@ public class StartFrame extends JFrame implements Observer {
         gbc.insets = new Insets(30, 20, 30, 20);
         panelContenido.add(pressSpace, gbc);
 
-        // Controles (con mejor formato)
         JLabel control1 = new JLabel("1 / 2 / 3  ==  Tipo de nave");
         control1.setForeground(Color.WHITE);
         control1.setFont(new Font("Monospaced", Font.PLAIN, 16));
@@ -121,30 +125,14 @@ public class StartFrame extends JFrame implements Observer {
         gbc.gridy = 6;
         gbc.insets = new Insets(10, 20, 120, 20);
         panelContenido.add(control4, gbc);
-        
-        // Poner el contenido dentro de la imagen de fondo
+
         panelFondo.setLayout(new BorderLayout());
         panelFondo.add(panelContenido, BorderLayout.CENTER);
-        
+
         return panelFondo;
     }
 
-
-	@Override
-	public void update(Observable o, Object arg) {
-		int[] datos = (int[]) arg;
-        int tipo = datos[0];
-	    if (tipo == 9) { // Notificación para cambiar de pantalla
-	        Espacio.getEspacio().deleteObserver(this);
-            this.setVisible(false);
-            new MainFrame();
-        }
-    }
-
-    /**
-     * Controlador para gestionar la interacción del usuario con la pantalla de inicio
-     * Clase privada interna según patrón MVC
-     */
+    /** Teclado en menú: teclas 1–4 eligen nave; SPACE confirma e inicializa al jugador. */
     private class Controller extends KeyAdapter {
 
         @Override
