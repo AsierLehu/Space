@@ -178,19 +178,117 @@ El trabajo se ha distribuido entre cuatro miembros: \textbf{Unai Urrutia}, \text
 \section{Reparto de tareas por sprint}
 \label{sec:reparto}
 
-El equipo ha documentado el reparto de tareas en cada sprint. Ver archivos \texttt{REPARTO TAREAS SPRINT1.tex}, \texttt{REPARTO TAREAS SPRINT2.tex} y \texttt{REPARTO TAREAS SPRINT3.tex} en \texttt{DOCUMENTOS/} para detalle completo.
 
 \subsection{Sprint 1}
 
-\textbf{Sprint 1:} 50 horas reales de desarrollo. Tareas clave: patrón MVC+Observer, clases principales del modelo, lógica de colisiones, interfaz gráfica.
+\textbf{Sprint 1} (juego inicial y MVC+Observer): \textbf{50 h} totales según documento de reparto.
+
+{\small
+\begin{center}
+\rowcolors{2}{lightgray!25}{white}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\rowcolor{tabheadfill}\textcolor{tabheadtext}{\textbf{Tarea}} & \textcolor{tabheadtext}{\textbf{h}} & \textcolor{tabheadtext}{\textbf{UU}} & \textcolor{tabheadtext}{\textbf{EO}} & \textcolor{tabheadtext}{\textbf{EL}} & \textcolor{tabheadtext}{\textbf{AL}} \\
+\hline
+\celdarep{7.6cm}{MVC e ideamiento de clases principales} & 5 & 2{,}5 & 0{,}5 & 0{,}5 & 1{,}5 \\
+\hline
+\celdarep{7.6cm}{Repositorio Git y configuración inicial} & 1 & 0{,}3 & 0 & 0 & 0{,}7 \\
+\hline
+\celdarep{7.6cm}{Clases principales del modelo} & 5 & 2{,}5 & 0{,}5 & 0{,}5 & 1{,}5 \\
+\hline
+\celdarep{7.6cm}{Lógica de juego, disparo y colisiones} & 4 & 1{,}5 & 0{,}5 & 0{,}5 & 1{,}5 \\
+\hline
+\celdarep{7.6cm}{Vista, controlador y métodos \texttt{update}} & 3 & 1 & 0{,}5 & 0{,}5 & 1 \\
+\hline
+\celdarep{7.6cm}{\texttt{notify}/\texttt{update} para inicializar \texttt{MainFrame}} & 4 & 1{,}5 & 0{,}25 & 0{,}25 & 1{,}5 \\
+\hline
+\celdarep{7.6cm}{Corrección colisiones, límites, movimiento} & 3 & 1 & 0{,}5 & 0{,}5 & 1 \\
+\hline
+\celdarep{7.6cm}{Refinamiento del modelo} & 1 & 0{,}25 & 0{,}25 & 0{,}25 & 0{,}25 \\
+\hline
+\celdarep{7.6cm}{\texttt{MainFrame} con rejilla de \texttt{JLabel}} & 5 & 2 & 1 & 0{,}5 & 1{,}5 \\
+\hline
+\celdarep{7.6cm}{Reestructuración \texttt{update}/\texttt{notify} en vista} & 5 & 2 & 0{,}5 & 0{,}5 & 2 \\
+\hline
+\celdarep{7.6cm}{Revisión patrón MVC+Observer y fin de partida} & 5 & 2 & 0{,}5 & 0{,}5 & 2 \\
+\hline
+\celdarep{7.6cm}{Documentación} & 6 & 2 & 1 & 1 & 2 \\
+\hline
+\celdarep{7.6cm}{Diagramas UML y MVC+Observer} & 3 & 1 & 1 & 1 & 0 \\
+\hline
+\rowcolor{tabheadfill}\textcolor{tabheadtext}{\textbf{Suma tiempo (tareas)}} & \textcolor{tabheadtext}{\textbf{50}} & & & & \\
+\hline
+\rowcolor{tabheadfill}\textcolor{tabheadtext}{\textbf{Suma ded.\ por miembro}} & & \textcolor{tabheadtext}{\textbf{19{,}55}} & \textcolor{tabheadtext}{\textbf{7}} & \textcolor{tabheadtext}{\textbf{6{,}5}} & \textcolor{tabheadtext}{\textbf{16{,}45}} \\
+\hline
+\end{tabular}
+\end{center}
+}
+
+\textit{Sprint\,1\,---\,columnas de personas: \textbf{UU}\,/\,\textbf{EO}\,/\,\textbf{EL}\,/\,\textbf{AL} = Unai Urrutia, Ekain Ortega, Eder Lorenzo y Asier López. En las tablas Sprint\,2 y Sprint\,3 no se incluye columna de Eder Lorenzo (en los documentos de reparto su dedicación en esas fases es nula). Al sumar las ded.\ de Sprint\,1, el documento de reparto cuadra en cada fila con la columna~\textbf{h}, pero los totales personales suman \(49{,}5~\mathrm{h}\) (\(0{,}5~\mathrm{h}\) de diferencia respecto al total de tareas de \(50~\mathrm{h}\)).}
 
 \subsection{Sprint 2}
 
-\textbf{Sprint 2:} 50 horas reales de desarrollo. Tareas clave: Factory, Strategy, Composite; 3 naves iniciales; 3 tipos de disparos; diagramas UML.
+\textbf{Sprint 2} (patrones Factory, Strategy, Composite): \textbf{50 h} reales. Resumen estadístico del equipo según \texttt{REPARTO TAREAS SPRINT2.tex}: estimado 27{,}2 h; real por miembro Unai 16 h, Ekain 16{,}5 h, Asier 17{,}5 h.
 
-\subsection{Sprint 3}
+{\small
+\begin{center}
+\rowcolors{2}{lightgray!25}{white}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\rowcolor{tabheadfill}\textcolor{tabheadtext}{\textbf{Tarea}} & \textcolor{tabheadtext}{\textbf{h}} & \textcolor{tabheadtext}{\textbf{UU}} & \textcolor{tabheadtext}{\textbf{EO}} & \textcolor{tabheadtext}{\textbf{AL}} \\
+\hline
+\celdarep{7.6cm}{Patrón Factory (\texttt{NaveFactory}, Singleton)} & 4 & 0{,}5 & 2 & 1{,}5 \\
+\hline
+\celdarep{7.6cm}{Patrón Strategy (\texttt{StrategyDisparo})} & 8 & 1 & 3 & 4 \\
+\hline
+\celdarep{7.6cm}{Patrón Composite (píxeles jerárquicos)} & 6 & 2 & 2 & 2 \\
+\hline
+\celdarep{7.6cm}{Actualización diagrama UML} & 8 & 6 & 1 & 1 \\
+\hline
+\celdarep{7.6cm}{Tres naves (\texttt{Nave1}--\texttt{Nave3})} & 5 & 2 & 1 & 2 \\
+\hline
+\celdarep{7.6cm}{Naves multipixel (\texttt{construir}, geometría)} & 6 & 1 & 2{,}5 & 2{,}5 \\
+\hline
+\celdarep{7.6cm}{Enemigos multipixel y \texttt{FlotaEnemigos}} & 3 & 0{,}5 & 1 & 1{,}5 \\
+\hline
+\celdarep{7.6cm}{Tipos de disparo (Pixel, Flecha, Rombo)} & 5 & 2 & 1 & 2 \\
+\hline
+\celdarep{7.6cm}{Documentación de patrones} & 5 & 1 & 3 & 1 \\
+\hline
+\rowcolor{tabheadfill}\textcolor{tabheadtext}{\textbf{Total por miembro}} & \textbf{50} & \textbf{16} & \textbf{16{,}5} & \textbf{17{,}5} \\
+\hline
+\end{tabular}
+\end{center}
+}
 
-\textbf{Sprint 3:} Desarrollo de funcionalidades adicionales (Nave4, DisparoDoble, sistema de puntuación, fondos, pantalla final mejorada) y documentación final.
+\subsection{Sprint 3 y cierre (\textit{entrega final})}
+
+\textbf{Sprint 3} (puntuación, \texttt{FinalFrame}, fondos, \texttt{Nave4}, \texttt{DisparoDoble}): \textbf{25 h} reales según \texttt{REPARTO TAREAS SPRINT3.tex}. Esta fase coincide con las mejoras y la preparación documental/de demo de la entrega final.
+
+{\small
+\begin{center}
+\rowcolors{2}{lightgray!25}{white}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\rowcolor{tabheadfill}\textcolor{tabheadtext}{\textbf{Tarea}} & \textcolor{tabheadtext}{\textbf{h}} & \textcolor{tabheadtext}{\textbf{UU}} & \textcolor{tabheadtext}{\textbf{EO}} & \textcolor{tabheadtext}{\textbf{AL}} \\
+\hline
+\celdarep{7.6cm}{Sistema de puntuación en \texttt{MainFrame}} & 7 & 3{,}5 & 1 & 2{,}5 \\
+\hline
+\celdarep{7.6cm}{\texttt{FinalFrame}: victoria / game over} & 5 & 1 & 2{,}5 & 1{,}5 \\
+\hline
+\celdarep{7.6cm}{Reiniciar juego desde \texttt{FinalFrame}} & 4 & 1 & 2 & 1 \\
+\hline
+\celdarep{7.6cm}{Imágenes de fondo en todas las pantallas} & 5 & 1{,}5 & 1{,}5 & 2 \\
+\hline
+\celdarep{7.6cm}{Estrategia \texttt{DisparoDoble}} & 2 & 1 & 0 & 1 \\
+\hline
+\celdarep{7.6cm}{\texttt{Nave4} con disparo doble} & 2 & 1 & 0{,}5 & 0{,}5 \\
+\hline
+\rowcolor{tabheadfill}\textcolor{tabheadtext}{\textbf{Total por miembro}} & \textbf{25} & \textbf{9} & \textbf{7{,}5} & \textbf{8{,}5} \\
+\hline
+\end{tabular}
+\end{center}
+}
 
 % ============================================================
 % h. Conclusiones → reflexión y cambios futuros
@@ -213,9 +311,5 @@ Líneas de mejora futuras:
 \end{itemize}
 
 \vspace{2em}
-
-\begin{center}
-    \textcolor{verdeexito}{\textbf{Fin del documento (entrega documentación final + Demo Day).}}
-\end{center}
 
 \end{document}
